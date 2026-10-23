@@ -1,670 +1,570 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Procvičování - Odmocniny a mocniny</title>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- MathJax Config & Script -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true
-      },
-      options: {
-        ignoreHtmlClass: 'tex2jax_ignore',
-        processHtmlClass: 'tex2jax_process'
-      }
-    };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-  <style>
-    /* Prevent text selection when tapping rapidly */
-    .no-select {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    
-    /* MathJax sizing & contrast */
-    .mjx-chtml {
-      font-size: 110% !important;
-      color: #0f172a !important;
-    }
-    
-    @media (min-width: 640px) {
-      .mjx-chtml {
-        font-size: 130% !important;
-      }
-    }
-
-    /* Custom horizontal scrollbar for long math equations */
-    .math-scroll::-webkit-scrollbar {
-      height: 6px;
-    }
-    .math-scroll::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 4px;
-    }
-    .math-scroll::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-    .math-scroll::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování odmocnin a mocnin</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        /* Extra výrazné táhlo (kolečko) posuvníku přesahující osu nahoru a dolů */
+        input[type=range]::-webkit-slider-thumb {
+            pointer-events: auto;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            border: 3px solid #0f172a;
+            -webkit-appearance: none;
+            margin-top: -7px; /* Posunutí nahoru, aby přesahovalo track o výšce 16px */
+        }
+        input[type=range]::-moz-range-thumb {
+            pointer-events: auto;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            border: 3px solid #0f172a;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 16px;
+            border-radius: 9999px;
+            background: transparent;
+        }
+        input[type=range]::-moz-range-track {
+            height: 16px;
+            border-radius: 9999px;
+            background: transparent;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col items-center justify-between p-3 sm:p-6 no-select">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between select-none">
 
-  <!-- Main Container -->
-  <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-200/80 p-4 sm:p-7 flex flex-col gap-5 my-auto">
-    
-    <!-- HEADER -->
-    <header class="flex items-center justify-between border-b border-slate-100 pb-4">
-      <div>
-        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Odmocniny a mocniny</h1>
-        <p class="text-xs sm:text-sm text-slate-500 font-medium">Procvičování 96 příkladů</p>
-      </div>
-      <div class="flex-shrink-0 ml-3">
-        <img src="logo.png" alt="Logo" class="h-10 sm:h-12 w-auto object-contain" onerror="this.style.display='none'">
-      </div>
+    <!-- Hlavička -->
+    <header class="w-full max-w-2xl mx-auto p-4 flex justify-between items-center border-b border-slate-800">
+        <div>
+            <h1 class="text-xl font-bold text-slate-100">Odmocniny a mocniny</h1>
+            <p class="text-xs text-slate-400">Interaktivní pracovní list (96 příkladů)</p>
+        </div>
+        <!-- Logo -->
+        <div id="logo-container">
+            <img src="logo.png" alt="Logo" class="h-10 w-auto object-contain hidden" id="app-logo" onerror="this.style.display='none'">
+        </div>
     </header>
 
-    <!-- PROGRESS BAR / SLIDER -->
-    <section class="bg-slate-50 rounded-2xl p-3 sm:p-4 border border-slate-200/60 flex flex-col gap-2">
-      <!-- Info Header -->
-      <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-700">
-        <div id="chapter-label" class="text-indigo-600 truncate max-w-[200px] sm:max-w-xs font-bold">
-          1. Základní odmocniny
+    <!-- Hlavní obsah -->
+    <main class="w-full max-w-2xl mx-auto p-4 flex-1 flex flex-col justify-center">
+
+        <!-- Posuvník / Indikátor pozice (Sekvenční režim) -->
+        <div id="sequential-nav-container" class="mb-4">
+            <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">I. Základní odmocniny</span>
+                <div>
+                    Příklad <input type="number" id="problem-input" min="1" max="96" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">96</span>
+                </div>
+            </div>
+            <!-- Barevně rozlišená osa s výrazným sliderem -->
+            <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible" id="progress-bar-track">
+                <div class="absolute top-0 left-0 h-full flex w-full pointer-events-none rounded-full overflow-hidden">
+                    <div class="h-full bg-blue-500/70" style="width: 25%;" title="1-24: I. Základní"></div>
+                    <div class="h-full bg-emerald-500/70" style="width: 41.66%;" title="25-64: II. Částečné odmocňování"></div>
+                    <div class="h-full bg-amber-500/70" style="width: 16.66%;" title="65-80: III. Operace"></div>
+                    <div class="h-full bg-purple-500/70" style="width: 16.66%;" title="81-96: IV. Kombinace"></div>
+                </div>
+                <input type="range" id="slider-range" min="1" max="96" value="1" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
+            </div>
         </div>
-        <div class="flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm">
-          <span class="text-slate-400">Příklad</span>
-          <input type="number" id="input-index" min="1" max="96" value="1" 
-                 class="w-10 sm:w-12 text-center font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500 rounded bg-slate-50">
-          <span class="text-slate-400">/ 96</span>
+
+        <!-- Progress bar pro náhodný režim -->
+        <div id="random-nav-container" class="mb-4 hidden">
+            <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+                <span class="text-amber-400 font-medium">Režim náhodného předkládání</span>
+                <span id="random-progress-text">Příklad 1 z 96</span>
+            </div>
+            <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible cursor-pointer" id="random-track">
+                <div id="random-progress-bar" class="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-all duration-300 pointer-events-none" style="width: 1%;"></div>
+                <input type="range" id="random-slider" min="0" max="95" value="0" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
+            </div>
         </div>
-      </div>
 
-      <!-- Slider -->
-      <div class="relative w-full flex items-center">
-        <input type="range" id="progress-slider" min="1" max="96" value="1" 
-               class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none">
-      </div>
-
-      <!-- Colored Subchapters Bar (Visible in Sequential Mode) -->
-      <div id="subchapters-bar" class="grid grid-cols-4 gap-1 h-1.5 w-full rounded-full overflow-hidden mt-0.5">
-        <div title="1. Základní odmocniny (1-24)" class="bg-emerald-400 h-full"></div>
-        <div title="2. Částečné odmocniny a proměnné (25-64)" class="bg-blue-400 h-full"></div>
-        <div title="3. Operace s odmocninami (65-80)" class="bg-amber-400 h-full"></div>
-        <div title="4. Kombinace s mocninami (81-96)" class="bg-purple-400 h-full"></div>
-      </div>
-    </section>
-
-    <!-- MAIN MATH DISPLAY CARD -->
-    <main id="math-card" 
-          class="relative bg-gradient-to-b from-white to-slate-50/50 border-2 border-indigo-200 hover:border-indigo-400 rounded-3xl p-4 sm:p-8 shadow-lg min-h-[220px] sm:min-h-[260px] flex flex-col justify-center items-center cursor-pointer transition-all duration-200 active:scale-[0.99] group">
-      
-      <!-- Tap hint -->
-      <span class="absolute top-3 right-4 text-[10px] sm:text-xs font-medium text-slate-400 group-hover:text-indigo-500 transition-colors">
-        Klepnutím ➔ Další
-      </span>
-
-      <!-- Math Equation Container with Horizontal Scrollbar -->
-      <div class="w-full overflow-x-auto math-scroll py-4 px-1 flex justify-center items-center">
-        <div id="math-content" class="tex2jax_process text-center text-slate-900 text-lg sm:text-2xl font-medium whitespace-nowrap">
-          <!-- MathJax renders here -->
+        <!-- Tlačítka Předchozí a Následující -->
+        <div class="flex justify-between gap-4 mb-2">
+            <button id="prev-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-semibold py-3 px-4 rounded-xl shadow border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+                ← Předchozí
+            </button>
+            <button id="next-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-semibold py-3 px-4 rounded-xl shadow border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+                Následující →
+            </button>
         </div>
-      </div>
+
+        <!-- Karta s příkladem -->
+        <div id="math-card" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[150px] flex flex-col justify-center items-center text-center cursor-pointer relative overflow-hidden transition-all">
+            <div id="math-content" class="w-full overflow-x-auto py-2 px-1 text-lg md:text-xl font-medium">
+                Načítání...
+            </div>
+            <div class="absolute bottom-1 right-3 text-[10px] text-slate-400 pointer-events-none">
+                (Klepnutím na kartu nebo [Mezerník] = Následující)
+            </div>
+        </div>
+
+        <!-- Přepínač režimu: Výsledek / Postup -->
+        <div class="mt-4 bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span class="text-xs font-medium text-slate-300">Zobrazení v kartě:</span>
+            <div class="inline-flex rounded-lg bg-slate-900 p-1 border border-slate-700 w-full sm:w-auto">
+                <button id="mode-result" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow">
+                    Jen výsledek
+                </button>
+                <button id="mode-steps" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white">
+                    Postup řešení
+                </button>
+            </div>
+        </div>
+
+        <!-- Pokročilá nastavení -->
+        <div class="mt-3 space-y-2 bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="no-worksheets-chk" class="w-4 h-4 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+                    <span class="font-medium text-slate-300">Režim bez pracovního listu (jen zadání)</span>
+                </label>
+                <label id="continuous-result-wrapper" class="flex items-center gap-2 cursor-pointer pl-6 sm:pl-0 opacity-50 pointer-events-none transition">
+                    <input type="checkbox" id="continuous-result-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+                    <span class="text-slate-400">Zobrazovat průběžně výsledky</span>
+                </label>
+            </div>
+
+            <div class="border-t border-slate-700/60 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="random-mode-chk" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                    <span class="font-medium text-amber-400">Režim náhodného předkládání (promíchat sadu)</span>
+                </label>
+                <div id="random-suboptions" class="mt-2 pl-6 space-y-1 hidden">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="random-sub" value="interleave" checked class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <span class="text-slate-300">Prokládat výsledky (zadání -> výsledek -> další)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="random-sub" value="only-statements" class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <span class="text-slate-300">Procházet jen zadání</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="random-sub" value="instant-results" class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <span class="text-slate-300">Zobrazovat ihned s výsledky</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- NAVIGATION BUTTONS (DIRECTLY BELOW MATH CARD) -->
-    <section class="grid grid-cols-2 gap-3 sm:gap-4">
-      <button id="btn-prev" 
-              class="flex items-center justify-center gap-2 py-3.5 px-4 bg-white hover:bg-slate-50 active:bg-slate-100 border-2 border-slate-300 rounded-2xl font-bold text-slate-700 text-base sm:text-lg shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-        <span>Předchozí</span>
-      </button>
-
-      <button id="btn-next" 
-              class="flex items-center justify-center gap-2 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-2xl font-bold text-base sm:text-lg shadow-md hover:shadow-lg transition-all">
-        <span>Následující</span>
-        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </section>
-
-    <!-- OPTIONS & SWITCHES -->
-    <section class="flex flex-col gap-3 pt-2 border-t border-slate-100">
-      
-      <!-- Toggle: "Jen výsledek / Postup" -->
-      <div id="detail-toggle-container" class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-        <span class="text-xs sm:text-sm font-semibold text-slate-700 ml-1">Detail zobrazení:</span>
-        <div class="inline-flex rounded-xl bg-slate-200 p-1">
-          <button id="mode-result-only" class="px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm">
-            Jen výsledek
-          </button>
-          <button id="mode-step-by-step" class="px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
-            Postup
-          </button>
-        </div>
-      </div>
-
-      <!-- Režim bez pracovního listu -->
-      <div class="flex flex-col gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-        <label class="flex items-center gap-2.5 cursor-pointer">
-          <input type="checkbox" id="chk-no-worksheet" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-          <span class="text-xs sm:text-sm font-semibold text-slate-700">Režim bez pracovního listu</span>
+    <!-- Zápatí -->
+    <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
+        <span>Matematický trenažér v1.11</span>
+        <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+            <span>Hmatová odezva (vibrace)</span>
         </label>
+    </footer>
 
-        <!-- Sub-option: Zobrazovat průběžně výsledky -->
-        <div id="sub-option-container" class="hidden pl-6">
-          <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 shadow-sm">
-            <input type="checkbox" id="chk-show-progressively" checked class="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-            <span>Zobrazovat průběžně výsledky</span>
-          </label>
-        </div>
-      </div>
+    <!-- Logika aplikace -->
+    <script>
+        const problems = [
+            [1, "\\sqrt{81}", "\\underline{\\underline{9}}", "\\sqrt{81} = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}"],
+            [2, "\\sqrt{100}", "\\underline{\\underline{10}}", "\\sqrt{100} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
+            [3, "\\sqrt{144}", "\\underline{\\underline{12}}", "\\sqrt{144} = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}"],
+            [4, "\\sqrt{196}", "\\underline{\\underline{14}}", "\\sqrt{196} = \\bbox[#fef08a, 3px]{\\underline{\\underline{14}}}"],
+            [5, "\\sqrt[3]{8}", "\\underline{\\underline{2}}", "\\sqrt[3]{8} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
+            [6, "\\sqrt[3]{27}", "\\underline{\\underline{3}}", "\\sqrt[3]{27} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
+            [7, "\\sqrt[3]{125}", "\\underline{\\underline{5}}", "\\sqrt[3]{125} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
+            [8, "\\sqrt[3]{216}", "\\underline{\\underline{6}}", "\\sqrt[3]{216} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
+            [9, "\\sqrt{0{,}25}", "\\underline{\\underline{0{,}5}}", "\\sqrt{0{,}25} = \\sqrt{\\frac{25}{100}} = \\frac{5}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}5}}}"],
+            [10, "\\sqrt{0{,}09}", "\\underline{\\underline{0{,}3}}", "\\sqrt{0{,}09} = \\sqrt{\\frac{9}{100}} = \\frac{3}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}"],
+            [11, "\\sqrt{1{,}69}", "\\underline{\\underline{1{,}3}}", "\\sqrt{1{,}69} = \\sqrt{\\frac{169}{100}} = \\frac{13}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}3}}}"],
+            [12, "\\sqrt{2{,}25}", "\\underline{\\underline{1{,}5}}", "\\sqrt{2{,}25} = \\sqrt{\\frac{225}{100}} = \\frac{15}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}5}}}"],
+            [13, "\\sqrt{\\dfrac{9}{16}}", "\\underline{\\underline{\\dfrac{3}{4}}}", "\\sqrt{\\frac{9}{16}} = \\frac{\\sqrt{9}}{\\sqrt{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{3}{4}}}\\mathstrut}"],
+            [14, "\\sqrt{\\dfrac{4}{25}}", "\\underline{\\underline{\\dfrac{2}{5}}}", "\\sqrt{\\frac{4}{25}} = \\frac{\\sqrt{4}}{\\sqrt{25}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}"],
+            [15, "\\sqrt{\\dfrac{16}{49}}", "\\underline{\\underline{\\dfrac{4}{7}}}", "\\sqrt{\\frac{16}{49}} = \\frac{\\sqrt{16}}{\\sqrt{49}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{4}{7}}}\\mathstrut}"],
+            [16, "\\sqrt{\\dfrac{81}{100}}", "\\underline{\\underline{\\dfrac{9}{10}}}", "\\sqrt{\\frac{81}{100}} = \\frac{\\sqrt{81}}{\\sqrt{100}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{9}{10}}}\\mathstrut}"],
+            [17, "\\sqrt{10^4}", "\\underline{\\underline{100}}", "\\sqrt{10^4} = 10^{\\frac{4}{2}} = 10^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{100}}}"],
+            [18, "\\sqrt{10^6}", "\\underline{\\underline{1000}}", "\\sqrt{10^6} = 10^{\\frac{6}{2}} = 10^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1000}}}"],
+            [19, "\\sqrt[4]{16}", "\\underline{\\underline{2}}", "\\sqrt[4]{16} = \\sqrt[4]{2^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
+            [20, "\\sqrt[4]{81}", "\\underline{\\underline{3}}", "\\sqrt[4]{81} = \\sqrt[4]{3^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
+            [21, "\\sqrt[5]{32}", "\\underline{\\underline{2}}", "\\sqrt[5]{32} = \\sqrt[5]{2^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
+            [22, "\\sqrt[5]{243}", "\\underline{\\underline{3}}", "\\sqrt[5]{243} = \\sqrt[5]{3^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
+            [23, "\\sqrt[3]{0{,}001}", "\\underline{\\underline{0{,}1}}", "\\sqrt[3]{0{,}001} = \\sqrt[3]{\\frac{1}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}1}}}"],
+            [24, "\\sqrt[3]{0{,}027}", "\\underline{\\underline{0{,}3}}", "\\sqrt[3]{0{,}027} = \\sqrt[3]{\\frac{27}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}"],
 
-      <!-- Režim náhodného předkládání -->
-      <div class="flex flex-col gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-        <label class="flex items-center gap-2.5 cursor-pointer">
-          <input type="checkbox" id="chk-random-mode" class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
-          <span class="text-xs sm:text-sm font-semibold text-slate-700">Režim náhodného předkládání</span>
-        </label>
+            [25, "\\sqrt{0{,}0001}", "\\underline{\\underline{0{,}01}}", "\\sqrt{0{,}0001} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}01}}}"],
+            [26, "\\sqrt{2500}", "\\underline{\\underline{50}}", "\\sqrt{2500} = \\sqrt{25 \\cdot 100} = 5 \\cdot 10 = \\bbox[#fef08a, 3px]{\\underline{\\underline{50}}}"],
+            [27, "\\sqrt[3]{1000}", "\\underline{\\underline{10}}", "\\sqrt[3]{1000} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
+            [28, "\\sqrt[4]{10000}", "\\underline{\\underline{10}}", "\\sqrt[4]{10000} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
+            [29, "\\sqrt{\\dfrac{1}{16}}", "\\underline{\\underline{\\dfrac{1}{4}}}", "\\sqrt{\\frac{1}{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{1}{4}}}\\mathstrut}"],
+            [30, "\\sqrt[3]{\\dfrac{8}{125}}", "\\underline{\\underline{\\dfrac{2}{5}}}", "\\sqrt[3]{\\frac{8}{125}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}"],
+            [31, "\\sqrt{3^4}", "\\underline{\\underline{9}}", "\\sqrt{3^4} = 3^{\\frac{4}{2}} = 3^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}"],
+            [32, "\\sqrt[3]{2^6}", "\\underline{\\underline{4}}", "\\sqrt[3]{2^6} = 2^{\\frac{6}{3}} = 2^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}"],
+            [33, "\\sqrt{8}", "\\underline{\\underline{2\\sqrt{2}}}", "\\sqrt{8} = \\sqrt{4 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}"],
+            [34, "\\sqrt{12}", "\\underline{\\underline{2\\sqrt{3}}}", "\\sqrt{12} = \\sqrt{4 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{3}}}]}"],
+            [35, "\\sqrt{18}", "\\underline{\\underline{3\\sqrt{2}}}", "\\sqrt{18} = \\sqrt{9 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}"],
+            [36, "\\sqrt{20}", "\\underline{\\underline{2\\sqrt{5}}}", "\\sqrt{20} = \\sqrt{4 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{5}}}]}"],
+            [37, "\\sqrt{27}", "\\underline{\\underline{3\\sqrt{3}}}", "\\sqrt{27} = \\sqrt{9 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{3}}}]}"],
+            [38, "\\sqrt{32}", "\\underline{\\underline{4\\sqrt{2}}}", "\\sqrt{32} = \\sqrt{16 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{2}}}]}"],
+            [39, "\\sqrt{45}", "\\underline{\\underline{3\\sqrt{5}}}", "\\sqrt{45} = \\sqrt{9 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{5}}}]}"],
+            [40, "\\sqrt{50}", "\\underline{\\underline{5\\sqrt{2}}}", "\\sqrt{50} = \\sqrt{25 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{2}}}]}"],
+            [41, "\\sqrt{75}", "\\underline{\\underline{5\\sqrt{3}}}", "\\sqrt{75} = \\sqrt{25 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}"],
+            [42, "\\sqrt{72}", "\\underline{\\underline{6\\sqrt{2}}}", "\\sqrt{72} = \\sqrt{36 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{2}}}]}"],
+            [43, "\\sqrt{98}", "\\underline{\\underline{7\\sqrt{2}}}", "\\sqrt{98} = \\sqrt{49 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{7\\sqrt{2}}}]}"],
+            [44, "\\sqrt{108}", "\\underline{\\underline{6\\sqrt{3}}}", "\\sqrt{108} = \\sqrt{36 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{3}}}]}"],
+            [45, "\\sqrt{x^3}", "\\underline{\\underline{x\\sqrt{x}}}", "\\sqrt{x^3} = \\sqrt{x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt{x}}}]}"],
+            [46, "\\sqrt{x^5}", "\\underline{\\underline{x^2\\sqrt{x}}}", "\\sqrt{x^5} = \\sqrt{x^4 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2\\sqrt{x}}}]}"],
+            [47, "\\sqrt{a^4}", "\\underline{\\underline{a^2}}", "\\sqrt{a^4} = a^{\\frac{4}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^2}}}"],
+            [48, "\\sqrt{a^7}", "\\underline{\\underline{a^3\\sqrt{a}}}", "\\sqrt{a^7} = \\sqrt{a^6 \\cdot a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^3\\sqrt{a}}}]}"],
+            [49, "\\sqrt{18x^2}", "\\underline{\\underline{3x\\sqrt{2}}}", "\\sqrt{18x^2} = \\sqrt{9 \\cdot 2 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3x\\sqrt{2}}}]}"],
+            [50, "\\sqrt{20x^3}", "\\underline{\\underline{2x\\sqrt{5x}}}", "\\sqrt{20x^3} = \\sqrt{4 \\cdot 5 \\cdot x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x\\sqrt{5x}}}]}"],
+            [51, "\\sqrt{32y^3}", "\\underline{\\underline{4y\\sqrt{2y}}}", "\\sqrt{32y^3} = \\sqrt{16 \\cdot 2 \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4y\\sqrt{2y}}}]}"],
+            [52, "\\sqrt{45a^4}", "\\underline{\\underline{3a^2\\sqrt{5}}}", "\\sqrt{45a^4} = \\sqrt{9 \\cdot 5 \\cdot a^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a^2\\sqrt{5}}}]}"],
+            [53, "\\sqrt{50b^5}", "\\underline{\\underline{5b^2\\sqrt{2b}}}", "\\sqrt{50b^5} = \\sqrt{25 \\cdot 2 \\cdot b^4 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5b^2\\sqrt{2b}}}]}"],
+            [54, "\\sqrt{75x^6}", "\\underline{\\underline{5x^3\\sqrt{3}}}", "\\sqrt{75x^6} = \\sqrt{25 \\cdot 3 \\cdot x^6} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5x^3\\sqrt{3}}}]}"],
+            [55, "\\sqrt[3]{16}", "\\underline{\\underline{2\\sqrt[3]{2}}}", "\\sqrt[3]{16} = \\sqrt[3]{8 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{2}}}]}"],
+            [56, "\\sqrt[3]{24}", "\\underline{\\underline{2\\sqrt[3]{3}}}", "\\sqrt[3]{24} = \\sqrt[3]{8 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{3}}}]}"],
+            [57, "\\sqrt[3]{54}", "\\underline{\\underline{3\\sqrt[3]{2}}}", "\\sqrt[3]{54} = \\sqrt[3]{27 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{2}}}]}"],
+            [58, "\\sqrt[3]{81}", "\\underline{\\underline{3\\sqrt[3]{3}}}", "\\sqrt[3]{81} = \\sqrt[3]{27 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{3}}}]}"],
+            [59, "\\sqrt[3]{x^4}", "\\underline{\\underline{x\\sqrt[3]{x}}}", "\\sqrt[3]{x^4} = \\sqrt[3]{x^3 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x}}}]}"],
+            [60, "\\sqrt[3]{x^5}", "\\underline{\\underline{x\\sqrt[3]{x^2}}}", "\\sqrt[3]{x^5} = \\sqrt[3]{x^3 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x^2}}}]}"],
+            [61, "\\sqrt[3]{8a^5}", "\\underline{\\underline{2a\\sqrt[3]{a^2}}}", "\\sqrt[3]{8a^5} = \\sqrt[3]{8 \\cdot a^3 \\cdot a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2a\\sqrt[3]{a^2}}}]}"],
+            [62, "\\sqrt[3]{27b^4}", "\\underline{\\underline{3b\\sqrt[3]{b}}}", "\\sqrt[3]{27b^4} = \\sqrt[3]{27 \\cdot b^3 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3b\\sqrt[3]{b}}}]}"],
+            [63, "\\sqrt{8x^5 y^3}", "\\underline{\\underline{2x^2 y \\sqrt{2xy}}}", "\\sqrt{8x^5 y^3} = \\sqrt{4 \\cdot 2 \\cdot x^4 \\cdot x \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2 y \\sqrt{2xy}}}]}"],
+            [64, "\\sqrt[3]{16a^4 b^5}", "\\underline{\\underline{2ab\\sqrt[3]{2a \\cdot b^2}}}", "\\sqrt[3]{16a^4 b^5} = \\sqrt[3]{8 \\cdot 2 \\cdot a^3 \\cdot a \\cdot b^3 \\cdot b^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2ab\\sqrt[3]{2ab^2}}}]}"],
 
-        <!-- Random mode options -->
-        <div id="random-options-container" class="hidden flex flex-col gap-1.5 pl-6 pt-1">
-          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-            <input type="radio" name="random-sub-mode" value="interleaved" checked class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
-            <span>Prokládat výsledky (Zadání ➔ Výsledek ➔ Další)</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-            <input type="radio" name="random-sub-mode" value="questions-only" class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
-            <span>Procházet jen zadání</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-            <input type="radio" name="random-sub-mode" value="with-results" class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
-            <span>Zobrazovat ihned s výsledky</span>
-          </label>
-        </div>
-      </div>
+            [65, "\\sqrt{3} \\cdot \\sqrt{12}", "\\underline{\\underline{6}}", "\\sqrt{3} \\cdot \\sqrt{12} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
+            [66, "\\sqrt{2} \\cdot \\sqrt{8}", "\\underline{\\underline{4}}", "\\sqrt{2} \\cdot \\sqrt{8} = \\sqrt{16} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}"],
+            [67, "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", "\\underline{\\underline{3}}", "\\frac{\\sqrt{54}}{\\sqrt{6}} = \\sqrt{\\frac{54}{6}} = \\sqrt{9} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
+            [68, "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", "\\underline{\\underline{5}}", "\\frac{\\sqrt{75}}{\\sqrt{3}} = \\sqrt{\\frac{75}{3}} = \\sqrt{25} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
+            [69, "3\\sqrt{2} + 5\\sqrt{2}", "\\underline{\\underline{8\\sqrt{2}}}", "3\\sqrt{2} + 5\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{8\\sqrt{2}}}]}"],
+            [70, "7\\sqrt{5} - 3\\sqrt{5}", "\\underline{\\underline{4\\sqrt{5}}}", "7\\sqrt{5} - 3\\sqrt{5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{5}}}]}"],
+            [71, "\\sqrt{50} - \\sqrt{18}", "\\underline{\\underline{2\\sqrt{2}}}", "\\sqrt{50} - \\sqrt{18} = 5\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}"],
+            [72, "\\sqrt{27} + \\sqrt{12}", "\\underline{\\underline{5\\sqrt{3}}}", "\\sqrt{27} + \\sqrt{12} = 3\\sqrt{3} + 2\\sqrt{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}"],
+            [73, "(2\\sqrt{3})^2", "\\underline{\\underline{12}}", "(2\\sqrt{3})^2 = 2^2 \\cdot (\\sqrt{3})^2 = 4 \\cdot 3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}"],
+            [74, "(-3\\sqrt{2})^2", "\\underline{\\underline{18}}", "(-3\\sqrt{2})^2 = (-3)^2 \\cdot (\\sqrt{2})^2 = 9 \\cdot 2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{18}}}"],
+            [75, "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", "\\underline{\\underline{1}}", "(\\sqrt{5}+2)(\\sqrt{5}-2) = (\\sqrt{5})^2 - 2^2 = 5 - 4 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}"],
+            [76, "(\\sqrt{3} + 1)^2", "\\underline{\\underline{4 + 2\\sqrt{3}}}", "(\\sqrt{3}+1)^2 = 3 + 2\\sqrt{3} + 1 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4 + 2\\sqrt{3}}}]}"],
+            [77, "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", "\\underline{\\underline{10}}", "\\sqrt{2}(\\sqrt{8} + \\sqrt{18}) = \\sqrt{16} + \\sqrt{36} = 4 + 6 = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
+            [78, "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", "\\underline{\\underline{5}}", "\\frac{\\sqrt{12}+\\sqrt{27}}{\\sqrt{3}} = \\frac{2\\sqrt{3}+3\\sqrt{3}}{\\sqrt{3}} = \\frac{5\\sqrt{3}}{\\sqrt{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
+            [79, "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", "\\underline{\\underline{6}}", "\\sqrt{2 \\cdot 3 \\cdot 6} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
+            [80, "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", "\\underline{\\underline{2}}", "\\frac{\\sqrt{64}}{4} = \\frac{8}{4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
 
-    </section>
+            [81, "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", "\\underline{\\underline{x^{\\frac{5}{6}}}}", "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{1}{2}+\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{5}{6}}}}}"],
+            [82, "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", "\\underline{\\underline{x^{\\frac{7}{6}}}}", "x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{7}{6}}}}}"],
+            [83, "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", "\\underline{\\underline{a^{-\\frac{1}{6}}}}", "\\frac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{6}}}}}"],
+            [84, "(\\sqrt{a^3})^{\\frac{1}{3}}", "\\underline{\\underline{a^{\\frac{1}{2}}}}", "(a^{\\frac{3}{2}})^{\\frac{1}{3}} = a^{\\frac{3}{2} \\cdot \\frac{1}{3}} = a^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\sqrt{a}}}}"],
+            [85, "\\sqrt{x \\sqrt{x}}", "\\underline{\\underline{x^{\\frac{3}{4}}}}", "\\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = (x^{\\frac{3}{2}})^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{4}}}}}"],
+            [86, "\\sqrt[3]{a \\cdot \\sqrt{a}}", "\\underline{\\underline{a^{\\frac{1}{2}}}}", "\\sqrt[3]{a \\cdot a^{\\frac{1}{2}}} = \\sqrt[3]{a^{\\frac{3}{2}}} = (a^{\\frac{3}{2}})^{\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{2}}}}}"],
+            [87, "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", "\\underline{\\underline{x^{\\frac{13}{6}}}}", "\\frac{x^2 \\cdot x^{\\frac{1}{2}}}{x^{\\frac{2}{3}}} = x^{2 + \\frac{1}{2} - \\frac{2}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{13}{6}}}}}"],
+            [88, "(\\sqrt[4]{x^3})^2", "\\underline{\\underline{x^{\\frac{3}{2}}}}", "(x^{\\frac{3}{4}})^2 = x^{\\frac{6}{4}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{2}}}}}"],
+            [89, "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", "\\underline{\\underline{3\\sqrt{2}}}", "2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}"],
+            [90, "\\sqrt{3} \\cdot \\sqrt[3]{9}", "\\underline{\\underline{3^{\\frac{5}{6}}}}", "3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3^{\\frac{5}{6}}}}}"],
+            [91, "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", "\\underline{\\underline{1}}", "\\frac{3}{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}"],
+            [92, "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", "\\underline{\\underline{ab^2\\sqrt{a}}}", "\\sqrt{a^3 b^4} = a b^2 \\sqrt{a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{ab^2\\sqrt{a}}}]}"],
+            [93, "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", "\\underline{\\underline{3a}}", "\\sqrt{\\frac{27a^3}{3a}} = \\sqrt{9a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a}}}"],
+            [94, "(\\sqrt[3]{2x^2})^3", "\\underline{\\underline{2x^2}}", "(\\sqrt[3]{2x^2})^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2}}}"],
+            [95, "\\sqrt{x^4 y^2}", "\\underline{\\underline{x^2 y}}", "\\sqrt{x^4 y^2} = x^{\\frac{4}{2}} y^{\\frac{2}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2 y}}}"],
+            [96, "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", "\\underline{\\underline{x}}", "\\sqrt{\\frac{x^5}{x^3}} = \\sqrt{x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x}}}"]
+        ];
 
-    <!-- GRATULATION MODAL -->
-    <div id="congrats-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl flex flex-col items-center gap-4">
-        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl">🎉</div>
-        <h2 class="text-2xl font-bold text-slate-900">Skvělá práce!</h2>
-        <p class="text-sm text-slate-600">Dokončili jste všech 96 příkladů v náhodném režimu.</p>
-        <button id="btn-restart-random" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all">
-          Spustit znovu
-        </button>
-      </div>
-    </div>
+        let currentIndex = 0;
+        let currentMode = 'result';
+        let isRandomMode = false;
+        let randomIndices = [];
+        let randomStepPointer = 0;
 
-  </div>
+        const mathCard = document.getElementById('math-card');
+        const mathContent = document.getElementById('math-content');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const problemInput = document.getElementById('problem-input');
+        const sliderRange = document.getElementById('slider-range');
+        const currentChapterBadge = document.getElementById('current-chapter-badge');
+        
+        const modeResultBtn = document.getElementById('mode-result');
+        const modeStepsBtn = document.getElementById('mode-steps');
+        
+        const noWorksheetsChk = document.getElementById('no-worksheets-chk');
+        const continuousResultChk = document.getElementById('continuous-result-chk');
+        const continuousResultWrapper = document.getElementById('continuous-result-wrapper');
+        
+        const randomModeChk = document.getElementById('random-mode-chk');
+        const randomSuboptions = document.getElementById('random-suboptions');
+        const sequentialNavContainer = document.getElementById('sequential-nav-container');
+        const randomNavContainer = document.getElementById('random-nav-container');
+        const randomProgressBar = document.getElementById('random-progress-bar');
+        const randomProgressText = document.getElementById('random-progress-text');
+        const randomSlider = document.getElementById('random-slider');
+        const vibrationChk = document.getElementById('vibration-chk');
 
-  <!-- FOOTER: Haptic vibration setting -->
-  <footer class="mt-4 mb-2 text-center">
-    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors">
-      <input type="checkbox" id="chk-vibration" checked class="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-      <span>Haptická odezva (vibrace při navigaci)</span>
-    </label>
-  </footer>
+        function getChapterInfo(idx) {
+            if (idx <= 24) return { text: "I. Základní odmocniny", color: "text-blue-400" };
+            if (idx <= 64) return { text: "II. Částečné odmocňování", color: "text-emerald-400" };
+            if (idx <= 80) return { text: "III. Operace s odmocninami", color: "text-amber-400" };
+            return { text: "IV. Kombinace a rac. exponenty", color: "text-purple-400" };
+        }
 
-  <!-- JAVASCRIPT & DATA -->
-  <script>
-    // Formátování finálního výsledku: žluté podbarvení + dvojité podtržení (pouze 1x na konci)
-    const highlightRes = (res) => `\\bbox[#fef08a, 3px]{\\underline{\\underline{${res}}}}`;
-
-    // Databáze 96 příkladů z pracovního listu
-    const problemsData = [
-      // STRANA 1: Základní odmocniny (1-24)
-      { id: 1, sub: "1. Základní odmocniny", q: "\\sqrt{81}", step: "= 9", res: "9" },
-      { id: 2, sub: "1. Základní odmocniny", q: "\\sqrt{100}", step: "= 10", res: "10" },
-      { id: 3, sub: "1. Základní odmocniny", q: "\\sqrt{144}", step: "= 12", res: "12" },
-      { id: 4, sub: "1. Základní odmocniny", q: "\\sqrt{196}", step: "= 14", res: "14" },
-      { id: 5, sub: "1. Základní odmocniny", q: "\\sqrt[3]{8}", step: "= 2", res: "2" },
-      { id: 6, sub: "1. Základní odmocniny", q: "\\sqrt[3]{27}", step: "= 3", res: "3" },
-      { id: 7, sub: "1. Základní odmocniny", q: "\\sqrt[3]{125}", step: "= 5", res: "5" },
-      { id: 8, sub: "1. Základní odmocniny", q: "\\sqrt[3]{216}", step: "= 6", res: "6" },
-      { id: 9, sub: "1. Základní odmocniny", q: "\\sqrt{0{,}25}", step: "= 0{,}5", res: "0{,}5" },
-      { id: 10, sub: "1. Základní odmocniny", q: "\\sqrt{0{,}09}", step: "= 0{,}3", res: "0{,}3" },
-      { id: 11, sub: "1. Základní odmocniny", q: "\\sqrt{1{,}69}", step: "= 1{,}3", res: "1{,}3" },
-      { id: 12, sub: "1. Základní odmocniny", q: "\\sqrt{2{,}25}", step: "= 1{,}5", res: "1{,}5" },
-      { id: 13, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{9}{16}}", step: "= \\dfrac{3}{4}", res: "\\dfrac{3}{4}" },
-      { id: 14, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{4}{25}}", step: "= \\dfrac{2}{5}", res: "\\dfrac{2}{5}" },
-      { id: 15, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{16}{49}}", step: "= \\dfrac{4}{7}", res: "\\dfrac{4}{7}" },
-      { id: 16, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{81}{100}}", step: "= \\dfrac{9}{10}", res: "\\dfrac{9}{10}" },
-      { id: 17, sub: "1. Základní odmocniny", q: "\\sqrt{10^4}", step: "= 10^2 = 100", res: "100" },
-      { id: 18, sub: "1. Základní odmocniny", q: "\\sqrt{10^6}", step: "= 10^3 = 1000", res: "1000" },
-      { id: 19, sub: "1. Základní odmocniny", q: "\\sqrt[4]{16}", step: "= 2", res: "2" },
-      { id: 20, sub: "1. Základní odmocniny", q: "\\sqrt[4]{81}", step: "= 3", res: "3" },
-      { id: 21, sub: "1. Základní odmocniny", q: "\\sqrt[5]{32}", step: "= 2", res: "2" },
-      { id: 22, sub: "1. Základní odmocniny", q: "\\sqrt[5]{243}", step: "= 3", res: "3" },
-      { id: 23, sub: "1. Základní odmocniny", q: "\\sqrt[3]{0{,}001}", step: "= 0{,}1", res: "0{,}1" },
-      { id: 24, sub: "1. Základní odmocniny", q: "\\sqrt[3]{0{,}027}", step: "= 0{,}3", res: "0{,}3" },
-
-      // STRANA 2: Částečné odmocňování a proměnné (25-64)
-      { id: 25, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{0{,}0001}", step: "= 0{,}01", res: "0{,}01" },
-      { id: 26, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{2500}", step: "= 50", res: "50" },
-      { id: 27, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{1000}", step: "= 10", res: "10" },
-      { id: 28, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[4]{10000}", step: "= 10", res: "10" },
-      { id: 29, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{\\dfrac{1}{16}}", step: "= \\dfrac{1}{4}", res: "\\dfrac{1}{4}" },
-      { id: 30, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{\\dfrac{8}{125}}", step: "= \\dfrac{2}{5}", res: "\\dfrac{2}{5}" },
-      { id: 31, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{3^4}", step: "= 3^2 = 9", res: "9" },
-      { id: 32, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{2^6}", step: "= 2^2 = 4", res: "4" },
-      { id: 33, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{8}", step: "= \\sqrt{4 \\cdot 2} = 2\\sqrt{2}", res: "2\\sqrt{2}" },
-      { id: 34, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{12}", step: "= \\sqrt{4 \\cdot 3} = 2\\sqrt{3}", res: "2\\sqrt{3}" },
-      { id: 35, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{18}", step: "= \\sqrt{9 \\cdot 2} = 3\\sqrt{2}", res: "3\\sqrt{2}" },
-      { id: 36, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{20}", step: "= \\sqrt{4 \\cdot 5} = 2\\sqrt{5}", res: "2\\sqrt{5}" },
-      { id: 37, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{27}", step: "= \\sqrt{9 \\cdot 3} = 3\\sqrt{3}", res: "3\\sqrt{3}" },
-      { id: 38, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{32}", step: "= \\sqrt{16 \\cdot 2} = 4\\sqrt{2}", res: "4\\sqrt{2}" },
-      { id: 39, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{45}", step: "= \\sqrt{9 \\cdot 5} = 3\\sqrt{5}", res: "3\\sqrt{5}" },
-      { id: 40, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{50}", step: "= \\sqrt{25 \\cdot 2} = 5\\sqrt{2}", res: "5\\sqrt{2}" },
-      { id: 41, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{75}", step: "= \\sqrt{25 \\cdot 3} = 5\\sqrt{3}", res: "5\\sqrt{3}" },
-      { id: 42, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{72}", step: "= \\sqrt{36 \\cdot 2} = 6\\sqrt{2}", res: "6\\sqrt{2}" },
-      { id: 43, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{98}", step: "= \\sqrt{49 \\cdot 2} = 7\\sqrt{2}", res: "7\\sqrt{2}" },
-      { id: 44, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{108}", step: "= \\sqrt{36 \\cdot 3} = 6\\sqrt{3}", res: "6\\sqrt{3}" },
-      { id: 45, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{x^3}", step: "= \\sqrt{x^2 \\cdot x} = x\\sqrt{x}", res: "x\\sqrt{x}" },
-      { id: 46, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{x^5}", step: "= \\sqrt{x^4 \\cdot x} = x^2\\sqrt{x}", res: "x^2\\sqrt{x}" },
-      { id: 47, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{a^4}", step: "= a^2", res: "a^2" },
-      { id: 48, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{a^7}", step: "= \\sqrt{a^6 \\cdot a} = a^3\\sqrt{a}", res: "a^3\\sqrt{a}" },
-      { id: 49, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{18x^2}", step: "= 3x\\sqrt{2}", res: "3x\\sqrt{2}" },
-      { id: 50, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{20x^3}", step: "= 2x\\sqrt{5x}", res: "2x\\sqrt{5x}" },
-      { id: 51, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{32y^3}", step: "= 4y\\sqrt{2y}", res: "4y\\sqrt{2y}" },
-      { id: 52, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{45a^4}", step: "= 3a^2\\sqrt{5}", res: "3a^2\\sqrt{5}" },
-      { id: 53, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{50b^5}", step: "= 5b^2\\sqrt{2b}", res: "5b^2\\sqrt{2b}" },
-      { id: 54, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{75x^6}", step: "= 5x^3\\sqrt{3}", res: "5x^3\\sqrt{3}" },
-      { id: 55, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{16}", step: "= \\sqrt[3]{8 \\cdot 2} = 2\\sqrt[3]{2}", res: "2\\sqrt[3]{2}" },
-      { id: 56, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{24}", step: "= \\sqrt[3]{8 \\cdot 3} = 2\\sqrt[3]{3}", res: "2\\sqrt[3]{3}" },
-      { id: 57, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{54}", step: "= \\sqrt[3]{27 \\cdot 2} = 3\\sqrt[3]{2}", res: "3\\sqrt[3]{2}" },
-      { id: 58, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{81}", step: "= \\sqrt[3]{27 \\cdot 3} = 3\\sqrt[3]{3}", res: "3\\sqrt[3]{3}" },
-      { id: 59, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{x^4}", step: "= \\sqrt[3]{x^3 \\cdot x} = x\\sqrt[3]{x}", res: "x\\sqrt[3]{x}" },
-      { id: 60, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{x^5}", step: "= \\sqrt[3]{x^3 \\cdot x^2} = x\\sqrt[3]{x^2}", res: "x\\sqrt[3]{x^2}" },
-      { id: 61, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{8a^5}", step: "= 2a\\sqrt[3]{a^2}", res: "2a\\sqrt[3]{a^2}" },
-      { id: 62, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{27b^4}", step: "= 3b\\sqrt[3]{b}", res: "3b\\sqrt[3]{b}" },
-      { id: 63, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{8x^5 y^3}", step: "= 2x^2 y\\sqrt{2xy}", res: "2x^2 y\\sqrt{2xy}" },
-      { id: 64, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{16a^4 b^5}", step: "= 2ab\\sqrt[3]{2ab^2}", res: "2ab\\sqrt[3]{2ab^2}" },
-
-      // STRANA 3: Operace s odmocninami (65-80)
-      { id: 65, sub: "3. Operace s odmocninami", q: "\\sqrt{3} \\cdot \\sqrt{12}", step: "= \\sqrt{36} = 6", res: "6" },
-      { id: 66, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot \\sqrt{8}", step: "= \\sqrt{16} = 4", res: "4" },
-      { id: 67, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", step: "= \\sqrt{\\dfrac{54}{6}} = \\sqrt{9} = 3", res: "3" },
-      { id: 68, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", step: "= \\sqrt{\\dfrac{75}{3}} = \\sqrt{25} = 5", res: "5" },
-      { id: 69, sub: "3. Operace s odmocninami", q: "3\\sqrt{2} + 5\\sqrt{2}", step: "= (3+5)\\sqrt{2} = 8\\sqrt{2}", res: "8\\sqrt{2}" },
-      { id: 70, sub: "3. Operace s odmocninami", q: "7\\sqrt{5} - 3\\sqrt{5}", step: "= (7-3)\\sqrt{5} = 4\\sqrt{5}", res: "4\\sqrt{5}" },
-      { id: 71, sub: "3. Operace s odmocninami", q: "\\sqrt{50} - \\sqrt{18}", step: "= 5\\sqrt{2} - 3\\sqrt{2} = 2\\sqrt{2}", res: "2\\sqrt{2}" },
-      { id: 72, sub: "3. Operace s odmocninami", q: "\\sqrt{27} + \\sqrt{12}", step: "= 3\\sqrt{3} + 2\\sqrt{3} = 5\\sqrt{3}", res: "5\\sqrt{3}" },
-      { id: 73, sub: "3. Operace s odmocninami", q: "(2\\sqrt{3})^2", step: "= 2^2 \\cdot 3 = 4 \\cdot 3 = 12", res: "12" },
-      { id: 74, sub: "3. Operace s odmocninami", q: "(-3\\sqrt{2})^2", step: "= (-3)^2 \\cdot 2 = 9 \\cdot 2 = 18", res: "18" },
-      { id: 75, sub: "3. Operace s odmocninami", q: "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", step: "= (\\sqrt{5})^2 - 2^2 = 5 - 4 = 1", res: "1" },
-      { id: 76, sub: "3. Operace s odmocninami", q: "(\\sqrt{3} + 1)^2", step: "= 3 + 2\\sqrt{3} + 1 = 4 + 2\\sqrt{3}", res: "4 + 2\\sqrt{3}" },
-      { id: 77, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", step: "= \\sqrt{16} + \\sqrt{36} = 4 + 6 = 10", res: "10" },
-      { id: 78, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", step: "= \\dfrac{2\\sqrt{3} + 3\\sqrt{3}}{\\sqrt{3}} = \\dfrac{5\\sqrt{3}}{\\sqrt{3}} = 5", res: "5" },
-      { id: 79, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", step: "= \\sqrt{36} = 6", res: "6" },
-      { id: 80, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", step: "= \\dfrac{\\sqrt{64}}{4} = \\dfrac{8}{4} = 2", res: "2" },
-
-      // STRANA 4: Kombinace s mocninami a racionálními exponenty (81-96)
-      { id: 81, sub: "4. Kombinace s mocninami", q: "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", step: "= x^{\\frac{1}{2}+\\frac{1}{3}} = x^{\\frac{5}{6}} = \\sqrt[6]{x^5}", res: "\\sqrt[6]{x^5}" },
-      { id: 82, sub: "4. Kombinace s mocninami", q: "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", step: "= x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{7}{6}} = x\\sqrt[6]{x}", res: "x\\sqrt[6]{x}" },
-      { id: 83, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", step: "= \\dfrac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = a^{\\frac{1}{6}} = \\sqrt[6]{a}", res: "\\sqrt[6]{a}" },
-      { id: 84, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt{a^3}\\right)^{\\frac{1}{3}}", step: "= \\left(a^{\\frac{3}{2}}\\right)^{\\frac{1}{3}} = a^{\\frac{1}{2}} = \\sqrt{a}", res: "\\sqrt{a}" },
-      { id: 85, sub: "4. Kombinace s mocninami", q: "\\sqrt{x \\sqrt{x}}", step: "= \\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = x^{\\frac{3}{4}} = \\sqrt[4]{x^3}", res: "\\sqrt[4]{x^3}" },
-      { id: 86, sub: "4. Kombinace s mocninami", q: "\\sqrt[3]{a \\cdot \\sqrt{a}}", step: "= \\sqrt[3]{a^{\\frac{3}{2}}} = a^{\\frac{1}{2}} = \\sqrt{a}", res: "\\sqrt{a}" },
-      { id: 87, sub: "4. Kombinace s mocninami", q: "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", step: "= \\dfrac{x^{\\frac{5}{2}}}{x^{\\frac{2}{3}}} = x^{\\frac{5}{2}-\\frac{2}{3}} = x^{\\frac{11}{6}} = x\\sqrt[6]{x^5}", res: "x\\sqrt[6]{x^5}" },
-      { id: 88, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt[4]{x^3}\\right)^2", step: "= x^{\\frac{3}{4} \\cdot 2} = x^{\\frac{3}{2}} = x\\sqrt{x}", res: "x\\sqrt{x}" },
-      { id: 89, sub: "4. Kombinace s mocninami", q: "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", step: "= 2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = 3\\sqrt{2}", res: "3\\sqrt{2}" },
-      { id: 90, sub: "4. Kombinace s mocninami", q: "\\sqrt{3} \\cdot \\sqrt[3]{9}", step: "= 3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{7}{6}} = 3\\sqrt[6]{3}", res: "3\\sqrt[6]{3}" },
-      { id: 91, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", step: "= \\dfrac{3}{3} = 1", res: "1" },
-      { id: 92, sub: "4. Kombinace s mocninami", q: "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", step: "= \\sqrt{a^3 b^4} = ab^2\\sqrt{a}", res: "ab^2\\sqrt{a}" },
-      { id: 93, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", step: "= \\sqrt{\\dfrac{27a^3}{3a}} = \\sqrt{9a^2} = 3a", res: "3a" },
-      { id: 94, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt[3]{2x^2}\\right)^3", step: "= 2x^2", res: "2x^2" },
-      { id: 95, sub: "4. Kombinace s mocninami", q: "\\sqrt{x^4 y^2}", step: "= x^2 y", res: "x^2 y" },
-      { id: 96, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", step: "= \\sqrt{\\dfrac{x^5}{x^3}} = \\sqrt{x^2} = x", res: "x" }
-    ];
-
-    // APPLICATION STATE
-    let currentIndex = 0; // 0 to 95
-    let showStepByStep = false;
-    let isRandomMode = false;
-    let noWorksheetMode = false;
-    let showProgressively = true;
-    let revealStage = 0; // 0 = problem only, 1 = answer revealed
-    
-    let randomOrder = [];
-    let randomPointer = 0;
-
-    // DOM ELEMENTS
-    const mathContent = document.getElementById('math-content');
-    const mathCard = document.getElementById('math-card');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnNext = document.getElementById('btn-next');
-    const progressSlider = document.getElementById('progress-slider');
-    const inputIndex = document.getElementById('input-index');
-    const chapterLabel = document.getElementById('chapter-label');
-    const subchaptersBar = document.getElementById('subchapters-bar');
-
-    const detailToggleContainer = document.getElementById('detail-toggle-container');
-    const modeResultOnly = document.getElementById('mode-result-only');
-    const modeStepByStep = document.getElementById('mode-step-by-step');
-
-    const chkNoWorksheet = document.getElementById('chk-no-worksheet');
-    const chkShowProgressively = document.getElementById('chk-show-progressively');
-    const subOptionContainer = document.getElementById('sub-option-container');
-
-    const chkRandomMode = document.getElementById('chk-random-mode');
-    const randomOptionsContainer = document.getElementById('random-options-container');
-
-    const chkVibration = document.getElementById('chk-vibration');
-    const congratsModal = document.getElementById('congrats-modal');
-    const btnRestartRandom = document.getElementById('btn-restart-random');
-
-    // Haptic vibration helper
-    function triggerVibration() {
-      if (chkVibration.checked && navigator.vibrate) {
-        navigator.vibrate(20);
-      }
-    }
-
-    // MAIN RENDER FUNCTION
-    function renderCurrentProblem() {
-      const activeIdx = isRandomMode ? randomOrder[randomPointer] : currentIndex;
-      const prob = problemsData[activeIdx];
-
-      // Update Slider & Headers
-      if (!isRandomMode) {
-        progressSlider.value = activeIdx + 1;
-        inputIndex.value = activeIdx + 1;
-        chapterLabel.innerText = prob.sub;
-        chapterLabel.classList.remove('hidden');
-        subchaptersBar.classList.remove('hidden');
-      } else {
-        progressSlider.value = randomPointer + 1;
-        inputIndex.value = randomPointer + 1;
-        chapterLabel.innerText = `Náhodně: ${randomPointer + 1} z 96`;
-        subchaptersBar.classList.add('hidden');
-      }
-
-      // Get selected random sub-mode if active
-      const randomSubMode = document.querySelector('input[name="random-sub-mode"]:checked')?.value || "interleaved";
-
-      // Build LaTeX Math string
-      let latexStr = "";
-
-      // Hide prefix number in Random Mode
-      if (!isRandomMode) {
-        latexStr += `\\mathbf{${prob.id}\\;)} \\quad `;
-      }
-
-      latexStr += prob.q;
-
-      // Construct Result/Step logic
-      if (isRandomMode) {
-        if (randomSubMode === "questions-only") {
-          latexStr += ` = \\; ?`;
-        } else if (randomSubMode === "with-results") {
-          if (showStepByStep) {
-            latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
-          } else {
-            latexStr += ` = ${highlightRes(prob.res)}`;
-          }
-        } else { // "interleaved"
-          if (revealStage === 1) {
-            if (showStepByStep) {
-              latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
-            } else {
-              latexStr += ` = ${highlightRes(prob.res)}`;
+        function initRandomIndices() {
+            randomIndices = Array.from({length: problems.length}, (_, i) => i);
+            for (let i = randomIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomIndices[i], randomIndices[j]] = [randomIndices[j], randomIndices[i]];
             }
-          } else {
-            latexStr += ` = \\; ?`;
-          }
+            randomStepPointer = 0;
         }
-      } else if (noWorksheetMode) {
-        if (showProgressively) {
-          if (revealStage === 1) {
-            if (showStepByStep) {
-              latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
-            } else {
-              latexStr += ` = ${highlightRes(prob.res)}`;
+
+        function vibrate() {
+            if (vibrationChk.checked && navigator.vibrate) {
+                navigator.vibrate(30);
             }
-          } else {
-            latexStr += ` = \\; ?`;
-          }
-        } else {
-          latexStr += ` = \\; ?`;
-        }
-      } else {
-        // Standard mode with worksheet
-        if (showStepByStep) {
-          // Yellow highlighted answer appears ONCE at the end of the steps
-          latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
-        } else {
-          latexStr += ` = ${highlightRes(prob.res)}`;
-        }
-      }
-
-      // Render MathJax
-      mathContent.innerHTML = `$${latexStr}$`;
-      if (window.MathJax && window.MathJax.typesetPromise) {
-        MathJax.typesetPromise([mathContent]).catch((err) => console.log(err));
-      }
-
-      // Enable/Disable Prev Button
-      if (isRandomMode) {
-        btnPrev.disabled = (randomPointer === 0);
-      } else {
-        btnPrev.disabled = (currentIndex === 0);
-      }
-    }
-
-    // NEXT NAVIGATION
-    function goNext() {
-      triggerVibration();
-
-      const randomSubMode = document.querySelector('input[name="random-sub-mode"]:checked')?.value || "interleaved";
-
-      // Interleaved logic for Random mode
-      if (isRandomMode && randomSubMode === "interleaved" && revealStage === 0) {
-        revealStage = 1;
-        renderCurrentProblem();
-        return;
-      }
-
-      // Progressive logic for Worksheet-Free mode
-      if (!isRandomMode && noWorksheetMode && showProgressively && revealStage === 0) {
-        revealStage = 1;
-        renderCurrentProblem();
-        return;
-      }
-
-      // Reset reveal stage
-      revealStage = 0;
-
-      // Advance
-      if (isRandomMode) {
-        if (randomPointer < 95) {
-          randomPointer++;
-          resetDetailModeOnForward();
-          renderCurrentProblem();
-        } else {
-          congratsModal.classList.remove('hidden');
-        }
-      } else {
-        if (currentIndex < 95) {
-          currentIndex++;
-          resetDetailModeOnForward();
-          renderCurrentProblem();
-        }
-      }
-    }
-
-    // PREVIOUS NAVIGATION
-    function goPrev() {
-      triggerVibration();
-      revealStage = 0;
-
-      if (isRandomMode) {
-        if (randomPointer > 0) {
-          randomPointer--;
-          renderCurrentProblem();
-        }
-      } else {
-        if (currentIndex > 0) {
-          currentIndex--;
-          renderCurrentProblem();
-        }
-      }
-    }
-
-    // Reset to "Jen výsledek" on moving forward
-    function resetDetailModeOnForward() {
-      showStepByStep = false;
-      updateDetailToggleUI();
-    }
-
-    function updateDetailToggleUI() {
-      if (showStepByStep) {
-        modeStepByStep.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
-        modeResultOnly.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
-      } else {
-        modeResultOnly.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
-        modeStepByStep.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
-      }
-    }
-
-    // EVENT LISTENERS
-
-    btnNext.addEventListener('click', goNext);
-    btnPrev.addEventListener('click', goPrev);
-
-    // Tap card to move next
-    mathCard.addEventListener('click', (e) => {
-      goNext();
-    });
-
-    // Slider input (Works in both Sequential and Random modes)
-    progressSlider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value) - 1;
-      revealStage = 0;
-      if (isRandomMode) {
-        randomPointer = val;
-      } else {
-        currentIndex = val;
-      }
-      renderCurrentProblem();
-    });
-
-    // Direct input box
-    inputIndex.addEventListener('change', (e) => {
-      let val = parseInt(e.target.value);
-      if (isNaN(val) || val < 1) val = 1;
-      if (val > 96) val = 96;
-      
-      revealStage = 0;
-      if (isRandomMode) {
-        randomPointer = val - 1;
-      } else {
-        currentIndex = val - 1;
-      }
-      renderCurrentProblem();
-    });
-
-    // Detail Mode Toggles
-    modeResultOnly.addEventListener('click', () => {
-      showStepByStep = false;
-      updateDetailToggleUI();
-      renderCurrentProblem();
-    });
-
-    modeStepByStep.addEventListener('click', () => {
-      showStepByStep = true;
-      updateDetailToggleUI();
-      renderCurrentProblem();
-    });
-
-    // Worksheet-free Mode
-    chkNoWorksheet.addEventListener('change', (e) => {
-      noWorksheetMode = e.target.checked;
-      revealStage = 0;
-      
-      if (noWorksheetMode) {
-        subOptionContainer.classList.remove('hidden');
-        // Automatically uncheck random mode
-        if (isRandomMode) {
-          chkRandomMode.checked = false;
-          isRandomMode = false;
-          randomOptionsContainer.classList.add('hidden');
-        }
-      } else {
-        subOptionContainer.classList.add('hidden');
-      }
-      renderCurrentProblem();
-    });
-
-    chkShowProgressively.addEventListener('change', (e) => {
-      showProgressively = e.target.checked;
-      revealStage = 0;
-      renderCurrentProblem();
-    });
-
-    // Random Mode
-    chkRandomMode.addEventListener('change', (e) => {
-      isRandomMode = e.target.checked;
-      revealStage = 0;
-
-      if (isRandomMode) {
-        randomOptionsContainer.classList.remove('hidden');
-        // Automatically uncheck worksheet-free mode
-        if (noWorksheetMode) {
-          chkNoWorksheet.checked = false;
-          noWorksheetMode = false;
-          subOptionContainer.classList.add('hidden');
         }
 
-        // Shuffle deck
-        randomOrder = Array.from({ length: 96 }, (_, i) => i);
-        for (let i = randomOrder.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [randomOrder[i], randomOrder[j]] = [randomOrder[j], randomOrder[i]];
+        function render() {
+            let pIndex;
+            if (isRandomMode) {
+                pIndex = randomIndices[currentIndex];
+            } else {
+                pIndex = currentIndex;
+            }
+
+            const problem = problems[pIndex];
+            const probNum = problem[0];
+            const statement = problem[1];
+            const answer = problem[2];
+            const steps = problem[3];
+
+            let htmlString = "";
+
+            if (isRandomMode) {
+                const subOpt = document.querySelector('input[name="random-sub"]:checked').value;
+                
+                if (subOpt === 'only-statements') {
+                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                } else if (subOpt === 'instant-results') {
+                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                } else {
+                    if (randomStepPointer === 0) {
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                    } else {
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                    }
+                }
+
+                const progressPct = ((currentIndex + 1) / problems.length) * 100;
+                randomProgressBar.style.width = `${progressPct}%`;
+                randomProgressText.innerText = `Příklad ${currentIndex + 1} z 96`;
+                randomSlider.value = currentIndex;
+
+            } else {
+                const noWorksheets = noWorksheetsChk.checked;
+                const isContinuous = continuousResultChk.checked;
+
+                if (noWorksheets) {
+                    if (isContinuous) {
+                        if (currentMode === 'steps') {
+                            htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
+                        } else {
+                            htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                        }
+                    } else {
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                    }
+                } else {
+                    if (currentMode === 'steps') {
+                        htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
+                    } else {
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                    }
+                }
+
+                problemInput.value = probNum;
+                sliderRange.value = probNum;
+                
+                const chapterInfo = getChapterInfo(probNum);
+                currentChapterBadge.innerText = chapterInfo.text;
+                currentChapterBadge.className = `px-2 py-0.5 bg-slate-800 rounded font-medium ${chapterInfo.color}`;
+            }
+
+            mathContent.innerHTML = `$${htmlString}$`;
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([mathContent]).catch((err) => console.log(err));
+            }
         }
-        randomPointer = 0;
-      } else {
-        randomOptionsContainer.classList.add('hidden');
-      }
 
-      renderCurrentProblem();
-    });
+        function goNext() {
+            vibrate();
+            if (isRandomMode) {
+                const subOpt = document.querySelector('input[name="random-sub"]:checked').value;
+                if (subOpt === 'interleave') {
+                    if (randomStepPointer === 0) {
+                        randomStepPointer = 1;
+                        render();
+                        return;
+                    } else {
+                        randomStepPointer = 0;
+                    }
+                }
+                
+                if (currentIndex < problems.length - 1) {
+                    currentIndex++;
+                    render();
+                } else {
+                    alert("Gratulace! Dosaženo konce náhodné sady.");
+                    randomModeChk.checked = false;
+                    randomModeChk.dispatchEvent(new Event('change'));
+                }
+            } else {
+                const noWorksheets = noWorksheetsChk.checked;
+                const isContinuous = continuousResultChk.checked;
 
-    // Random sub-mode radio buttons
-    document.querySelectorAll('input[name="random-sub-mode"]').forEach((radio) => {
-      radio.addEventListener('change', () => {
-        revealStage = 0;
-        renderCurrentProblem();
-      });
-    });
+                if (noWorksheets && isContinuous && currentMode === 'result') {
+                    currentMode = 'steps';
+                    render();
+                    return;
+                }
 
-    // Restart random deck
-    btnRestartRandom.addEventListener('click', () => {
-      congratsModal.classList.add('hidden');
-      randomPointer = 0;
-      renderCurrentProblem();
-    });
+                currentMode = 'result';
+                if (currentIndex < problems.length - 1) {
+                    currentIndex++;
+                    render();
+                } else {
+                    currentIndex = 0;
+                    render();
+                }
+            }
+        }
 
-    // INIT
-    window.onload = function() {
-      renderCurrentProblem();
-    };
-  </script>
+        function goPrev() {
+            vibrate();
+            if (isRandomMode) {
+                randomStepPointer = 0;
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    render();
+                }
+            } else {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    render();
+                } else {
+                    currentIndex = problems.length - 1;
+                    render();
+                }
+            }
+        }
+
+        nextBtn.addEventListener('click', goNext);
+        prevBtn.addEventListener('click', goPrev);
+        mathCard.addEventListener('click', goNext);
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                goNext();
+            }
+        });
+
+        modeResultBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentMode = 'result';
+            modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
+            modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+            render();
+        });
+
+        modeStepsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentMode = 'steps';
+            modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
+            modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+            render();
+        });
+
+        noWorksheetsChk.addEventListener('change', () => {
+            if (noWorksheetsChk.checked) {
+                continuousResultWrapper.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                continuousResultWrapper.classList.add('opacity-50', 'pointer-events-none');
+            }
+            currentMode = 'result';
+            render();
+        });
+
+        continuousResultChk.addEventListener('change', () => render());
+
+        randomModeChk.addEventListener('change', () => {
+            isRandomMode = randomModeChk.checked;
+            if (isRandomMode) {
+                noWorksheetsChk.checked = false;
+                continuousResultWrapper.classList.add('opacity-50', 'pointer-events-none');
+                randomSuboptions.classList.remove('hidden');
+                sequentialNavContainer.classList.add('hidden');
+                randomNavContainer.classList.remove('hidden');
+                initRandomIndices();
+                currentIndex = 0;
+            } else {
+                randomSuboptions.classList.add('hidden');
+                randomNavContainer.classList.add('hidden');
+                sequentialNavContainer.classList.remove('hidden');
+                currentIndex = 0;
+            }
+            currentMode = 'result';
+            render();
+        });
+
+        document.querySelectorAll('input[name="random-sub"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                randomStepPointer = 0;
+                render();
+            });
+        });
+
+        problemInput.addEventListener('change', (e) => {
+            let val = parseInt(e.target.value);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 96) val = 96;
+            currentIndex = val - 1;
+            currentMode = 'result';
+            render();
+        });
+
+        sliderRange.addEventListener('input', (e) => {
+            currentIndex = parseInt(e.target.value) - 1;
+            currentMode = 'result';
+            render();
+        });
+
+        randomSlider.addEventListener('input', (e) => {
+            currentIndex = parseInt(e.target.value);
+            randomStepPointer = 0;
+            render();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            render();
+        });
+    </script>
 </body>
 </html>
