@@ -21,7 +21,7 @@
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
     </script>
     <style>
-        /* Extra výrazné táhlo (kolečko) posuvníku přesahující osu nahoru a dolů */
+        /* Výrazné táhlo (kolečko) posuvníku přesahující osu nahoru a dolů */
         input[type=range]::-webkit-slider-thumb {
             pointer-events: auto;
             width: 30px;
@@ -32,7 +32,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             border: 3px solid #0f172a;
             -webkit-appearance: none;
-            margin-top: -7px; /* Posunutí nahoru, aby přesahovalo track o výšce 16px */
+            margin-top: -7px;
         }
         input[type=range]::-moz-range-thumb {
             pointer-events: auto;
@@ -116,12 +116,12 @@
         </div>
 
         <!-- Karta s příkladem -->
-        <div id="math-card" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[150px] flex flex-col justify-center items-center text-center cursor-pointer relative overflow-hidden transition-all">
-            <div id="math-content" class="w-full overflow-x-auto py-2 px-1 text-lg md:text-xl font-medium">
+        <div id="math-card" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[150px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all">
+            <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-2 px-1 text-lg md:text-xl font-medium">
                 Načítání...
             </div>
             <div class="absolute bottom-1 right-3 text-[10px] text-slate-400 pointer-events-none">
-                (Klepnutím na kartu nebo [Mezerník] = Následující)
+                (Klepnutí / [Mezerník] / [Šipky] = Navigace)
             </div>
         </div>
 
@@ -132,7 +132,7 @@
                 <button id="mode-result" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow">
                     Jen výsledek
                 </button>
-                <button id="mode-steps" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white">
+                <button id="mode-steps" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed">
                     Postup řešení
                 </button>
             </div>
@@ -146,7 +146,7 @@
                     <span class="font-medium text-slate-300">Režim bez pracovního listu (jen zadání)</span>
                 </label>
                 <label id="continuous-result-wrapper" class="flex items-center gap-2 cursor-pointer pl-6 sm:pl-0 opacity-50 pointer-events-none transition">
-                    <input type="checkbox" id="continuous-result-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+                    <input type="checkbox" id="continuous-result-chk" class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
                     <span class="text-slate-400">Zobrazovat průběžně výsledky</span>
                 </label>
             </div>
@@ -177,7 +177,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Matematický trenažér v1.11</span>
+        <span>Matematický trenažér v1.14</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -340,6 +340,23 @@
             }
         }
 
+        function hasDetailedSteps(problem) {
+            const steps = problem[3];
+            const equalsCount = (steps.match(/=/g) || []).length;
+            return equalsCount > 1;
+        }
+
+        function updateStepsButtonState(problem) {
+            if (hasDetailedSteps(problem)) {
+                modeStepsBtn.removeAttribute('disabled');
+            } else {
+                modeStepsBtn.setAttribute('disabled', 'true');
+                currentMode = 'result';
+                modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
+                modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed";
+            }
+        }
+
         function render() {
             let pIndex;
             if (isRandomMode) {
@@ -353,6 +370,8 @@
             const statement = problem[1];
             const answer = problem[2];
             const steps = problem[3];
+
+            updateStepsButtonState(problem);
 
             let htmlString = "";
 
@@ -382,7 +401,7 @@
 
                 if (noWorksheets) {
                     if (isContinuous) {
-                        if (currentMode === 'steps') {
+                        if (currentMode === 'steps' && hasDetailedSteps(problem)) {
                             htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
                         } else {
                             htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
@@ -391,7 +410,7 @@
                         htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                     }
                 } else {
-                    if (currentMode === 'steps') {
+                    if (currentMode === 'steps' && hasDetailedSteps(problem)) {
                         htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
                     } else {
                         htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
@@ -438,14 +457,25 @@
             } else {
                 const noWorksheets = noWorksheetsChk.checked;
                 const isContinuous = continuousResultChk.checked;
+                const pIndex = currentIndex;
+                const problem = problems[pIndex];
 
                 if (noWorksheets && isContinuous && currentMode === 'result') {
-                    currentMode = 'steps';
+                    if (hasDetailedSteps(problem)) {
+                        currentMode = 'steps';
+                        modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
+                        modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+                    } else {
+                        currentMode = 'result';
+                    }
                     render();
                     return;
                 }
 
                 currentMode = 'result';
+                modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
+                modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed";
+
                 if (currentIndex < problems.length - 1) {
                     currentIndex++;
                     render();
@@ -479,10 +509,17 @@
         prevBtn.addEventListener('click', goPrev);
         mathCard.addEventListener('click', goNext);
 
+        // Ovládání klávesnicí (Mezerník, Šipka vpravo, Šipka vlevo)
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+            // Nezasahovat do psaní v inputu čísla příkladu
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') return;
+
+            if (e.code === 'Space' || e.code === 'ArrowRight') {
                 e.preventDefault();
                 goNext();
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                goPrev();
             }
         });
 
@@ -490,12 +527,13 @@
             e.stopPropagation();
             currentMode = 'result';
             modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
-            modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+            modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed";
             render();
         });
 
         modeStepsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            if (modeStepsBtn.hasAttribute('disabled')) return;
             currentMode = 'steps';
             modeStepsBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
             modeResultBtn.className = "flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
