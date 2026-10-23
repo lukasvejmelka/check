@@ -1,507 +1,670 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Odmocniny a Mocniny - Řešení příkladů</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- MathJax Configuration -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            options: {
-                ignoreHtmlClass: 'tex2jax_ignore',
-                processHtmlClass: 'tex2jax_process'
-            },
-            startup: {
-                pageReady: () => {
-                    return MathJax.startup.defaultPageReady();
-                }
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Custom Styles -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procvičování - Odmocniny a mocniny</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- MathJax Config & Script -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-        /* Smooth Card Transition */
-        .card-enter {
-            animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+  <style>
+    /* Prevent text selection when tapping rapidly */
+    .no-select {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    /* MathJax sizing & contrast */
+    .mjx-chtml {
+      font-size: 110% !important;
+      color: #0f172a !important;
+    }
+    
+    @media (min-width: 640px) {
+      .mjx-chtml {
+        font-size: 130% !important;
+      }
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px) scale(0.99);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Light Cards & Glass Effect */
-        .light-panel {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
-        }
-
-        .light-button {
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: #1e293b;
-            transition: all 0.15s ease;
-        }
-
-        .light-button:active {
-            transform: scale(0.96);
-            background: #f1f5f9;
-        }
-
-        /* Hide Number Input Spinners */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* Custom Segmented Control */
-        .toggle-container {
-            background-color: #f1f5f9;
-            border: 1px solid #e2e8f0;
-        }
-
-        /* MathJax Typography - Dark Sharp Text on Light Background */
-        .mjx-chtml {
-            font-size: 135% !important;
-            color: #020617 !important;
-            outline: none !important;
-        }
-
-        @media (max-width: 480px) {
-            .mjx-chtml {
-                font-size: 118% !important;
-            }
-        }
-
-        /* Prevent text selection during swiping */
-        .no-select {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-    </style>
+    /* Custom horizontal scrollbar for long math equations */
+    .math-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+    .math-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .math-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .math-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
-<body class="flex flex-col min-h-screen justify-between p-4 sm:p-6 max-w-xl mx-auto selection:bg-blue-500 selection:text-white">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col items-center justify-between p-3 sm:p-6 no-select">
 
-    <!-- Header Section -->
-    <header class="w-full text-center my-2">
-        <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Odmocniny a Mocniny
-        </h1>
-        <p class="text-xs text-slate-500 mt-1 font-medium">Pracovní list • 96 řešených příkladů</p>
+  <!-- Main Container -->
+  <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-200/80 p-4 sm:p-7 flex flex-col gap-5 my-auto">
+    
+    <!-- HEADER -->
+    <header class="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Odmocniny a mocniny</h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-medium">Procvičování 96 příkladů</p>
+      </div>
+      <div class="flex-shrink-0 ml-3">
+        <img src="logo.png" alt="Logo" class="h-10 sm:h-12 w-auto object-contain" onerror="this.style.display='none'">
+      </div>
     </header>
 
-    <!-- Main Interactive Container -->
-    <main class="w-full my-auto flex flex-col gap-4">
-
-        <!-- Top Navigation Buttons (Big Touch Targets) -->
-        <div class="grid grid-cols-2 gap-3 no-select">
-            <button id="btnPrev" onclick="navigate(-1)" class="light-button h-14 sm:h-16 rounded-2xl flex items-center justify-center gap-2 font-bold text-base sm:text-lg shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Předchozí</span>
-            </button>
-
-            <button id="btnNext" onclick="navigate(1)" class="light-button h-14 sm:h-16 rounded-2xl flex items-center justify-center gap-2 font-bold text-base sm:text-lg shadow-sm">
-                <span>Následující</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
+    <!-- PROGRESS BAR / SLIDER -->
+    <section class="bg-slate-50 rounded-2xl p-3 sm:p-4 border border-slate-200/60 flex flex-col gap-2">
+      <!-- Info Header -->
+      <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-700">
+        <div id="chapter-label" class="text-indigo-600 truncate max-w-[200px] sm:max-w-xs font-bold">
+          1. Základní odmocniny
         </div>
-
-        <!-- Mode Toggle Switch (Segmented Control) -->
-        <div class="toggle-container p-1 rounded-2xl flex relative no-select">
-            <button id="modeResult" onclick="setMode('result')" class="w-1/2 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 z-10 text-slate-700 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Jen výsledek
-            </button>
-            <button id="modeSteps" onclick="setMode('steps')" class="w-1/2 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 z-10 text-slate-500 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Postup
-            </button>
-            <!-- Animated Background Indicator -->
-            <div id="toggleIndicator" class="absolute top-1 bottom-1 w-[calc(50%-0.25rem)] bg-white rounded-xl transition-all duration-200 ease-out shadow-md border border-slate-200"></div>
+        <div class="flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm">
+          <span class="text-slate-400">Příklad</span>
+          <input type="number" id="input-index" min="1" max="96" value="1" 
+                 class="w-10 sm:w-12 text-center font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500 rounded bg-slate-50">
+          <span class="text-slate-400">/ 96</span>
         </div>
+      </div>
 
-        <!-- Main Math Card (Supports Touch Swipe Gesture) -->
-        <div id="swipeCard" class="light-panel rounded-3xl p-5 sm:p-7 flex flex-col items-center justify-between min-h-[250px] relative overflow-hidden touch-pan-y no-select">
-            
-            <!-- Problem Header & Direct Jump Input -->
-            <div class="w-full flex items-center justify-between border-b border-slate-100 pb-3 mb-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-slate-400 font-bold text-xs uppercase tracking-wider">Příklad</span>
-                    <div class="relative flex items-center">
-                        <input type="number" id="problemInput" min="1" max="96" value="1" 
-                               onchange="onInputChange()" onfocus="this.select()"
-                               class="w-16 bg-slate-100 text-blue-700 font-extrabold text-center text-lg rounded-xl border border-slate-300 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 py-0.5 transition-all">
-                    </div>
-                    <span class="text-slate-400 text-xs font-semibold">/ 96</span>
-                </div>
-                <div id="categoryBadge" class="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 font-bold">
-                    Základní odmocniny
-                </div>
-            </div>
+      <!-- Slider -->
+      <div class="relative w-full flex items-center">
+        <input type="range" id="progress-slider" min="1" max="96" value="1" 
+               class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none">
+      </div>
 
-            <!-- Math Rendering Container -->
-            <div id="cardContent" class="w-full flex-1 flex flex-col items-center justify-center my-3 card-enter text-center">
-                <div id="mathContainer" class="tex2jax_process text-slate-900 font-semibold py-2 min-h-[70px] flex items-center justify-center w-full overflow-x-auto">
-                    <!-- LaTeX Rendered Here -->
-                </div>
-            </div>
+      <!-- Colored Subchapters Bar (Visible in Sequential Mode) -->
+      <div id="subchapters-bar" class="grid grid-cols-4 gap-1 h-1.5 w-full rounded-full overflow-hidden mt-0.5">
+        <div title="1. Základní odmocniny (1-24)" class="bg-emerald-400 h-full"></div>
+        <div title="2. Částečné odmocniny a proměnné (25-64)" class="bg-blue-400 h-full"></div>
+        <div title="3. Operace s odmocninami (65-80)" class="bg-amber-400 h-full"></div>
+        <div title="4. Kombinace s mocninami (81-96)" class="bg-purple-400 h-full"></div>
+      </div>
+    </section>
 
-            <!-- Mobile Swipe Hint & Quick Jumps -->
-            <div class="w-full pt-3 flex items-center justify-between text-xs text-slate-400 border-t border-slate-100">
-                <button onclick="jumpTo(1)" class="hover:text-slate-700 transition-colors py-1 px-2 rounded hover:bg-slate-100 font-medium">#1 Začátek</button>
-                <div class="hidden sm:flex gap-2">
-                    <button onclick="jumpTo(25)" class="hover:text-slate-700 transition-colors py-1 px-1.5 rounded hover:bg-slate-100">#25</button>
-                    <button onclick="jumpTo(65)" class="hover:text-slate-700 transition-colors py-1 px-1.5 rounded hover:bg-slate-100">#65</button>
-                    <button onclick="jumpTo(81)" class="hover:text-slate-700 transition-colors py-1 px-1.5 rounded hover:bg-slate-100">#81</button>
-                </div>
-                <span class="sm:hidden text-[10px] text-slate-400 font-medium flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M8 12h8m-8 5h8"></path></svg>
-                    Posun prstem 🖞
-                </span>
-                <button onclick="jumpTo(96)" class="hover:text-slate-700 transition-colors py-1 px-2 rounded hover:bg-slate-100 font-medium">#96 Konec</button>
-            </div>
+    <!-- MAIN MATH DISPLAY CARD -->
+    <main id="math-card" 
+          class="relative bg-gradient-to-b from-white to-slate-50/50 border-2 border-indigo-200 hover:border-indigo-400 rounded-3xl p-4 sm:p-8 shadow-lg min-h-[220px] sm:min-h-[260px] flex flex-col justify-center items-center cursor-pointer transition-all duration-200 active:scale-[0.99] group">
+      
+      <!-- Tap hint -->
+      <span class="absolute top-3 right-4 text-[10px] sm:text-xs font-medium text-slate-400 group-hover:text-indigo-500 transition-colors">
+        Klepnutím ➔ Další
+      </span>
 
+      <!-- Math Equation Container with Horizontal Scrollbar -->
+      <div class="w-full overflow-x-auto math-scroll py-4 px-1 flex justify-center items-center">
+        <div id="math-content" class="tex2jax_process text-center text-slate-900 text-lg sm:text-2xl font-medium whitespace-nowrap">
+          <!-- MathJax renders here -->
         </div>
-
+      </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="w-full text-center py-3 text-xs text-slate-400">
-        Navigace: gestem po kartě, nebo klávesami <kbd class="px-1.5 py-0.5 bg-slate-200 border border-slate-300 rounded text-slate-700 font-mono">←</kbd> a <kbd class="px-1.5 py-0.5 bg-slate-200 border border-slate-300 rounded text-slate-700 font-mono">→</kbd>
-    </footer>
+    <!-- NAVIGATION BUTTONS (DIRECTLY BELOW MATH CARD) -->
+    <section class="grid grid-cols-2 gap-3 sm:gap-4">
+      <button id="btn-prev" 
+              class="flex items-center justify-center gap-2 py-3.5 px-4 bg-white hover:bg-slate-50 active:bg-slate-100 border-2 border-slate-300 rounded-2xl font-bold text-slate-700 text-base sm:text-lg shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+        <span>Předchozí</span>
+      </button>
 
-    <!-- Application Logic Script -->
-    <script>
-        // Database of 96 exercises with LaTeX formatted double underlined results
-        const exercises = [
-            // Page 1: 1-24
-            { id: 1, expr: "\\sqrt{81}", steps: "\\underline{\\underline{9}}", result: "\\underline{\\underline{9}}", cat: "Základní odmocniny" },
-            { id: 2, expr: "\\sqrt{100}", steps: "\\underline{\\underline{10}}", result: "\\underline{\\underline{10}}", cat: "Základní odmocniny" },
-            { id: 3, expr: "\\sqrt{144}", steps: "\\underline{\\underline{12}}", result: "\\underline{\\underline{12}}", cat: "Základní odmocniny" },
-            { id: 4, expr: "\\sqrt{196}", steps: "\\underline{\\underline{14}}", result: "\\underline{\\underline{14}}", cat: "Základní odmocniny" },
-            { id: 5, expr: "\\sqrt[3]{8}", steps: "\\underline{\\underline{2}}", result: "\\underline{\\underline{2}}", cat: "Základní odmocniny" },
-            { id: 6, expr: "\\sqrt[3]{27}", steps: "\\underline{\\underline{3}}", result: "\\underline{\\underline{3}}", cat: "Základní odmocniny" },
-            { id: 7, expr: "\\sqrt[3]{125}", steps: "\\underline{\\underline{5}}", result: "\\underline{\\underline{5}}", cat: "Základní odmocniny" },
-            { id: 8, expr: "\\sqrt[3]{216}", steps: "\\underline{\\underline{6}}", result: "\\underline{\\underline{6}}", cat: "Základní odmocniny" },
-            { id: 9, expr: "\\sqrt{0{,}25}", steps: "\\underline{\\underline{0{,}5}}", result: "\\underline{\\underline{0{,}5}}", cat: "Desetinná čísla" },
-            { id: 10, expr: "\\sqrt{0{,}09}", steps: "\\underline{\\underline{0{,}3}}", result: "\\underline{\\underline{0{,}3}}", cat: "Desetinná čísla" },
-            { id: 11, expr: "\\sqrt{1{,}69}", steps: "\\underline{\\underline{1{,}3}}", result: "\\underline{\\underline{1{,}3}}", cat: "Desetinná čísla" },
-            { id: 12, expr: "\\sqrt{2{,}25}", steps: "\\underline{\\underline{1{,}5}}", result: "\\underline{\\underline{1{,}5}}", cat: "Desetinná čísla" },
-            { id: 13, expr: "\\sqrt{\\dfrac{9}{16}}", steps: "\\dfrac{\\sqrt{9}}{\\sqrt{16}} = \\underline{\\underline{\\dfrac{3}{4}}}", result: "\\underline{\\underline{\\dfrac{3}{4}}}", cat: "Zlomky" },
-            { id: 14, expr: "\\sqrt{\\dfrac{4}{25}}", steps: "\\dfrac{\\sqrt{4}}{\\sqrt{25}} = \\underline{\\underline{\\dfrac{2}{5}}}", result: "\\underline{\\underline{\\dfrac{2}{5}}}", cat: "Zlomky" },
-            { id: 15, expr: "\\sqrt{\\dfrac{16}{49}}", steps: "\\dfrac{\\sqrt{16}}{\\sqrt{49}} = \\underline{\\underline{\\dfrac{4}{7}}}", result: "\\underline{\\underline{\\dfrac{4}{7}}}", cat: "Zlomky" },
-            { id: 16, expr: "\\sqrt{\\dfrac{81}{100}}", steps: "\\dfrac{\\sqrt{81}}{\\sqrt{100}} = \\underline{\\underline{\\dfrac{9}{10}}}", result: "\\underline{\\underline{\\dfrac{9}{10}}}", cat: "Zlomky" },
-            { id: 17, expr: "\\sqrt{10^4}", steps: "10^2 = \\underline{\\underline{100}}", result: "\\underline{\\underline{100}}", cat: "Mocniny 10" },
-            { id: 18, expr: "\\sqrt{10^6}", steps: "10^3 = \\underline{\\underline{1000}}", result: "\\underline{\\underline{1000}}", cat: "Mocniny 10" },
-            { id: 19, expr: "\\sqrt[4]{16}", steps: "\\underline{\\underline{2}}", result: "\\underline{\\underline{2}}", cat: "Vyšší odmocniny" },
-            { id: 20, expr: "\\sqrt[4]{81}", steps: "\\underline{\\underline{3}}", result: "\\underline{\\underline{3}}", cat: "Vyšší odmocniny" },
-            { id: 21, expr: "\\sqrt[5]{32}", steps: "\\underline{\\underline{2}}", result: "\\underline{\\underline{2}}", cat: "Vyšší odmocniny" },
-            { id: 22, expr: "\\sqrt[5]{243}", steps: "\\underline{\\underline{3}}", result: "\\underline{\\underline{3}}", cat: "Vyšší odmocniny" },
-            { id: 23, expr: "\\sqrt[3]{0{,}001}", steps: "\\underline{\\underline{0{,}1}}", result: "\\underline{\\underline{0{,}1}}", cat: "Desetinná čísla" },
-            { id: 24, expr: "\\sqrt[3]{0{,}027}", steps: "\\underline{\\underline{0{,}3}}", result: "\\underline{\\underline{0{,}3}}", cat: "Desetinná čísla" },
+      <button id="btn-next" 
+              class="flex items-center justify-center gap-2 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-2xl font-bold text-base sm:text-lg shadow-md hover:shadow-lg transition-all">
+        <span>Následující</span>
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </section>
 
-            // Page 2: 25-64
-            { id: 25, expr: "\\sqrt{0{,}0001}", steps: "\\underline{\\underline{0{,}01}}", result: "\\underline{\\underline{0{,}01}}", cat: "Desetinná čísla" },
-            { id: 26, expr: "\\sqrt{2500}", steps: "\\underline{\\underline{50}}", result: "\\underline{\\underline{50}}", cat: "Velká čísla" },
-            { id: 27, expr: "\\sqrt[3]{1000}", steps: "\\underline{\\underline{10}}", result: "\\underline{\\underline{10}}", cat: "Mocniny 10" },
-            { id: 28, expr: "\\sqrt[4]{10000}", steps: "\\underline{\\underline{10}}", result: "\\underline{\\underline{10}}", cat: "Mocniny 10" },
-            { id: 29, expr: "\\sqrt{\\dfrac{1}{16}}", steps: "\\underline{\\underline{\\dfrac{1}{4}}}", result: "\\underline{\\underline{\\dfrac{1}{4}}}", cat: "Zlomky" },
-            { id: 30, expr: "\\sqrt[3]{\\dfrac{8}{125}}", steps: "\\dfrac{\\sqrt[3]{8}}{\\sqrt[3]{125}} = \\underline{\\underline{\\dfrac{2}{5}}}", result: "\\underline{\\underline{\\dfrac{2}{5}}}", cat: "Zlomky" },
-            { id: 31, expr: "\\sqrt{3^4}", steps: "3^2 = \\underline{\\underline{9}}", result: "\\underline{\\underline{9}}", cat: "Upravování mocnin" },
-            { id: 32, expr: "\\sqrt[3]{2^6}", steps: "2^2 = \\underline{\\underline{4}}", result: "\\underline{\\underline{4}}", cat: "Upravování mocnin" },
-            { id: 33, expr: "\\sqrt{8}", steps: "\\sqrt{4 \\cdot 2} = \\underline{\\underline{2\\sqrt{2}}}", result: "\\underline{\\underline{2\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 34, expr: "\\sqrt{12}", steps: "\\sqrt{4 \\cdot 3} = \\underline{\\underline{2\\sqrt{3}}}", result: "\\underline{\\underline{2\\sqrt{3}}}", cat: "Částečné odmocňování" },
-            { id: 35, expr: "\\sqrt{18}", steps: "\\sqrt{9 \\cdot 2} = \\underline{\\underline{3\\sqrt{2}}}", result: "\\underline{\\underline{3\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 36, expr: "\\sqrt{20}", steps: "\\sqrt{4 \\cdot 5} = \\underline{\\underline{2\\sqrt{5}}}", result: "\\underline{\\underline{2\\sqrt{5}}}", cat: "Částečné odmocňování" },
-            { id: 37, expr: "\\sqrt{27}", steps: "\\sqrt{9 \\cdot 3} = \\underline{\\underline{3\\sqrt{3}}}", result: "\\underline{\\underline{3\\sqrt{3}}}", cat: "Částečné odmocňování" },
-            { id: 38, expr: "\\sqrt{32}", steps: "\\sqrt{16 \\cdot 2} = \\underline{\\underline{4\\sqrt{2}}}", result: "\\underline{\\underline{4\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 39, expr: "\\sqrt{45}", steps: "\\sqrt{9 \\cdot 5} = \\underline{\\underline{3\\sqrt{5}}}", result: "\\underline{\\underline{3\\sqrt{5}}}", cat: "Částečné odmocňování" },
-            { id: 40, expr: "\\sqrt{50}", steps: "\\sqrt{25 \\cdot 2} = \\underline{\\underline{5\\sqrt{2}}}", result: "\\underline{\\underline{5\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 41, expr: "\\sqrt{75}", steps: "\\sqrt{25 \\cdot 3} = \\underline{\\underline{5\\sqrt{3}}}", result: "\\underline{\\underline{5\\sqrt{3}}}", cat: "Částečné odmocňování" },
-            { id: 42, expr: "\\sqrt{72}", steps: "\\sqrt{36 \\cdot 2} = \\underline{\\underline{6\\sqrt{2}}}", result: "\\underline{\\underline{6\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 43, expr: "\\sqrt{98}", steps: "\\sqrt{49 \\cdot 2} = \\underline{\\underline{7\\sqrt{2}}}", result: "\\underline{\\underline{7\\sqrt{2}}}", cat: "Částečné odmocňování" },
-            { id: 44, expr: "\\sqrt{108}", steps: "\\sqrt{36 \\cdot 3} = \\underline{\\underline{6\\sqrt{3}}}", result: "\\underline{\\underline{6\\sqrt{3}}}", cat: "Částečné odmocňování" },
-            { id: 45, expr: "\\sqrt{x^3}", steps: "\\sqrt{x^2 \\cdot x} = \\underline{\\underline{x\\sqrt{x}}}", result: "\\underline{\\underline{x\\sqrt{x}}}", cat: "Odmocniny s proměnnou" },
-            { id: 46, expr: "\\sqrt{x^5}", steps: "\\sqrt{x^4 \\cdot x} = \\underline{\\underline{x^2\\sqrt{x}}}", result: "\\underline{\\underline{x^2\\sqrt{x}}}", cat: "Odmocniny s proměnnou" },
-            { id: 47, expr: "\\sqrt{a^4}", steps: "\\underline{\\underline{a^2}}", result: "\\underline{\\underline{a^2}}", cat: "Odmocniny s proměnnou" },
-            { id: 48, expr: "\\sqrt{a^7}", steps: "\\sqrt{a^6 \\cdot a} = \\underline{\\underline{a^3\\sqrt{a}}}", result: "\\underline{\\underline{a^3\\sqrt{a}}}", cat: "Odmocniny s proměnnou" },
-            { id: 49, expr: "\\sqrt{18x^2}", steps: "\\sqrt{9 \\cdot 2 \\cdot x^2} = \\underline{\\underline{3x\\sqrt{2}}}", result: "\\underline{\\underline{3x\\sqrt{2}}}", cat: "Odmocniny s proměnnou" },
-            { id: 50, expr: "\\sqrt{20x^3}", steps: "\\sqrt{4 \\cdot 5 \\cdot x^2 \\cdot x} = \\underline{\\underline{2x\\sqrt{5x}}}", result: "\\underline{\\underline{2x\\sqrt{5x}}}", cat: "Odmocniny s proměnnou" },
-            { id: 51, expr: "\\sqrt{32y^3}", steps: "\\sqrt{16 \\cdot 2 \\cdot y^2 \\cdot y} = \\underline{\\underline{4y\\sqrt{2y}}}", result: "\\underline{\\underline{4y\\sqrt{2y}}}", cat: "Odmocniny s proměnnou" },
-            { id: 52, expr: "\\sqrt{45a^4}", steps: "\\sqrt{9 \\cdot 5 \\cdot a^4} = \\underline{\\underline{3a^2\\sqrt{5}}}", result: "\\underline{\\underline{3a^2\\sqrt{5}}}", cat: "Odmocniny s proměnnou" },
-            { id: 53, expr: "\\sqrt{50b^5}", steps: "\\sqrt{25 \\cdot 2 \\cdot b^4 \\cdot b} = \\underline{\\underline{5b^2\\sqrt{2b}}}", result: "\\underline{\\underline{5b^2\\sqrt{2b}}}", cat: "Odmocniny s proměnnou" },
-            { id: 54, expr: "\\sqrt{75x^6}", steps: "\\sqrt{25 \\cdot 3 \\cdot x^6} = \\underline{\\underline{5x^3\\sqrt{3}}}", result: "\\underline{\\underline{5x^3\\sqrt{3}}}", cat: "Odmocniny s proměnnou" },
-            { id: 55, expr: "\\sqrt[3]{16}", steps: "\\sqrt[3]{8 \\cdot 2} = \\underline{\\underline{2\\sqrt[3]{2}}}", result: "\\underline{\\underline{2\\sqrt[3]{2}}}", cat: "Částečné odmocňování" },
-            { id: 56, expr: "\\sqrt[3]{24}", steps: "\\sqrt[3]{8 \\cdot 3} = \\underline{\\underline{2\\sqrt[3]{3}}}", result: "\\underline{\\underline{2\\sqrt[3]{3}}}", cat: "Částečné odmocňování" },
-            { id: 57, expr: "\\sqrt[3]{54}", steps: "\\sqrt[3]{27 \\cdot 2} = \\underline{\\underline{3\\sqrt[3]{2}}}", result: "\\underline{\\underline{3\\sqrt[3]{2}}}", cat: "Částečné odmocňování" },
-            { id: 58, expr: "\\sqrt[3]{81}", steps: "\\sqrt[3]{27 \\cdot 3} = \\underline{\\underline{3\\sqrt[3]{3}}}", result: "\\underline{\\underline{3\\sqrt[3]{3}}}", cat: "Částečné odmocňování" },
-            { id: 59, expr: "\\sqrt[3]{x^4}", steps: "\\sqrt[3]{x^3 \\cdot x} = \\underline{\\underline{x\\sqrt[3]{x}}}", result: "\\underline{\\underline{x\\sqrt[3]{x}}}", cat: "Odmocniny s proměnnou" },
-            { id: 60, expr: "\\sqrt[3]{x^5}", steps: "\\sqrt[3]{x^3 \\cdot x^2} = \\underline{\\underline{x\\sqrt[3]{x^2}}}", result: "\\underline{\\underline{x\\sqrt[3]{x^2}}}", cat: "Odmocniny s proměnnou" },
-            { id: 61, expr: "\\sqrt[3]{8a^5}", steps: "\\sqrt[3]{8 \\cdot a^3 \\cdot a^2} = \\underline{\\underline{2a\\sqrt[3]{a^2}}}", result: "\\underline{\\underline{2a\\sqrt[3]{a^2}}}", cat: "Odmocniny s proměnnou" },
-            { id: 62, expr: "\\sqrt[3]{27b^4}", steps: "\\sqrt[3]{27 \\cdot b^3 \\cdot b} = \\underline{\\underline{3b\\sqrt[3]{b}}}", result: "\\underline{\\underline{3b\\sqrt[3]{b}}}", cat: "Odmocniny s proměnnou" },
-            { id: 63, expr: "\\sqrt{8x^5 y^3}", steps: "\\sqrt{4 \\cdot 2 \\cdot x^4 \\cdot x \\cdot y^2 \\cdot y} = \\underline{\\underline{2x^2 y\\sqrt{2xy}}}", result: "\\underline{\\underline{2x^2 y\\sqrt{2xy}}}", cat: "Odmocniny s proměnnou" },
-            { id: 64, expr: "\\sqrt[3]{16a^4 b^5}", steps: "\\sqrt[3]{8 \\cdot 2 \\cdot a^3 \\cdot a \\cdot b^3 \\cdot b^2} = \\underline{\\underline{2ab\\sqrt[3]{2ab^2}}}", result: "\\underline{\\underline{2ab\\sqrt[3]{2ab^2}}}", cat: "Odmocniny s proměnnou" },
+    <!-- OPTIONS & SWITCHES -->
+    <section class="flex flex-col gap-3 pt-2 border-t border-slate-100">
+      
+      <!-- Toggle: "Jen výsledek / Postup" -->
+      <div id="detail-toggle-container" class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+        <span class="text-xs sm:text-sm font-semibold text-slate-700 ml-1">Detail zobrazení:</span>
+        <div class="inline-flex rounded-xl bg-slate-200 p-1">
+          <button id="mode-result-only" class="px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm">
+            Jen výsledek
+          </button>
+          <button id="mode-step-by-step" class="px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            Postup
+          </button>
+        </div>
+      </div>
 
-            // Page 3: 65-80
-            { id: 65, expr: "\\sqrt{3} \\cdot \\sqrt{12}", steps: "\\sqrt{36} = \\underline{\\underline{6}}", result: "\\underline{\\underline{6}}", cat: "Operace s odmocninami" },
-            { id: 66, expr: "\\sqrt{2} \\cdot \\sqrt{8}", steps: "\\sqrt{16} = \\underline{\\underline{4}}", result: "\\underline{\\underline{4}}", cat: "Operace s odmocninami" },
-            { id: 67, expr: "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", steps: "\\sqrt{\\dfrac{54}{6}} = \\sqrt{9} = \\underline{\\underline{3}}", result: "\\underline{\\underline{3}}", cat: "Operace s odmocninami" },
-            { id: 68, expr: "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", steps: "\\sqrt{\\dfrac{75}{3}} = \\sqrt{25} = \\underline{\\underline{5}}", result: "\\underline{\\underline{5}}", cat: "Operace s odmocninami" },
-            { id: 69, expr: "3\\sqrt{2} + 5\\sqrt{2}", steps: "(3+5)\\sqrt{2} = \\underline{\\underline{8\\sqrt{2}}}", result: "\\underline{\\underline{8\\sqrt{2}}}", cat: "Součet odmocnin" },
-            { id: 70, expr: "7\\sqrt{5} - 3\\sqrt{5}", steps: "(7-3)\\sqrt{5} = \\underline{\\underline{4\\sqrt{5}}}", result: "\\underline{\\underline{4\\sqrt{5}}}", cat: "Rozdíl odmocnin" },
-            { id: 71, expr: "\\sqrt{50} - \\sqrt{18}", steps: "5\\sqrt{2} - 3\\sqrt{2} = \\underline{\\underline{2\\sqrt{2}}}", result: "\\underline{\\underline{2\\sqrt{2}}}", cat: "Úprava a součet" },
-            { id: 72, expr: "\\sqrt{27} + \\sqrt{12}", steps: "3\\sqrt{3} + 2\\sqrt{3} = \\underline{\\underline{5\\sqrt{3}}}", result: "\\underline{\\underline{5\\sqrt{3}}}", cat: "Úprava a součet" },
-            { id: 73, expr: "(2\\sqrt{3})^2", steps: "4 \\cdot 3 = \\underline{\\underline{12}}", result: "\\underline{\\underline{12}}", cat: "Mocniny odmocnin" },
-            { id: 74, expr: "(-3\\sqrt{2})^2", steps: "9 \\cdot 2 = \\underline{\\underline{18}}", result: "\\underline{\\underline{18}}", cat: "Mocniny odmocnin" },
-            { id: 75, expr: "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", steps: "(\\sqrt{5})^2 - 2^2 = 5 - 4 = \\underline{\\underline{1}}", result: "\\underline{\\underline{1}}", cat: "Algebraické vzorce" },
-            { id: 76, expr: "(\\sqrt{3} + 1)^2", steps: "(\\sqrt{3})^2 + 2\\sqrt{3} + 1 = 3 + 2\\sqrt{3} + 1 = \\underline{\\underline{4 + 2\\sqrt{3}}}", result: "\\underline{\\underline{4 + 2\\sqrt{3}}}", cat: "Algebraické vzorce" },
-            { id: 77, expr: "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", steps: "\\sqrt{16} + \\sqrt{36} = 4 + 6 = \\underline{\\underline{10}}", result: "\\underline{\\underline{10}}", cat: "Roznásobování" },
-            { id: 78, expr: "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", steps: "\\dfrac{2\\sqrt{3} + 3\\sqrt{3}}{\\sqrt{3}} = \\dfrac{5\\sqrt{3}}{\\sqrt{3}} = \\underline{\\underline{5}}", result: "\\underline{\\underline{5}}", cat: "Složitější zlomky" },
-            { id: 79, expr: "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", steps: "\\sqrt{36} = \\underline{\\underline{6}}", result: "\\underline{\\underline{6}}", cat: "Součin odmocnin" },
-            { id: 80, expr: "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", steps: "\\dfrac{\\sqrt{64}}{4} = \\dfrac{8}{4} = \\underline{\\underline{2}}", result: "\\underline{\\underline{2}}", cat: "Kombinované operace" },
+      <!-- Režim bez pracovního listu -->
+      <div class="flex flex-col gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+        <label class="flex items-center gap-2.5 cursor-pointer">
+          <input type="checkbox" id="chk-no-worksheet" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+          <span class="text-xs sm:text-sm font-semibold text-slate-700">Režim bez pracovního listu</span>
+        </label>
 
-            // Page 4: 81-96
-            { id: 81, expr: "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", steps: "x^{\\frac{1}{2} + \\frac{1}{3}} = x^{\\frac{5}{6}} = \\underline{\\underline{\\sqrt[6]{x^5}}}", result: "\\underline{\\underline{\\sqrt[6]{x^5}}}", cat: "Racionální exponenty" },
-            { id: 82, expr: "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", steps: "x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{7}{6}} = \\underline{\\underline{x \\sqrt[6]{x}}}", result: "\\underline{\\underline{x \\sqrt[6]{x}}}", cat: "Racionální exponenty" },
-            { id: 83, expr: "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", steps: "\\dfrac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3} - \\frac{1}{2}} = a^{\\frac{1}{6}} = \\underline{\\underline{\\sqrt[6]{a}}}", result: "\\underline{\\underline{\\sqrt[6]{a}}}", cat: "Racionální exponenty" },
-            { id: 84, expr: "\\left(\\sqrt{a^3}\\right)^{\\frac{1}{3}}", steps: "\\left(a^{\\frac{3}{2}}\\right)^{\\frac{1}{3}} = a^{\\frac{1}{2}} = \\underline{\\underline{\\sqrt{a}}}", result: "\\underline{\\underline{\\sqrt{a}}}", cat: "Racionální exponenty" },
-            { id: 85, expr: "\\sqrt{x \\sqrt{x}}", steps: "\\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = x^{\\frac{3}{4}} = \\underline{\\underline{\\sqrt[4]{x^3}}}", result: "\\underline{\\underline{\\sqrt[4]{x^3}}}", cat: "Vložené odmocniny" },
-            { id: 86, expr: "\\sqrt[3]{a \\cdot \\sqrt{a}}", steps: "\\sqrt[3]{a^{\\frac{3}{2}}} = a^{\\frac{1}{2}} = \\underline{\\underline{\\sqrt{a}}}", result: "\\underline{\\underline{\\sqrt{a}}}", cat: "Vložené odmocniny" },
-            { id: 87, expr: "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", steps: "\\dfrac{x^{\\frac{5}{2}}}{x^{\\frac{2}{3}}} = x^{\\frac{5}{2} - \\frac{2}{3}} = x^{\\frac{11}{6}} = \\underline{\\underline{x \\sqrt[6]{x^5}}}", result: "\\underline{\\underline{x \\sqrt[6]{x^5}}}", cat: "Složitější výrazy" },
-            { id: 88, expr: "\\left(\\sqrt[4]{x^3}\\right)^2", steps: "\\left(x^{\\frac{3}{4}}\\right)^2 = x^{\\frac{3}{2}} = \\underline{\\underline{x \\sqrt{x}}}", result: "\\underline{\\underline{x \\sqrt{x}}}", cat: "Mocniny odmocnin" },
-            { id: 89, expr: "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", steps: "2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = \\underline{\\underline{3\\sqrt{2}}}", result: "\\underline{\\underline{3\\sqrt{2}}}", cat: "Součty odmocnin" },
-            { id: 90, expr: "\\sqrt{3} \\cdot \\sqrt[3]{9}", steps: "3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{7}{6}} = \\underline{\\underline{3\\sqrt[6]{3}}}", result: "\\underline{\\underline{3\\sqrt[6]{3}}}", cat: "Různé základy/exponenty" },
-            { id: 91, expr: "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", steps: "\\dfrac{3}{3} = \\underline{\\underline{1}}", result: "\\underline{\\underline{1}}", cat: "Podíly odmocnin" },
-            { id: 92, expr: "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", steps: "\\sqrt{a^3 b^4} = \\underline{\\underline{ab^2 \\sqrt{a}}}", result: "\\underline{\\underline{ab^2 \\sqrt{a}}}", cat: "Výrazy s proměnnými" },
-            { id: 93, expr: "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", steps: "\\sqrt{\\dfrac{27a^3}{3a}} = \\sqrt{9a^2} = \\underline{\\underline{3a}}", result: "\\underline{\\underline{3a}}", cat: "Výrazy s proměnnými" },
-            { id: 94, expr: "\\left(\\sqrt[3]{2x^2}\\right)^3", steps: "\\underline{\\underline{2x^2}}", result: "\\underline{\\underline{2x^2}}", cat: "Mocniny a odmocniny" },
-            { id: 95, expr: "\\sqrt{x^4 y^2}", steps: "\\underline{\\underline{x^2 y}}", result: "\\underline{\\underline{x^2 y}}", cat: "Úpravy výrazů" },
-            { id: 96, expr: "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", steps: "\\sqrt{x^2} = \\underline{\\underline{x}}", result: "\\underline{\\underline{x}}", cat: "Podíl mocnin" }
-        ];
+        <!-- Sub-option: Zobrazovat průběžně výsledky -->
+        <div id="sub-option-container" class="hidden pl-6">
+          <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 shadow-sm">
+            <input type="checkbox" id="chk-show-progressively" checked class="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+            <span>Zobrazovat průběžně výsledky</span>
+          </label>
+        </div>
+      </div>
 
-        // State variables
-        let currentIndex = 0; // 0 to 95
-        let activeMode = 'result'; // 'result' | 'steps'
+      <!-- Režim náhodného předkládání -->
+      <div class="flex flex-col gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+        <label class="flex items-center gap-2.5 cursor-pointer">
+          <input type="checkbox" id="chk-random-mode" class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
+          <span class="text-xs sm:text-sm font-semibold text-slate-700">Režim náhodného předkládání</span>
+        </label>
 
-        // DOM Element references
-        const problemInput = document.getElementById('problemInput');
-        const mathContainer = document.getElementById('mathContainer');
-        const categoryBadge = document.getElementById('categoryBadge');
-        const cardContent = document.getElementById('cardContent');
-        const btnPrev = document.getElementById('btnPrev');
-        const btnNext = document.getElementById('btnNext');
-        const modeResultBtn = document.getElementById('modeResult');
-        const modeStepsBtn = document.getElementById('modeSteps');
-        const toggleIndicator = document.getElementById('toggleIndicator');
-        const swipeCard = document.getElementById('swipeCard');
+        <!-- Random mode options -->
+        <div id="random-options-container" class="hidden flex flex-col gap-1.5 pl-6 pt-1">
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+            <input type="radio" name="random-sub-mode" value="interleaved" checked class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
+            <span>Prokládat výsledky (Zadání ➔ Výsledek ➔ Další)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+            <input type="radio" name="random-sub-mode" value="questions-only" class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
+            <span>Procházet jen zadání</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+            <input type="radio" name="random-sub-mode" value="with-results" class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
+            <span>Zobrazovat ihned s výsledky</span>
+          </label>
+        </div>
+      </div>
 
-        // App Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            renderProblem();
-            updateToggleUI();
-            setupSwipeGestures();
-        });
+    </section>
 
-        // Navigation logic
-        function navigate(direction) {
-            // direction: 1 = FORWARD (next), -1 = BACKWARD (previous)
-            if (direction === 1) {
-                if (currentIndex < exercises.length - 1) {
-                    currentIndex++;
-                    // Forward movement resets mode to 'result'
-                    activeMode = 'result';
-                } else {
-                    return;
-                }
-            } else if (direction === -1) {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    // Backward movement keeps current active mode
-                } else {
-                    return;
-                }
-            }
+    <!-- GRATULATION MODAL -->
+    <div id="congrats-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl flex flex-col items-center gap-4">
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl">🎉</div>
+        <h2 class="text-2xl font-bold text-slate-900">Skvělá práce!</h2>
+        <p class="text-sm text-slate-600">Dokončili jste všech 96 příkladů v náhodném režimu.</p>
+        <button id="btn-restart-random" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all">
+          Spustit znovu
+        </button>
+      </div>
+    </div>
 
-            updateToggleUI();
-            renderProblem();
-        }
+  </div>
 
-        // Jump directly to specific problem ID
-        function jumpTo(id) {
-            const targetIndex = Math.max(0, Math.min(exercises.length - 1, id - 1));
-            if (targetIndex !== currentIndex) {
-                currentIndex = targetIndex;
-                renderProblem();
-            }
-        }
+  <!-- FOOTER: Haptic vibration setting -->
+  <footer class="mt-4 mb-2 text-center">
+    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors">
+      <input type="checkbox" id="chk-vibration" checked class="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+      <span>Haptická odezva (vibrace při navigaci)</span>
+    </label>
+  </footer>
 
-        // Handle user typing into input box
-        function onInputChange() {
-            let val = parseInt(problemInput.value, 10);
-            if (isNaN(val)) val = 1;
-            if (val < 1) val = 1;
-            if (val > 96) val = 96;
+  <!-- JAVASCRIPT & DATA -->
+  <script>
+    // Formátování finálního výsledku: žluté podbarvení + dvojité podtržení (pouze 1x na konci)
+    const highlightRes = (res) => `\\bbox[#fef08a, 3px]{\\underline{\\underline{${res}}}}`;
 
-            jumpTo(val);
-        }
+    // Databáze 96 příkladů z pracovního listu
+    const problemsData = [
+      // STRANA 1: Základní odmocniny (1-24)
+      { id: 1, sub: "1. Základní odmocniny", q: "\\sqrt{81}", step: "= 9", res: "9" },
+      { id: 2, sub: "1. Základní odmocniny", q: "\\sqrt{100}", step: "= 10", res: "10" },
+      { id: 3, sub: "1. Základní odmocniny", q: "\\sqrt{144}", step: "= 12", res: "12" },
+      { id: 4, sub: "1. Základní odmocniny", q: "\\sqrt{196}", step: "= 14", res: "14" },
+      { id: 5, sub: "1. Základní odmocniny", q: "\\sqrt[3]{8}", step: "= 2", res: "2" },
+      { id: 6, sub: "1. Základní odmocniny", q: "\\sqrt[3]{27}", step: "= 3", res: "3" },
+      { id: 7, sub: "1. Základní odmocniny", q: "\\sqrt[3]{125}", step: "= 5", res: "5" },
+      { id: 8, sub: "1. Základní odmocniny", q: "\\sqrt[3]{216}", step: "= 6", res: "6" },
+      { id: 9, sub: "1. Základní odmocniny", q: "\\sqrt{0{,}25}", step: "= 0{,}5", res: "0{,}5" },
+      { id: 10, sub: "1. Základní odmocniny", q: "\\sqrt{0{,}09}", step: "= 0{,}3", res: "0{,}3" },
+      { id: 11, sub: "1. Základní odmocniny", q: "\\sqrt{1{,}69}", step: "= 1{,}3", res: "1{,}3" },
+      { id: 12, sub: "1. Základní odmocniny", q: "\\sqrt{2{,}25}", step: "= 1{,}5", res: "1{,}5" },
+      { id: 13, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{9}{16}}", step: "= \\dfrac{3}{4}", res: "\\dfrac{3}{4}" },
+      { id: 14, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{4}{25}}", step: "= \\dfrac{2}{5}", res: "\\dfrac{2}{5}" },
+      { id: 15, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{16}{49}}", step: "= \\dfrac{4}{7}", res: "\\dfrac{4}{7}" },
+      { id: 16, sub: "1. Základní odmocniny", q: "\\sqrt{\\dfrac{81}{100}}", step: "= \\dfrac{9}{10}", res: "\\dfrac{9}{10}" },
+      { id: 17, sub: "1. Základní odmocniny", q: "\\sqrt{10^4}", step: "= 10^2 = 100", res: "100" },
+      { id: 18, sub: "1. Základní odmocniny", q: "\\sqrt{10^6}", step: "= 10^3 = 1000", res: "1000" },
+      { id: 19, sub: "1. Základní odmocniny", q: "\\sqrt[4]{16}", step: "= 2", res: "2" },
+      { id: 20, sub: "1. Základní odmocniny", q: "\\sqrt[4]{81}", step: "= 3", res: "3" },
+      { id: 21, sub: "1. Základní odmocniny", q: "\\sqrt[5]{32}", step: "= 2", res: "2" },
+      { id: 22, sub: "1. Základní odmocniny", q: "\\sqrt[5]{243}", step: "= 3", res: "3" },
+      { id: 23, sub: "1. Základní odmocniny", q: "\\sqrt[3]{0{,}001}", step: "= 0{,}1", res: "0{,}1" },
+      { id: 24, sub: "1. Základní odmocniny", q: "\\sqrt[3]{0{,}027}", step: "= 0{,}3", res: "0{,}3" },
 
-        // Set display mode manually (Jen výsledek vs. Postup)
-        function setMode(mode) {
-            if (activeMode !== mode) {
-                activeMode = mode;
-                updateToggleUI();
-                renderProblem(false);
-            }
-        }
+      // STRANA 2: Částečné odmocňování a proměnné (25-64)
+      { id: 25, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{0{,}0001}", step: "= 0{,}01", res: "0{,}01" },
+      { id: 26, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{2500}", step: "= 50", res: "50" },
+      { id: 27, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{1000}", step: "= 10", res: "10" },
+      { id: 28, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[4]{10000}", step: "= 10", res: "10" },
+      { id: 29, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{\\dfrac{1}{16}}", step: "= \\dfrac{1}{4}", res: "\\dfrac{1}{4}" },
+      { id: 30, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{\\dfrac{8}{125}}", step: "= \\dfrac{2}{5}", res: "\\dfrac{2}{5}" },
+      { id: 31, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{3^4}", step: "= 3^2 = 9", res: "9" },
+      { id: 32, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{2^6}", step: "= 2^2 = 4", res: "4" },
+      { id: 33, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{8}", step: "= \\sqrt{4 \\cdot 2} = 2\\sqrt{2}", res: "2\\sqrt{2}" },
+      { id: 34, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{12}", step: "= \\sqrt{4 \\cdot 3} = 2\\sqrt{3}", res: "2\\sqrt{3}" },
+      { id: 35, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{18}", step: "= \\sqrt{9 \\cdot 2} = 3\\sqrt{2}", res: "3\\sqrt{2}" },
+      { id: 36, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{20}", step: "= \\sqrt{4 \\cdot 5} = 2\\sqrt{5}", res: "2\\sqrt{5}" },
+      { id: 37, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{27}", step: "= \\sqrt{9 \\cdot 3} = 3\\sqrt{3}", res: "3\\sqrt{3}" },
+      { id: 38, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{32}", step: "= \\sqrt{16 \\cdot 2} = 4\\sqrt{2}", res: "4\\sqrt{2}" },
+      { id: 39, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{45}", step: "= \\sqrt{9 \\cdot 5} = 3\\sqrt{5}", res: "3\\sqrt{5}" },
+      { id: 40, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{50}", step: "= \\sqrt{25 \\cdot 2} = 5\\sqrt{2}", res: "5\\sqrt{2}" },
+      { id: 41, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{75}", step: "= \\sqrt{25 \\cdot 3} = 5\\sqrt{3}", res: "5\\sqrt{3}" },
+      { id: 42, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{72}", step: "= \\sqrt{36 \\cdot 2} = 6\\sqrt{2}", res: "6\\sqrt{2}" },
+      { id: 43, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{98}", step: "= \\sqrt{49 \\cdot 2} = 7\\sqrt{2}", res: "7\\sqrt{2}" },
+      { id: 44, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{108}", step: "= \\sqrt{36 \\cdot 3} = 6\\sqrt{3}", res: "6\\sqrt{3}" },
+      { id: 45, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{x^3}", step: "= \\sqrt{x^2 \\cdot x} = x\\sqrt{x}", res: "x\\sqrt{x}" },
+      { id: 46, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{x^5}", step: "= \\sqrt{x^4 \\cdot x} = x^2\\sqrt{x}", res: "x^2\\sqrt{x}" },
+      { id: 47, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{a^4}", step: "= a^2", res: "a^2" },
+      { id: 48, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{a^7}", step: "= \\sqrt{a^6 \\cdot a} = a^3\\sqrt{a}", res: "a^3\\sqrt{a}" },
+      { id: 49, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{18x^2}", step: "= 3x\\sqrt{2}", res: "3x\\sqrt{2}" },
+      { id: 50, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{20x^3}", step: "= 2x\\sqrt{5x}", res: "2x\\sqrt{5x}" },
+      { id: 51, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{32y^3}", step: "= 4y\\sqrt{2y}", res: "4y\\sqrt{2y}" },
+      { id: 52, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{45a^4}", step: "= 3a^2\\sqrt{5}", res: "3a^2\\sqrt{5}" },
+      { id: 53, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{50b^5}", step: "= 5b^2\\sqrt{2b}", res: "5b^2\\sqrt{2b}" },
+      { id: 54, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{75x^6}", step: "= 5x^3\\sqrt{3}", res: "5x^3\\sqrt{3}" },
+      { id: 55, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{16}", step: "= \\sqrt[3]{8 \\cdot 2} = 2\\sqrt[3]{2}", res: "2\\sqrt[3]{2}" },
+      { id: 56, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{24}", step: "= \\sqrt[3]{8 \\cdot 3} = 2\\sqrt[3]{3}", res: "2\\sqrt[3]{3}" },
+      { id: 57, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{54}", step: "= \\sqrt[3]{27 \\cdot 2} = 3\\sqrt[3]{2}", res: "3\\sqrt[3]{2}" },
+      { id: 58, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{81}", step: "= \\sqrt[3]{27 \\cdot 3} = 3\\sqrt[3]{3}", res: "3\\sqrt[3]{3}" },
+      { id: 59, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{x^4}", step: "= \\sqrt[3]{x^3 \\cdot x} = x\\sqrt[3]{x}", res: "x\\sqrt[3]{x}" },
+      { id: 60, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{x^5}", step: "= \\sqrt[3]{x^3 \\cdot x^2} = x\\sqrt[3]{x^2}", res: "x\\sqrt[3]{x^2}" },
+      { id: 61, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{8a^5}", step: "= 2a\\sqrt[3]{a^2}", res: "2a\\sqrt[3]{a^2}" },
+      { id: 62, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{27b^4}", step: "= 3b\\sqrt[3]{b}", res: "3b\\sqrt[3]{b}" },
+      { id: 63, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt{8x^5 y^3}", step: "= 2x^2 y\\sqrt{2xy}", res: "2x^2 y\\sqrt{2xy}" },
+      { id: 64, sub: "2. Částečné odmocňování a proměnné", q: "\\sqrt[3]{16a^4 b^5}", step: "= 2ab\\sqrt[3]{2ab^2}", res: "2ab\\sqrt[3]{2ab^2}" },
 
-        // Update toggle switch visual position and styles
-        function updateToggleUI() {
-            if (activeMode === 'result') {
-                toggleIndicator.style.transform = 'translateX(0%)';
-                modeResultBtn.classList.add('text-slate-900');
-                modeResultBtn.classList.remove('text-slate-500');
-                modeStepsBtn.classList.add('text-slate-500');
-                modeStepsBtn.classList.remove('text-slate-900');
+      // STRANA 3: Operace s odmocninami (65-80)
+      { id: 65, sub: "3. Operace s odmocninami", q: "\\sqrt{3} \\cdot \\sqrt{12}", step: "= \\sqrt{36} = 6", res: "6" },
+      { id: 66, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot \\sqrt{8}", step: "= \\sqrt{16} = 4", res: "4" },
+      { id: 67, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", step: "= \\sqrt{\\dfrac{54}{6}} = \\sqrt{9} = 3", res: "3" },
+      { id: 68, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", step: "= \\sqrt{\\dfrac{75}{3}} = \\sqrt{25} = 5", res: "5" },
+      { id: 69, sub: "3. Operace s odmocninami", q: "3\\sqrt{2} + 5\\sqrt{2}", step: "= (3+5)\\sqrt{2} = 8\\sqrt{2}", res: "8\\sqrt{2}" },
+      { id: 70, sub: "3. Operace s odmocninami", q: "7\\sqrt{5} - 3\\sqrt{5}", step: "= (7-3)\\sqrt{5} = 4\\sqrt{5}", res: "4\\sqrt{5}" },
+      { id: 71, sub: "3. Operace s odmocninami", q: "\\sqrt{50} - \\sqrt{18}", step: "= 5\\sqrt{2} - 3\\sqrt{2} = 2\\sqrt{2}", res: "2\\sqrt{2}" },
+      { id: 72, sub: "3. Operace s odmocninami", q: "\\sqrt{27} + \\sqrt{12}", step: "= 3\\sqrt{3} + 2\\sqrt{3} = 5\\sqrt{3}", res: "5\\sqrt{3}" },
+      { id: 73, sub: "3. Operace s odmocninami", q: "(2\\sqrt{3})^2", step: "= 2^2 \\cdot 3 = 4 \\cdot 3 = 12", res: "12" },
+      { id: 74, sub: "3. Operace s odmocninami", q: "(-3\\sqrt{2})^2", step: "= (-3)^2 \\cdot 2 = 9 \\cdot 2 = 18", res: "18" },
+      { id: 75, sub: "3. Operace s odmocninami", q: "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", step: "= (\\sqrt{5})^2 - 2^2 = 5 - 4 = 1", res: "1" },
+      { id: 76, sub: "3. Operace s odmocninami", q: "(\\sqrt{3} + 1)^2", step: "= 3 + 2\\sqrt{3} + 1 = 4 + 2\\sqrt{3}", res: "4 + 2\\sqrt{3}" },
+      { id: 77, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", step: "= \\sqrt{16} + \\sqrt{36} = 4 + 6 = 10", res: "10" },
+      { id: 78, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", step: "= \\dfrac{2\\sqrt{3} + 3\\sqrt{3}}{\\sqrt{3}} = \\dfrac{5\\sqrt{3}}{\\sqrt{3}} = 5", res: "5" },
+      { id: 79, sub: "3. Operace s odmocninami", q: "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", step: "= \\sqrt{36} = 6", res: "6" },
+      { id: 80, sub: "3. Operace s odmocninami", q: "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", step: "= \\dfrac{\\sqrt{64}}{4} = \\dfrac{8}{4} = 2", res: "2" },
+
+      // STRANA 4: Kombinace s mocninami a racionálními exponenty (81-96)
+      { id: 81, sub: "4. Kombinace s mocninami", q: "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", step: "= x^{\\frac{1}{2}+\\frac{1}{3}} = x^{\\frac{5}{6}} = \\sqrt[6]{x^5}", res: "\\sqrt[6]{x^5}" },
+      { id: 82, sub: "4. Kombinace s mocninami", q: "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", step: "= x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{7}{6}} = x\\sqrt[6]{x}", res: "x\\sqrt[6]{x}" },
+      { id: 83, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", step: "= \\dfrac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = a^{\\frac{1}{6}} = \\sqrt[6]{a}", res: "\\sqrt[6]{a}" },
+      { id: 84, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt{a^3}\\right)^{\\frac{1}{3}}", step: "= \\left(a^{\\frac{3}{2}}\\right)^{\\frac{1}{3}} = a^{\\frac{1}{2}} = \\sqrt{a}", res: "\\sqrt{a}" },
+      { id: 85, sub: "4. Kombinace s mocninami", q: "\\sqrt{x \\sqrt{x}}", step: "= \\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = x^{\\frac{3}{4}} = \\sqrt[4]{x^3}", res: "\\sqrt[4]{x^3}" },
+      { id: 86, sub: "4. Kombinace s mocninami", q: "\\sqrt[3]{a \\cdot \\sqrt{a}}", step: "= \\sqrt[3]{a^{\\frac{3}{2}}} = a^{\\frac{1}{2}} = \\sqrt{a}", res: "\\sqrt{a}" },
+      { id: 87, sub: "4. Kombinace s mocninami", q: "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", step: "= \\dfrac{x^{\\frac{5}{2}}}{x^{\\frac{2}{3}}} = x^{\\frac{5}{2}-\\frac{2}{3}} = x^{\\frac{11}{6}} = x\\sqrt[6]{x^5}", res: "x\\sqrt[6]{x^5}" },
+      { id: 88, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt[4]{x^3}\\right)^2", step: "= x^{\\frac{3}{4} \\cdot 2} = x^{\\frac{3}{2}} = x\\sqrt{x}", res: "x\\sqrt{x}" },
+      { id: 89, sub: "4. Kombinace s mocninami", q: "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", step: "= 2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = 3\\sqrt{2}", res: "3\\sqrt{2}" },
+      { id: 90, sub: "4. Kombinace s mocninami", q: "\\sqrt{3} \\cdot \\sqrt[3]{9}", step: "= 3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{7}{6}} = 3\\sqrt[6]{3}", res: "3\\sqrt[6]{3}" },
+      { id: 91, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", step: "= \\dfrac{3}{3} = 1", res: "1" },
+      { id: 92, sub: "4. Kombinace s mocninami", q: "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", step: "= \\sqrt{a^3 b^4} = ab^2\\sqrt{a}", res: "ab^2\\sqrt{a}" },
+      { id: 93, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", step: "= \\sqrt{\\dfrac{27a^3}{3a}} = \\sqrt{9a^2} = 3a", res: "3a" },
+      { id: 94, sub: "4. Kombinace s mocninami", q: "\\left(\\sqrt[3]{2x^2}\\right)^3", step: "= 2x^2", res: "2x^2" },
+      { id: 95, sub: "4. Kombinace s mocninami", q: "\\sqrt{x^4 y^2}", step: "= x^2 y", res: "x^2 y" },
+      { id: 96, sub: "4. Kombinace s mocninami", q: "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", step: "= \\sqrt{\\dfrac{x^5}{x^3}} = \\sqrt{x^2} = x", res: "x" }
+    ];
+
+    // APPLICATION STATE
+    let currentIndex = 0; // 0 to 95
+    let showStepByStep = false;
+    let isRandomMode = false;
+    let noWorksheetMode = false;
+    let showProgressively = true;
+    let revealStage = 0; // 0 = problem only, 1 = answer revealed
+    
+    let randomOrder = [];
+    let randomPointer = 0;
+
+    // DOM ELEMENTS
+    const mathContent = document.getElementById('math-content');
+    const mathCard = document.getElementById('math-card');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const progressSlider = document.getElementById('progress-slider');
+    const inputIndex = document.getElementById('input-index');
+    const chapterLabel = document.getElementById('chapter-label');
+    const subchaptersBar = document.getElementById('subchapters-bar');
+
+    const detailToggleContainer = document.getElementById('detail-toggle-container');
+    const modeResultOnly = document.getElementById('mode-result-only');
+    const modeStepByStep = document.getElementById('mode-step-by-step');
+
+    const chkNoWorksheet = document.getElementById('chk-no-worksheet');
+    const chkShowProgressively = document.getElementById('chk-show-progressively');
+    const subOptionContainer = document.getElementById('sub-option-container');
+
+    const chkRandomMode = document.getElementById('chk-random-mode');
+    const randomOptionsContainer = document.getElementById('random-options-container');
+
+    const chkVibration = document.getElementById('chk-vibration');
+    const congratsModal = document.getElementById('congrats-modal');
+    const btnRestartRandom = document.getElementById('btn-restart-random');
+
+    // Haptic vibration helper
+    function triggerVibration() {
+      if (chkVibration.checked && navigator.vibrate) {
+        navigator.vibrate(20);
+      }
+    }
+
+    // MAIN RENDER FUNCTION
+    function renderCurrentProblem() {
+      const activeIdx = isRandomMode ? randomOrder[randomPointer] : currentIndex;
+      const prob = problemsData[activeIdx];
+
+      // Update Slider & Headers
+      if (!isRandomMode) {
+        progressSlider.value = activeIdx + 1;
+        inputIndex.value = activeIdx + 1;
+        chapterLabel.innerText = prob.sub;
+        chapterLabel.classList.remove('hidden');
+        subchaptersBar.classList.remove('hidden');
+      } else {
+        progressSlider.value = randomPointer + 1;
+        inputIndex.value = randomPointer + 1;
+        chapterLabel.innerText = `Náhodně: ${randomPointer + 1} z 96`;
+        subchaptersBar.classList.add('hidden');
+      }
+
+      // Get selected random sub-mode if active
+      const randomSubMode = document.querySelector('input[name="random-sub-mode"]:checked')?.value || "interleaved";
+
+      // Build LaTeX Math string
+      let latexStr = "";
+
+      // Hide prefix number in Random Mode
+      if (!isRandomMode) {
+        latexStr += `\\mathbf{${prob.id}\\;)} \\quad `;
+      }
+
+      latexStr += prob.q;
+
+      // Construct Result/Step logic
+      if (isRandomMode) {
+        if (randomSubMode === "questions-only") {
+          latexStr += ` = \\; ?`;
+        } else if (randomSubMode === "with-results") {
+          if (showStepByStep) {
+            latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
+          } else {
+            latexStr += ` = ${highlightRes(prob.res)}`;
+          }
+        } else { // "interleaved"
+          if (revealStage === 1) {
+            if (showStepByStep) {
+              latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
             } else {
-                toggleIndicator.style.transform = 'translateX(100%)';
-                modeStepsBtn.classList.add('text-slate-900');
-                modeStepsBtn.classList.remove('text-slate-500');
-                modeResultBtn.classList.add('text-slate-500');
-                modeResultBtn.classList.remove('text-slate-900');
+              latexStr += ` = ${highlightRes(prob.res)}`;
             }
+          } else {
+            latexStr += ` = \\; ?`;
+          }
         }
-
-        // Render mathematical formula with LaTeX numbering and MathJax
-        function renderProblem(animate = true) {
-            const ex = exercises[currentIndex];
-
-            // Update UI elements
-            problemInput.value = ex.id;
-            categoryBadge.textContent = ex.cat;
-
-            // Enable / Disable buttons at bounds
-            btnPrev.style.opacity = currentIndex === 0 ? "0.4" : "1";
-            btnPrev.style.pointerEvents = currentIndex === 0 ? "none" : "auto";
-
-            btnNext.style.opacity = currentIndex === exercises.length - 1 ? "0.4" : "1";
-            btnNext.style.pointerEvents = currentIndex === exercises.length - 1 ? "none" : "auto";
-
-            // Trigger smooth CSS animation
-            if (animate) {
-                cardContent.classList.remove('card-enter');
-                void cardContent.offsetWidth; // Force reflow
-                cardContent.classList.add('card-enter');
-            }
-
-            // LaTeX formatting with problem number prefix in LaTeX format: \mathbf{id)} \quad
-            const numberPrefix = `\\mathbf{${ex.id})} \\quad `;
-            let texFormula = '';
-
-            if (activeMode === 'result') {
-                texFormula = `$$ ${numberPrefix} ${ex.expr} = ${ex.result} $$`;
+      } else if (noWorksheetMode) {
+        if (showProgressively) {
+          if (revealStage === 1) {
+            if (showStepByStep) {
+              latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
             } else {
-                texFormula = `$$ ${numberPrefix} ${ex.expr} = ${ex.steps} $$`;
+              latexStr += ` = ${highlightRes(prob.res)}`;
             }
+          } else {
+            latexStr += ` = \\; ?`;
+          }
+        } else {
+          latexStr += ` = \\; ?`;
+        }
+      } else {
+        // Standard mode with worksheet
+        if (showStepByStep) {
+          // Yellow highlighted answer appears ONCE at the end of the steps
+          latexStr += ` ${prob.step} = ${highlightRes(prob.res)}`;
+        } else {
+          latexStr += ` = ${highlightRes(prob.res)}`;
+        }
+      }
 
-            // Insert into DOM
-            mathContainer.innerHTML = texFormula;
+      // Render MathJax
+      mathContent.innerHTML = `$${latexStr}$`;
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise([mathContent]).catch((err) => console.log(err));
+      }
 
-            // Trigger MathJax render
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                MathJax.typesetPromise([mathContainer]).catch((err) => console.error(err));
-            }
+      // Enable/Disable Prev Button
+      if (isRandomMode) {
+        btnPrev.disabled = (randomPointer === 0);
+      } else {
+        btnPrev.disabled = (currentIndex === 0);
+      }
+    }
+
+    // NEXT NAVIGATION
+    function goNext() {
+      triggerVibration();
+
+      const randomSubMode = document.querySelector('input[name="random-sub-mode"]:checked')?.value || "interleaved";
+
+      // Interleaved logic for Random mode
+      if (isRandomMode && randomSubMode === "interleaved" && revealStage === 0) {
+        revealStage = 1;
+        renderCurrentProblem();
+        return;
+      }
+
+      // Progressive logic for Worksheet-Free mode
+      if (!isRandomMode && noWorksheetMode && showProgressively && revealStage === 0) {
+        revealStage = 1;
+        renderCurrentProblem();
+        return;
+      }
+
+      // Reset reveal stage
+      revealStage = 0;
+
+      // Advance
+      if (isRandomMode) {
+        if (randomPointer < 95) {
+          randomPointer++;
+          resetDetailModeOnForward();
+          renderCurrentProblem();
+        } else {
+          congratsModal.classList.remove('hidden');
+        }
+      } else {
+        if (currentIndex < 95) {
+          currentIndex++;
+          resetDetailModeOnForward();
+          renderCurrentProblem();
+        }
+      }
+    }
+
+    // PREVIOUS NAVIGATION
+    function goPrev() {
+      triggerVibration();
+      revealStage = 0;
+
+      if (isRandomMode) {
+        if (randomPointer > 0) {
+          randomPointer--;
+          renderCurrentProblem();
+        }
+      } else {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderCurrentProblem();
+        }
+      }
+    }
+
+    // Reset to "Jen výsledek" on moving forward
+    function resetDetailModeOnForward() {
+      showStepByStep = false;
+      updateDetailToggleUI();
+    }
+
+    function updateDetailToggleUI() {
+      if (showStepByStep) {
+        modeStepByStep.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
+        modeResultOnly.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+      } else {
+        modeResultOnly.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
+        modeStepByStep.className = "px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+      }
+    }
+
+    // EVENT LISTENERS
+
+    btnNext.addEventListener('click', goNext);
+    btnPrev.addEventListener('click', goPrev);
+
+    // Tap card to move next
+    mathCard.addEventListener('click', (e) => {
+      goNext();
+    });
+
+    // Slider input (Works in both Sequential and Random modes)
+    progressSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value) - 1;
+      revealStage = 0;
+      if (isRandomMode) {
+        randomPointer = val;
+      } else {
+        currentIndex = val;
+      }
+      renderCurrentProblem();
+    });
+
+    // Direct input box
+    inputIndex.addEventListener('change', (e) => {
+      let val = parseInt(e.target.value);
+      if (isNaN(val) || val < 1) val = 1;
+      if (val > 96) val = 96;
+      
+      revealStage = 0;
+      if (isRandomMode) {
+        randomPointer = val - 1;
+      } else {
+        currentIndex = val - 1;
+      }
+      renderCurrentProblem();
+    });
+
+    // Detail Mode Toggles
+    modeResultOnly.addEventListener('click', () => {
+      showStepByStep = false;
+      updateDetailToggleUI();
+      renderCurrentProblem();
+    });
+
+    modeStepByStep.addEventListener('click', () => {
+      showStepByStep = true;
+      updateDetailToggleUI();
+      renderCurrentProblem();
+    });
+
+    // Worksheet-free Mode
+    chkNoWorksheet.addEventListener('change', (e) => {
+      noWorksheetMode = e.target.checked;
+      revealStage = 0;
+      
+      if (noWorksheetMode) {
+        subOptionContainer.classList.remove('hidden');
+        // Automatically uncheck random mode
+        if (isRandomMode) {
+          chkRandomMode.checked = false;
+          isRandomMode = false;
+          randomOptionsContainer.classList.add('hidden');
+        }
+      } else {
+        subOptionContainer.classList.add('hidden');
+      }
+      renderCurrentProblem();
+    });
+
+    chkShowProgressively.addEventListener('change', (e) => {
+      showProgressively = e.target.checked;
+      revealStage = 0;
+      renderCurrentProblem();
+    });
+
+    // Random Mode
+    chkRandomMode.addEventListener('change', (e) => {
+      isRandomMode = e.target.checked;
+      revealStage = 0;
+
+      if (isRandomMode) {
+        randomOptionsContainer.classList.remove('hidden');
+        // Automatically uncheck worksheet-free mode
+        if (noWorksheetMode) {
+          chkNoWorksheet.checked = false;
+          noWorksheetMode = false;
+          subOptionContainer.classList.add('hidden');
         }
 
-        // Touch Swipe Gesture Implementation for Mobile Gallery Feel
-        function setupSwipeGestures() {
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchEndX = 0;
-            let touchEndY = 0;
-
-            const minSwipeDistance = 45; // Minimum horizontal pixel drag to register swipe
-
-            swipeCard.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-
-            swipeCard.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                handleSwipeGesture();
-            }, { passive: true });
-
-            function handleSwipeGesture() {
-                const deltaX = touchEndX - touchStartX;
-                const deltaY = touchEndY - touchStartY;
-
-                // Ensure movement is mostly horizontal (not vertical scroll)
-                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-                    if (deltaX < 0) {
-                        // Swiped Left -> Go to NEXT problem
-                        navigate(1);
-                    } else {
-                        // Swiped Right -> Go to PREVIOUS problem
-                        navigate(-1);
-                    }
-                }
-            }
+        // Shuffle deck
+        randomOrder = Array.from({ length: 96 }, (_, i) => i);
+        for (let i = randomOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [randomOrder[i], randomOrder[j]] = [randomOrder[j], randomOrder[i]];
         }
+        randomPointer = 0;
+      } else {
+        randomOptionsContainer.classList.add('hidden');
+      }
 
-        // Keyboard Arrow Navigation
-        document.addEventListener('keydown', (e) => {
-            if (document.activeElement === problemInput) {
-                if (e.key === 'Enter') {
-                    problemInput.blur();
-                }
-                return;
-            }
+      renderCurrentProblem();
+    });
 
-            if (e.key === 'ArrowLeft') {
-                navigate(-1);
-            } else if (e.key === 'ArrowRight') {
-                navigate(1);
-            }
-        });
-    </script>
+    // Random sub-mode radio buttons
+    document.querySelectorAll('input[name="random-sub-mode"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        revealStage = 0;
+        renderCurrentProblem();
+      });
+    });
+
+    // Restart random deck
+    btnRestartRandom.addEventListener('click', () => {
+      congratsModal.classList.add('hidden');
+      randomPointer = 0;
+      renderCurrentProblem();
+    });
+
+    // INIT
+    window.onload = function() {
+      renderCurrentProblem();
+    };
+  </script>
 </body>
 </html>
