@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematický trenažér</title>
+    <title>Checkovník</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- MathJax -->
@@ -65,16 +65,14 @@
         };
     </script>
 
-    <!-- ZDE SE NAČÍTAJÍ JEDNOTLIVÉ JS SADY (pro novou sadu stačí přidat nový řádek) -->
+    <!-- ZDE SE NAČÍTAJÍ JEDNOTLIVÉ JS SADY -->
     <script src="sada-odmocniny.js"></script>
-    <script src="sada-odmocniny-2.js"></script>
-
 
     <!-- Hlavička -->
     <header class="w-full max-w-2xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-3">
         <div>
-            <h1 id="app-title" class="text-xl font-bold text-slate-100">Matematický trenažér</h1>
-            <p id="app-subtitle" class="text-xs text-slate-400">Načítání sady...</p>
+            <h1 id="app-title" class="text-xl font-bold text-slate-100">Checkovník</h1>
+            <p id="app-subtitle" class="text-xs text-slate-400">Není vybrána žádná sada</p>
         </div>
         <!-- Výběr sady / Našeptávač -->
         <div class="w-full sm:w-auto flex items-center gap-2">
@@ -92,9 +90,9 @@
         <!-- Posuvník / Indikátor pozice (Sekvenční režim) -->
         <div id="sequential-nav-container" class="mb-4">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
-                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">Načítání...</span>
+                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">-</span>
                 <div>
-                    Příklad <input type="number" id="problem-input" min="1" max="1" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">1</span>
+                    Příklad <input type="number" id="problem-input" min="1" max="1" value="1" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">0</span>
                 </div>
             </div>
             <!-- Barevně rozlišená osa s výrazným sliderem -->
@@ -107,7 +105,7 @@
         <div id="random-nav-container" class="mb-4 hidden">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
                 <span class="text-amber-400 font-medium">Režim náhodného předkládání</span>
-                <span id="random-progress-text">Příklad 1 z 1</span>
+                <span id="random-progress-text">Příklad 0 z 0</span>
             </div>
             <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible cursor-pointer" id="random-track">
                 <div id="random-progress-bar" class="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-all duration-300 pointer-events-none" style="width: 1%;"></div>
@@ -127,8 +125,8 @@
 
         <!-- Karta s příkladem -->
         <div id="math-card" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[160px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-2">
-            <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-4 px-2 text-lg md:text-xl font-medium">
-                Načítání sady...
+            <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-4 px-2 text-lg md:text-xl font-medium text-slate-500">
+                Zadejte název sady
             </div>
             <div class="absolute bottom-1 right-3 text-[10px] text-slate-400 pointer-events-none">
                 (Klepnutí / [Mezerník] / [Šipky] = Navigace)
@@ -142,7 +140,7 @@
                 <button id="mode-result" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow">
                     Jen výsledek
                 </button>
-                <button id="mode-steps" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed">
+                <button id="mode-steps" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed" disabled>
                     Postup řešení
                 </button>
             </div>
@@ -187,7 +185,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Matematický trenažér v2.3</span>
+        <span>Checkovník v2.4</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -234,6 +232,14 @@
         const appTitle = document.getElementById('app-title');
         const appSubtitle = document.getElementById('app-subtitle');
 
+        function setInputHighlight(highlight) {
+            if (highlight) {
+                datasetInput.className = "bg-red-950/50 text-red-100 border-2 border-red-500 rounded px-2 py-1 text-xs focus:outline-none focus:border-red-400 w-full sm:w-48 placeholder-red-300 animate-pulse";
+            } else {
+                datasetInput.className = "bg-slate-800 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-slate-500 w-full sm:w-48";
+            }
+        }
+
         function vibrate() {
             if (vibrationChk.checked && navigator.vibrate) {
                 navigator.vibrate(30);
@@ -258,7 +264,15 @@
         }
 
         function render() {
-            if (!problems || problems.length === 0) return;
+            if (!problems || problems.length === 0) {
+                appTitle.innerText = "Checkovník";
+                appSubtitle.innerText = "Není vybrána žádná sada";
+                mathContent.innerHTML = `<span class="text-slate-500 font-semibold">Zadejte název sady</span>`;
+                setInputHighlight(true);
+                return;
+            }
+
+            setInputHighlight(false);
 
             let pIndex;
             if (isRandomMode) {
@@ -338,6 +352,7 @@
         }
 
         function goNext() {
+            if (!problems || problems.length === 0) return;
             vibrate();
             if (isRandomMode) {
                 const subOpt = document.querySelector('input[name="random-sub"]:checked').value;
@@ -404,6 +419,7 @@
         }
 
         function goPrev() {
+            if (!problems || problems.length === 0) return;
             vibrate();
             if (isRandomMode) {
                 randomStepPointer = 0;
@@ -426,7 +442,8 @@
             const keys = Object.keys(registry);
             
             if (keys.length === 0) {
-                mathContent.innerHTML = `<span class="text-red-400 text-sm">Žádná sada nebola načtena.</span>`;
+                problems = [];
+                render();
                 return;
             }
 
@@ -438,8 +455,14 @@
                 );
             }
 
-            const targetKey = foundKey || keys[0];
-            const data = registry[targetKey];
+            if (!foundKey) {
+                problems = [];
+                datasetInput.value = datasetId;
+                render();
+                return;
+            }
+
+            const data = registry[foundKey];
 
             appTitle.innerText = data.meta.name;
             appSubtitle.innerText = data.meta.description;
@@ -574,6 +597,7 @@
         });
 
         problemInput.addEventListener('change', (e) => {
+            if (!problems || problems.length === 0) return;
             let val = parseInt(e.target.value);
             if (isNaN(val) || val < 1) val = 1;
             if (val > problems.length) val = problems.length;
@@ -584,6 +608,7 @@
         });
 
         sliderRange.addEventListener('input', (e) => {
+            if (!problems || problems.length === 0) return;
             currentIndex = parseInt(e.target.value) - 1;
             currentMode = 'result';
             nonWorksheetStepPointer = 0;
@@ -591,6 +616,7 @@
         });
 
         randomSlider.addEventListener('input', (e) => {
+            if (!problems || problems.length === 0) return;
             currentIndex = parseInt(e.target.value);
             randomStepPointer = 0;
             render();
@@ -605,7 +631,8 @@
             if (setParam) {
                 loadDataset(setParam);
             } else {
-                loadDataset("odmocniny-mocniny-96");
+                // Žádná sada není předem vybrána -> vyvolá se výchozí prázdný stav
+                loadDataset("");
             }
         });
     </script>
