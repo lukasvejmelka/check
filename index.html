@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procvičování odmocnin a mocnin</title>
+    <title>Matematický trenažér</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- MathJax -->
@@ -59,14 +59,18 @@
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between select-none">
 
     <!-- Hlavička -->
-    <header class="w-full max-w-2xl mx-auto p-4 flex justify-between items-center border-b border-slate-800">
+    <header class="w-full max-w-2xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-3">
         <div>
-            <h1 class="text-xl font-bold text-slate-100">Odmocniny a mocniny</h1>
-            <p class="text-xs text-slate-400">Interaktivní pracovní list (96 příkladů)</p>
+            <h1 id="app-title" class="text-xl font-bold text-slate-100">Matematický trenažér</h1>
+            <p id="app-subtitle" class="text-xs text-slate-400">Načítání sady...</p>
         </div>
-        <!-- Logo -->
-        <div id="logo-container">
-            <img src="logo.png" alt="Logo" class="h-10 w-auto object-contain hidden" id="app-logo" onerror="this.style.display='none'">
+        <!-- Výběr sady / Našeptávač -->
+        <div class="w-full sm:w-auto flex items-center gap-2">
+            <label for="dataset-input" class="text-xs text-slate-400 whitespace-nowrap">Sada:</label>
+            <input list="datasets-list" id="dataset-input" class="bg-slate-800 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-slate-500 w-full sm:w-48" placeholder="Vyberte nebo napište...">
+            <datalist id="datasets-list">
+                <!-- Dynamicky plněno ze seznamu sad -->
+            </datalist>
         </div>
     </header>
 
@@ -76,20 +80,14 @@
         <!-- Posuvník / Indikátor pozice (Sekvenční režim) -->
         <div id="sequential-nav-container" class="mb-4">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
-                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">I. Základní odmocniny</span>
+                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">Načítání...</span>
                 <div>
-                    Příklad <input type="number" id="problem-input" min="1" max="96" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">96</span>
+                    Příklad <input type="number" id="problem-input" min="1" max="1" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">1</span>
                 </div>
             </div>
             <!-- Barevně rozlišená osa s výrazným sliderem -->
             <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible" id="progress-bar-track">
-                <div class="absolute top-0 left-0 h-full flex w-full pointer-events-none rounded-full overflow-hidden">
-                    <div class="h-full bg-blue-500/70" style="width: 25%;" title="1-24: I. Základní"></div>
-                    <div class="h-full bg-emerald-500/70" style="width: 41.66%;" title="25-64: II. Částečné odmocňování"></div>
-                    <div class="h-full bg-amber-500/70" style="width: 16.66%;" title="65-80: III. Operace"></div>
-                    <div class="h-full bg-purple-500/70" style="width: 16.66%;" title="81-96: IV. Kombinace"></div>
-                </div>
-                <input type="range" id="slider-range" min="1" max="96" value="1" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
+                <input type="range" id="slider-range" min="1" max="1" value="1" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
             </div>
         </div>
 
@@ -97,11 +95,11 @@
         <div id="random-nav-container" class="mb-4 hidden">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
                 <span class="text-amber-400 font-medium">Režim náhodného předkládání</span>
-                <span id="random-progress-text">Příklad 1 z 96</span>
+                <span id="random-progress-text">Příklad 1 z 1</span>
             </div>
             <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible cursor-pointer" id="random-track">
                 <div id="random-progress-bar" class="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-all duration-300 pointer-events-none" style="width: 1%;"></div>
-                <input type="range" id="random-slider" min="0" max="95" value="0" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
+                <input type="range" id="random-slider" min="0" max="0" value="0" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
             </div>
         </div>
 
@@ -118,7 +116,7 @@
         <!-- Karta s příkladem -->
         <div id="math-card" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[160px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-2">
             <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-4 px-2 text-lg md:text-xl font-medium">
-                Načítání...
+                Načítání sady...
             </div>
             <div class="absolute bottom-1 right-3 text-[10px] text-slate-400 pointer-events-none">
                 (Klepnutí / [Mezerník] / [Šipky] = Navigace)
@@ -177,7 +175,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Matematický trenažér v1.17</span>
+        <span>Matematický trenažér v2.0</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -186,114 +184,18 @@
 
     <!-- Logika aplikace -->
     <script>
-        const problems = [
-            [1, "\\sqrt{81}", "\\underline{\\underline{9}}", "\\sqrt{81} = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}"],
-            [2, "\\sqrt{100}", "\\underline{\\underline{10}}", "\\sqrt{100} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
-            [3, "\\sqrt{144}", "\\underline{\\underline{12}}", "\\sqrt{144} = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}"],
-            [4, "\\sqrt{196}", "\\underline{\\underline{14}}", "\\sqrt{196} = \\bbox[#fef08a, 3px]{\\underline{\\underline{14}}}"],
-            [5, "\\sqrt[3]{8}", "\\underline{\\underline{2}}", "\\sqrt[3]{8} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
-            [6, "\\sqrt[3]{27}", "\\underline{\\underline{3}}", "\\sqrt[3]{27} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
-            [7, "\\sqrt[3]{125}", "\\underline{\\underline{5}}", "\\sqrt[3]{125} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
-            [8, "\\sqrt[3]{216}", "\\underline{\\underline{6}}", "\\sqrt[3]{216} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
-            [9, "\\sqrt{0{,}25}", "\\underline{\\underline{0{,}5}}", "\\sqrt{0{,}25} = \\sqrt{\\frac{25}{100}} = \\frac{5}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}5}}}"],
-            [10, "\\sqrt{0{,}09}", "\\underline{\\underline{0{,}3}}", "\\sqrt{0{,}09} = \\sqrt{\\frac{9}{100}} = \\frac{3}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}"],
-            [11, "\\sqrt{1{,}69}", "\\underline{\\underline{1{,}3}}", "\\sqrt{1{,}69} = \\sqrt{\\frac{169}{100}} = \\frac{13}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}3}}}"],
-            [12, "\\sqrt{2{,}25}", "\\underline{\\underline{1{,}5}}", "\\sqrt{2{,}25} = \\sqrt{\\frac{225}{100}} = \\frac{15}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}5}}}"],
-            [13, "\\sqrt{\\dfrac{9}{16}}", "\\underline{\\underline{\\dfrac{3}{4}}}", "\\sqrt{\\frac{9}{16}} = \\frac{\\sqrt{9}}{\\sqrt{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{3}{4}}}\\mathstrut}"],
-            [14, "\\sqrt{\\dfrac{4}{25}}", "\\underline{\\underline{\\dfrac{2}{5}}}", "\\sqrt{\\frac{4}{25}} = \\frac{\\sqrt{4}}{\\sqrt{25}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}"],
-            [15, "\\sqrt{\\dfrac{16}{49}}", "\\underline{\\underline{\\dfrac{4}{7}}}", "\\sqrt{\\frac{16}{49}} = \\frac{\\sqrt{16}}{\\sqrt{49}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{4}{7}}}\\mathstrut}"],
-            [16, "\\sqrt{\\dfrac{81}{100}}", "\\underline{\\underline{\\dfrac{9}{10}}}", "\\sqrt{\\frac{81}{100}} = \\frac{\\sqrt{81}}{\\sqrt{100}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{9}{10}}}\\mathstrut}"],
-            [17, "\\sqrt{10^4}", "\\underline{\\underline{100}}", "\\sqrt{10^4} = 10^{\\frac{4}{2}} = 10^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{100}}}"],
-            [18, "\\sqrt{10^6}", "\\underline{\\underline{1000}}", "\\sqrt{10^6} = 10^{\\frac{6}{2}} = 10^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1000}}}"],
-            [19, "\\sqrt[4]{16}", "\\underline{\\underline{2}}", "\\sqrt[4]{16} = \\sqrt[4]{2^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
-            [20, "\\sqrt[4]{81}", "\\underline{\\underline{3}}", "\\sqrt[4]{81} = \\sqrt[4]{3^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
-            [21, "\\sqrt[5]{32}", "\\underline{\\underline{2}}", "\\sqrt[5]{32} = \\sqrt[5]{2^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
-            [22, "\\sqrt[5]{243}", "\\underline{\\underline{3}}", "\\sqrt[5]{243} = \\sqrt[5]{3^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
-            [23, "\\sqrt[3]{0{,}001}", "\\underline{\\underline{0{,}1}}", "\\sqrt[3]{0{,}001} = \\sqrt[3]{\\frac{1}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}1}}}"],
-            [24, "\\sqrt[3]{0{,}027}", "\\underline{\\underline{0{,}3}}", "\\sqrt[3]{0{,}027} = \\sqrt[3]{\\frac{27}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}"],
-
-            [25, "\\sqrt{0{,}0001}", "\\underline{\\underline{0{,}01}}", "\\sqrt{0{,}0001} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}01}}}"],
-            [26, "\\sqrt{2500}", "\\underline{\\underline{50}}", "\\sqrt{2500} = \\sqrt{25 \\cdot 100} = 5 \\cdot 10 = \\bbox[#fef08a, 3px]{\\underline{\\underline{50}}}"],
-            [27, "\\sqrt[3]{1000}", "\\underline{\\underline{10}}", "\\sqrt[3]{1000} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
-            [28, "\\sqrt[4]{10000}", "\\underline{\\underline{10}}", "\\sqrt[4]{10000} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
-            [29, "\\sqrt{\\dfrac{1}{16}}", "\\underline{\\underline{\\dfrac{1}{4}}}", "\\sqrt{\\frac{1}{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{1}{4}}}\\mathstrut}"],
-            [30, "\\sqrt[3]{\\dfrac{8}{125}}", "\\underline{\\underline{\\dfrac{2}{5}}}", "\\sqrt[3]{\\frac{8}{125}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}"],
-            [31, "\\sqrt{3^4}", "\\underline{\\underline{9}}", "\\sqrt{3^4} = 3^{\\frac{4}{2}} = 3^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}"],
-            [32, "\\sqrt[3]{2^6}", "\\underline{\\underline{4}}", "\\sqrt[3]{2^6} = 2^{\\frac{6}{3}} = 2^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}"],
-            [33, "\\sqrt{8}", "\\underline{\\underline{2\\sqrt{2}}}", "\\sqrt{8} = \\sqrt{4 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}"],
-            [34, "\\sqrt{12}", "\\underline{\\underline{2\\sqrt{3}}}", "\\sqrt{12} = \\sqrt{4 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{3}}}]}"],
-            [35, "\\sqrt{18}", "\\underline{\\underline{3\\sqrt{2}}}", "\\sqrt{18} = \\sqrt{9 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}"],
-            [36, "\\sqrt{20}", "\\underline{\\underline{2\\sqrt{5}}}", "\\sqrt{20} = \\sqrt{4 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{5}}}]}"],
-            [37, "\\sqrt{27}", "\\underline{\\underline{3\\sqrt{3}}}", "\\sqrt{27} = \\sqrt{9 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{3}}}]}"],
-            [38, "\\sqrt{32}", "\\underline{\\underline{4\\sqrt{2}}}", "\\sqrt{32} = \\sqrt{16 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{2}}}]}"],
-            [39, "\\sqrt{45}", "\\underline{\\underline{3\\sqrt{5}}}", "\\sqrt{45} = \\sqrt{9 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{5}}}]}"],
-            [40, "\\sqrt{50}", "\\underline{\\underline{5\\sqrt{2}}}", "\\sqrt{50} = \\sqrt{25 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{2}}}]}"],
-            [41, "\\sqrt{75}", "\\underline{\\underline{5\\sqrt{3}}}", "\\sqrt{75} = \\sqrt{25 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}"],
-            [42, "\\sqrt{72}", "\\underline{\\underline{6\\sqrt{2}}}", "\\sqrt{72} = \\sqrt{36 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{2}}}]}"],
-            [43, "\\sqrt{98}", "\\underline{\\underline{7\\sqrt{2}}}", "\\sqrt{98} = \\sqrt{49 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{7\\sqrt{2}}}]}"],
-            [44, "\\sqrt{108}", "\\underline{\\underline{6\\sqrt{3}}}", "\\sqrt{108} = \\sqrt{36 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{3}}}]}"],
-            [45, "\\sqrt{x^3}", "\\underline{\\underline{x\\sqrt{x}}}", "\\sqrt{x^3} = \\sqrt{x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt{x}}}]}"],
-            [46, "\\sqrt{x^5}", "\\underline{\\underline{x^2\\sqrt{x}}}", "\\sqrt{x^5} = \\sqrt{x^4 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2\\sqrt{x}}}]}"],
-            [47, "\\sqrt{a^4}", "\\underline{\\underline{a^2}}", "\\sqrt{a^4} = a^{\\frac{4}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^2}}}"],
-            [48, "\\sqrt{a^7}", "\\underline{\\underline{a^3\\sqrt{a}}}", "\\sqrt{a^7} = \\sqrt{a^6 \\cdot a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^3\\sqrt{a}}}]}"],
-            [49, "\\sqrt{18x^2}", "\\underline{\\underline{3x\\sqrt{2}}}", "\\sqrt{18x^2} = \\sqrt{9 \\cdot 2 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3x\\sqrt{2}}}]}"],
-            [50, "\\sqrt{20x^3}", "\\underline{\\underline{2x\\sqrt{5x}}}", "\\sqrt{20x^3} = \\sqrt{4 \\cdot 5 \\cdot x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x\\sqrt{5x}}}]}"],
-            [51, "\\sqrt{32y^3}", "\\underline{\\underline{4y\\sqrt{2y}}}", "\\sqrt{32y^3} = \\sqrt{16 \\cdot 2 \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4y\\sqrt{2y}}}]}"],
-            [52, "\\sqrt{45a^4}", "\\underline{\\underline{3a^2\\sqrt{5}}}", "\\sqrt{45a^4} = \\sqrt{9 \\cdot 5 \\cdot a^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a^2\\sqrt{5}}}]}"],
-            [53, "\\sqrt{50b^5}", "\\underline{\\underline{5b^2\\sqrt{2b}}}", "\\sqrt{50b^5} = \\sqrt{25 \\cdot 2 \\cdot b^4 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5b^2\\sqrt{2b}}}]}"],
-            [54, "\\sqrt{75x^6}", "\\underline{\\underline{5x^3\\sqrt{3}}}", "\\sqrt{75x^6} = \\sqrt{25 \\cdot 3 \\cdot x^6} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5x^3\\sqrt{3}}}]}"],
-            [55, "\\sqrt[3]{16}", "\\underline{\\underline{2\\sqrt[3]{2}}}", "\\sqrt[3]{16} = \\sqrt[3]{8 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{2}}}]}"],
-            [56, "\\sqrt[3]{24}", "\\underline{\\underline{2\\sqrt[3]{3}}}", "\\sqrt[3]{24} = \\sqrt[3]{8 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{3}}}]}"],
-            [57, "\\sqrt[3]{54}", "\\underline{\\underline{3\\sqrt[3]{2}}}", "\\sqrt[3]{54} = \\sqrt[3]{27 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{2}}}]}"],
-            [58, "\\sqrt[3]{81}", "\\underline{\\underline{3\\sqrt[3]{3}}}", "\\sqrt[3]{81} = \\sqrt[3]{27 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{3}}}]}"],
-            [59, "\\sqrt[3]{x^4}", "\\underline{\\underline{x\\sqrt[3]{x}}}", "\\sqrt[3]{x^4} = \\sqrt[3]{x^3 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x}}}]}"],
-            [60, "\\sqrt[3]{x^5}", "\\underline{\\underline{x\\sqrt[3]{x^2}}}", "\\sqrt[3]{x^5} = \\sqrt[3]{x^3 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x^2}}}]}"],
-            [61, "\\sqrt[3]{8a^5}", "\\underline{\\underline{2a\\sqrt[3]{a^2}}}", "\\sqrt[3]{8a^5} = \\sqrt[3]{8 \\cdot a^3 \\cdot a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2a\\sqrt[3]{a^2}}}]}"],
-            [62, "\\sqrt[3]{27b^4}", "\\underline{\\underline{3b\\sqrt[3]{b}}}", "\\sqrt[3]{27b^4} = \\sqrt[3]{27 \\cdot b^3 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3b\\sqrt[3]{b}}}]}"],
-            [63, "\\sqrt{8x^5 y^3}", "\\underline{\\underline{2x^2 y \\sqrt{2xy}}}", "\\sqrt{8x^5 y^3} = \\sqrt{4 \\cdot 2 \\cdot x^4 \\cdot x \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2 y \\sqrt{2xy}}}]}"],
-            [64, "\\sqrt[3]{16a^4 b^5}", "\\underline{\\underline{2ab\\sqrt[3]{2a \\cdot b^2}}}", "\\sqrt[3]{16a^4 b^5} = \\sqrt[3]{8 \\cdot 2 \\cdot a^3 \\cdot a \\cdot b^3 \\cdot b^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2ab\\sqrt[3]{2ab^2}}}]}"],
-
-            [65, "\\sqrt{3} \\cdot \\sqrt{12}", "\\underline{\\underline{6}}", "\\sqrt{3} \\cdot \\sqrt{12} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
-            [66, "\\sqrt{2} \\cdot \\sqrt{8}", "\\underline{\\underline{4}}", "\\sqrt{2} \\cdot \\sqrt{8} = \\sqrt{16} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}"],
-            [67, "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", "\\underline{\\underline{3}}", "\\frac{\\sqrt{54}}{\\sqrt{6}} = \\sqrt{\\frac{54}{6}} = \\sqrt{9} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}"],
-            [68, "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", "\\underline{\\underline{5}}", "\\frac{\\sqrt{75}}{\\sqrt{3}} = \\sqrt{\\frac{75}{3}} = \\sqrt{25} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
-            [69, "3\\sqrt{2} + 5\\sqrt{2}", "\\underline{\\underline{8\\sqrt{2}}}", "3\\sqrt{2} + 5\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{8\\sqrt{2}}}]}"],
-            [70, "7\\sqrt{5} - 3\\sqrt{5}", "\\underline{\\underline{4\\sqrt{5}}}", "7\\sqrt{5} - 3\\sqrt{5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{5}}}]}"],
-            [71, "\\sqrt{50} - \\sqrt{18}", "\\underline{\\underline{2\\sqrt{2}}}", "\\sqrt{50} - \\sqrt{18} = 5\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}"],
-            [72, "\\sqrt{27} + \\sqrt{12}", "\\underline{\\underline{5\\sqrt{3}}}", "\\sqrt{27} + \\sqrt{12} = 3\\sqrt{3} + 2\\sqrt{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}"],
-            [73, "(2\\sqrt{3})^2", "\\underline{\\underline{12}}", "(2\\sqrt{3})^2 = 2^2 \\cdot (\\sqrt{3})^2 = 4 \\cdot 3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}"],
-            [74, "(-3\\sqrt{2})^2", "\\underline{\\underline{18}}", "(-3\\sqrt{2})^2 = (-3)^2 \\cdot (\\sqrt{2})^2 = 9 \\cdot 2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{18}}}"],
-            [75, "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", "\\underline{\\underline{1}}", "(\\sqrt{5}+2)(\\sqrt{5}-2) = (\\sqrt{5})^2 - 2^2 = 5 - 4 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}"],
-            [76, "(\\sqrt{3} + 1)^2", "\\underline{\\underline{4 + 2\\sqrt{3}}}", "(\\sqrt{3}+1)^2 = 3 + 2\\sqrt{3} + 1 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4 + 2\\sqrt{3}}}]}"],
-            [77, "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", "\\underline{\\underline{10}}", "\\sqrt{2}(\\sqrt{8} + \\sqrt{18}) = \\sqrt{16} + \\sqrt{36} = 4 + 6 = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}"],
-            [78, "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", "\\underline{\\underline{5}}", "\\frac{\\sqrt{12}+\\sqrt{27}}{\\sqrt{3}} = \\frac{2\\sqrt{3}+3\\sqrt{3}}{\\sqrt{3}} = \\frac{5\\sqrt{3}}{\\sqrt{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}"],
-            [79, "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", "\\underline{\\underline{6}}", "\\sqrt{2 \\cdot 3 \\cdot 6} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}"],
-            [80, "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", "\\underline{\\underline{2}}", "\\frac{\\sqrt{64}}{4} = \\frac{8}{4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}"],
-
-            [81, "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", "\\underline{\\underline{x^{\\frac{5}{6}}}}", "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{1}{2}+\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{5}{6}}}}}"],
-            [82, "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", "\\underline{\\underline{x^{\\frac{7}{6}}}}", "x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{7}{6}}}}}"],
-            [83, "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", "\\underline{\\underline{a^{-\\frac{1}{6}}}}", "\\frac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{6}}}}}"],
-            [84, "(\\sqrt{a^3})^{\\frac{1}{3}}", "\\underline{\\underline{a^{\\frac{1}{2}}}}", "(a^{\\frac{3}{2}})^{\\frac{1}{3}} = a^{\\frac{3}{2} \\cdot \\frac{1}{3}} = a^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\sqrt{a}}}}"],
-            [85, "\\sqrt{x \\sqrt{x}}", "\\underline{\\underline{x^{\\frac{3}{4}}}}", "\\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = (x^{\\frac{3}{2}})^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{4}}}}}"],
-            [86, "\\sqrt[3]{a \\cdot \\sqrt{a}}", "\\underline{\\underline{a^{\\frac{1}{2}}}}", "\\sqrt[3]{a \\cdot a^{\\frac{1}{2}}} = \\sqrt[3]{a^{\\frac{3}{2}}} = (a^{\\frac{3}{2}})^{\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{2}}}}}"],
-            [87, "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", "\\underline{\\underline{x^{\\frac{13}{6}}}}", "\\frac{x^2 \\cdot x^{\\frac{1}{2}}}{x^{\\frac{2}{3}}} = x^{2 + \\frac{1}{2} - \\frac{2}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{13}{6}}}}}"],
-            [88, "(\\sqrt[4]{x^3})^2", "\\underline{\\underline{x^{\\frac{3}{2}}}}", "(x^{\\frac{3}{4}})^2 = x^{\\frac{6}{4}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{2}}}}}"],
-            [89, "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", "\\underline{\\underline{3\\sqrt{2}}}", "2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}"],
-            [90, "\\sqrt{3} \\cdot \\sqrt[3]{9}", "\\underline{\\underline{3^{\\frac{5}{6}}}}", "3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3^{\\frac{5}{6}}}}}"],
-            [91, "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", "\\underline{\\underline{1}}", "\\frac{3}{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}"],
-            [92, "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", "\\underline{\\underline{ab^2\\sqrt{a}}}", "\\sqrt{a^3 b^4} = a b^2 \\sqrt{a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{ab^2\\sqrt{a}}}]}"],
-            [93, "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", "\\underline{\\underline{3a}}", "\\sqrt{\\frac{27a^3}{3a}} = \\sqrt{9a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a}}}"],
-            [94, "(\\sqrt[3]{2x^2})^3", "\\underline{\\underline{2x^2}}", "(\\sqrt[3]{2x^2})^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2}}}"],
-            [95, "\\sqrt{x^4 y^2}", "\\underline{\\underline{x^2 y}}", "\\sqrt{x^4 y^2} = x^{\\frac{4}{2}} y^{\\frac{2}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2 y}}}"],
-            [96, "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", "\\underline{\\underline{x}}", "\\sqrt{\\frac{x^5}{x^3}} = \\sqrt{x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x}}}"]
+        // Registr dostupných sad příkladů (lze v budoucnu snadno rozšiřovat)
+        const availableDatasets = [
+            { id: "odmocniny-mocniny-96", name: "Odmocniny a mocniny", file: "sada-odmocniny.json" }
         ];
 
+        let problems = []; // Zde se načtou příklady z JSONu
         let currentIndex = 0;
         let currentMode = 'result';
         let isRandomMode = false;
         let randomIndices = [];
         let randomStepPointer = 0;
-        let nonWorksheetStepPointer = 0; // 0: zadání, 1: zadání + výsledek
+        let nonWorksheetStepPointer = 0;
 
         const mathCard = document.getElementById('math-card');
         const mathContent = document.getElementById('math-content');
@@ -302,6 +204,7 @@
         const problemInput = document.getElementById('problem-input');
         const sliderRange = document.getElementById('slider-range');
         const currentChapterBadge = document.getElementById('current-chapter-badge');
+        const totalCountSpan = document.getElementById('total-count');
         
         const modeResultBtn = document.getElementById('mode-result');
         const modeStepsBtn = document.getElementById('mode-steps');
@@ -318,22 +221,11 @@
         const randomProgressText = document.getElementById('random-progress-text');
         const randomSlider = document.getElementById('random-slider');
         const vibrationChk = document.getElementById('vibration-chk');
-
-        function getChapterInfo(idx) {
-            if (idx <= 24) return { text: "I. Základní odmocniny", color: "text-blue-400" };
-            if (idx <= 64) return { text: "II. Částečné odmocňování", color: "text-emerald-400" };
-            if (idx <= 80) return { text: "III. Operace s odmocninami", color: "text-amber-400" };
-            return { text: "IV. Kombinace a rac. exponenty", color: "text-purple-400" };
-        }
-
-        function initRandomIndices() {
-            randomIndices = Array.from({length: problems.length}, (_, i) => i);
-            for (let i = randomIndices.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [randomIndices[i], randomIndices[j]] = [randomIndices[j], randomIndices[i]];
-            }
-            randomStepPointer = 0;
-        }
+        
+        const datasetInput = document.getElementById('dataset-input');
+        const datasetsList = document.getElementById('datasets-list');
+        const appTitle = document.getElementById('app-title');
+        const appSubtitle = document.getElementById('app-subtitle');
 
         function vibrate() {
             if (vibrationChk.checked && navigator.vibrate) {
@@ -342,7 +234,7 @@
         }
 
         function hasDetailedSteps(problem) {
-            const steps = problem[3];
+            const steps = problem.steps;
             const equalsCount = (steps.match(/=/g) || []).length;
             return equalsCount > 1;
         }
@@ -359,6 +251,8 @@
         }
 
         function render() {
+            if (problems.length === 0) return;
+
             let pIndex;
             if (isRandomMode) {
                 pIndex = randomIndices[currentIndex];
@@ -367,10 +261,10 @@
             }
 
             const problem = problems[pIndex];
-            const probNum = problem[0];
-            const statement = problem[1];
-            const answer = problem[2];
-            const steps = problem[3];
+            const probNum = problem.id;
+            const statement = problem.statement;
+            const answer = problem.answer;
+            const steps = problem.steps;
 
             updateStepsButtonState(problem);
 
@@ -393,7 +287,7 @@
 
                 const progressPct = ((currentIndex + 1) / problems.length) * 100;
                 randomProgressBar.style.width = `${progressPct}%`;
-                randomProgressText.innerText = `Příklad ${currentIndex + 1} z 96`;
+                randomProgressText.innerText = `Příklad ${currentIndex + 1} z ${problems.length}`;
                 randomSlider.value = currentIndex;
 
             } else {
@@ -425,9 +319,8 @@
                 problemInput.value = probNum;
                 sliderRange.value = probNum;
                 
-                const chapterInfo = getChapterInfo(probNum);
-                currentChapterBadge.innerText = chapterInfo.text;
-                currentChapterBadge.className = `px-2 py-0.5 bg-slate-800 rounded font-medium ${chapterInfo.color}`;
+                currentChapterBadge.innerText = problem.chapterTitle;
+                currentChapterBadge.className = `px-2 py-0.5 bg-slate-800 rounded font-medium ${problem.chapterColor}`;
             }
 
             mathContent.innerHTML = `$${htmlString}$`;
@@ -521,12 +414,81 @@
             }
         }
 
+        // Načtení sady JSON souboru
+        async function loadDataset(datasetId) {
+            const found = availableDatasets.find(d => d.id === datasetId || d.name.toLowerCase().includes(datasetId.toLowerCase()));
+            const target = found || availableDatasets[0]; // Výchozí první
+
+            try {
+                const response = await fetch(target.file);
+                if (!response.ok) throw new Error("Chyba při načítání souboru sady.");
+                const data = await response.json();
+
+                appTitle.innerText = data.meta.name;
+                appSubtitle.innerText = data.meta.description;
+                datasetInput.value = data.meta.name;
+
+                // Zpracování kapitol a zploštění do jednoho pole s metadaty kapitoly
+                problems = [];
+                data.chapters.forEach(chap => {
+                    chap.problems.forEach(prob => {
+                        problems.push({
+                            ...prob,
+                            chapterTitle: chap.title,
+                            chapterColor: chap.color || "text-slate-300"
+                        });
+                    });
+                });
+
+                // Aktualizace UI rozsahů
+                problemInput.max = problems.length;
+                sliderRange.max = problems.length;
+                totalCountSpan.innerText = problems.length;
+                randomSlider.max = problems.length - 1;
+
+                currentIndex = 0;
+                currentMode = 'result';
+                nonWorksheetStepPointer = 0;
+                
+                if (isRandomMode) {
+                    initRandomIndices();
+                }
+
+                render();
+            } catch (err) {
+                console.error(err);
+                mathContent.innerHTML = `<span class="text-red-500">Nepodařilo se načíst datovou sadu "${datasetId}".</span>`;
+            }
+        }
+
+        function initRandomIndices() {
+            randomIndices = Array.from({length: problems.length}, (_, i) => i);
+            for (let i = randomIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomIndices[i], randomIndices[j]] = [randomIndices[j], randomIndices[i]];
+            }
+            randomStepPointer = 0;
+        }
+
+        // Inicializace našeptávače v datalistu
+        function initDatasetSelector() {
+            datasetsList.innerHTML = '';
+            availableDatasets.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.name;
+                opt.setAttribute('data-id', d.id);
+                datasetsList.appendChild(opt);
+            });
+        }
+
+        // Eventy
         nextBtn.addEventListener('click', goNext);
         prevBtn.addEventListener('click', goPrev);
         mathCard.addEventListener('click', goNext);
 
         window.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' && e.target.type === 'number') return;
+            if (e.target === datasetInput) return;
 
             if (e.code === 'Space' || e.code === 'ArrowRight') {
                 e.preventDefault();
@@ -534,6 +496,20 @@
             } else if (e.code === 'ArrowLeft') {
                 e.preventDefault();
                 goPrev();
+            }
+        });
+
+        datasetInput.addEventListener('change', (e) => {
+            const val = e.target.value;
+            const matched = availableDatasets.find(d => d.name.toLowerCase() === val.toLowerCase() || d.id.toLowerCase() === val.toLowerCase());
+            if (matched) {
+                loadDataset(matched.id);
+            } else {
+                // Pokus o částečnou shodu
+                const partial = availableDatasets.find(d => d.name.toLowerCase().includes(val.toLowerCase()) || d.id.toLowerCase().includes(val.toLowerCase()));
+                if (partial) {
+                    loadDataset(partial.id);
+                }
             }
         });
 
@@ -601,7 +577,7 @@
         problemInput.addEventListener('change', (e) => {
             let val = parseInt(e.target.value);
             if (isNaN(val) || val < 1) val = 1;
-            if (val > 96) val = 96;
+            if (val > problems.length) val = problems.length;
             currentIndex = val - 1;
             currentMode = 'result';
             nonWorksheetStepPointer = 0;
@@ -621,8 +597,19 @@
             render();
         });
 
+        // Start při načtení stránky
         window.addEventListener('DOMContentLoaded', () => {
-            render();
+            initDatasetSelector();
+
+            // Kontrola URL parametru např. ?set=odmocniny-mocniny-96
+            const urlParams = new URLSearchParams(window.location.search);
+            const setParam = urlParams.get('set') || urlParams.get('id') || urlParams.get('sada');
+
+            if (setParam) {
+                loadDataset(setParam);
+            } else {
+                loadDataset("odmocniny-mocniny-96"); // Výchozí sada
+            }
         });
     </script>
 </body>
