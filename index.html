@@ -74,15 +74,16 @@
     <script src="sada-odmocniny-2.js"></script>
     <script src="sada-odmocniny-3.js"></script>
 
-    <!-- Hlavička s logem -->
+
+    <!-- Hlavička s logem (kliknutí resetuje aplikaci) -->
     <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-2">
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-            <img src="logo.svg" alt="Logo" class="h-12 w-auto object-contain">
+        <a href="index.html" class="flex items-center gap-3 w-full sm:w-auto cursor-pointer group focus:outline-none">
+            <img src="logo.svg" alt="Logo" class="h-12 w-auto object-contain transition group-hover:scale-105">
             <div>
-                <h1 id="app-title" class="text-lg font-bold text-slate-100">Checkovník</h1>
+                <h1 id="app-title" class="text-lg font-bold text-slate-100 group-hover:text-amber-400 transition">Checkovník</h1>
                 <p id="app-subtitle" class="text-xs text-slate-400">Není vybrána žádná sada</p>
             </div>
-        </div>
+        </a>
         <!-- Výběr sady / Našeptávač + tlačítko nastavení -->
         <div class="w-full sm:w-auto flex items-center gap-2">
             <label for="dataset-input" class="text-xs text-slate-400 whitespace-nowrap">Sada:</label>
@@ -142,16 +143,14 @@
             </button>
         </div>
 
-        <!-- Přepínač režimu: Výsledek / Postup (nově graficky poladěno) -->
-        <div class="mt-1 bg-slate-800/40 p-1.5 rounded-xl border border-slate-800 flex justify-center">
-            <div class="inline-flex rounded-lg bg-slate-900/80 p-1 border border-slate-700/80 w-full shadow-inner">
-                <button id="mode-result" class="flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow">
-                    Jen výsledek
-                </button>
-                <button id="mode-steps" class="flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
-                    Postup řešení
-                </button>
-            </div>
+        <!-- Přepínač režimu: Výsledek / Postup (elegantní design) -->
+        <div class="mt-1 flex rounded-xl bg-slate-800/80 p-1 border border-slate-700/60 shadow-lg">
+            <button id="mode-result" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm">
+                Jen výsledek
+            </button>
+            <button id="mode-steps" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+                Postup řešení
+            </button>
         </div>
 
         <!-- Pokročilá nastavení (skrytá pod ozubeným kolečkem) -->
@@ -193,7 +192,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.14</span>
+        <span>Checkovník v2.15</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -243,6 +242,11 @@
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
         const advancedSettingsContainer = document.getElementById('advanced-settings-container');
 
+        // Pomocná funkce pro odstranění diakritiky a převedení na malá písmena
+        function normalizeString(str) {
+            return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
         // Toggle pro pokročilá nastavení (ozubené kolečko)
         settingsToggleBtn.addEventListener('click', () => {
             advancedSettingsContainer.classList.toggle('hidden');
@@ -275,8 +279,8 @@
             } else {
                 modeStepsBtn.setAttribute('disabled', 'true');
                 currentMode = 'result';
-                modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
-                modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
+                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
             }
         }
 
@@ -432,8 +436,8 @@
                     currentMode = 'result';
                 }
 
-                modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
-                modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
+                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
 
                 if (currentIndex < problems.length - 1) {
                     currentIndex++;
@@ -479,13 +483,15 @@
                 return;
             }
 
-            // Hledání přesné shody klíče (ID) nebo názvu
-            let foundKey = keys.find(key => key.toLowerCase() === datasetId.toLowerCase());
+            const normDatasetId = normalizeString(datasetId);
+
+            // Hledání přesné shody (ignorující diakritiku a velikost písmen)
+            let foundKey = keys.find(key => normalizeString(key) === normDatasetId);
             
             if (!foundKey) {
                 foundKey = keys.find(key => {
                     const name = registry[key]?.meta?.name;
-                    return name && name.toLowerCase() === datasetId.toLowerCase();
+                    return name && normalizeString(name) === normDatasetId;
                 });
             }
 
@@ -568,7 +574,7 @@
             datasetInput.value = "";
         });
 
-        // Inteligentní našeptávač: vyhodnotí shody, pokud je výsledkem právě jedna sada, automaticky ji načte
+        // Inteligentní našeptávač (shovívavý k diakritice a velikosti písmen)
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
@@ -577,18 +583,16 @@
             }
 
             const registry = window.datasetRegistry || {};
+            const normQuery = normalizeString(query);
+            
             const matchingEntries = Object.values(registry).filter(d => {
-                const name = (d.meta?.name || "").toLowerCase();
-                const id = (d.meta?.id || "").toLowerCase();
-                const q = query.toLowerCase();
-                return name.includes(q) || id.includes(q);
+                const name = normalizeString(d.meta?.name || "");
+                const id = normalizeString(d.meta?.id || "");
+                return name.includes(normQuery) || id.includes(normQuery);
             });
 
             if (matchingEntries.length === 1) {
-                // Unikátní shoda - automaticky vybereme a načteme
                 loadDataset(matchingEntries[0].meta.name);
-            } else {
-                // Více možností nebo žádná - vyčkáme na další znaky / přesný výběr
             }
         });
 
@@ -616,8 +620,8 @@
         modeResultBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             currentMode = 'result';
-            modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
-            modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200";
+            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
+            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200";
             render();
         });
 
@@ -625,8 +629,8 @@
             e.stopPropagation();
             if (modeStepsBtn.hasAttribute('disabled')) return;
             currentMode = 'steps';
-            modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
-            modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200";
+            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
+            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200";
             render();
         });
 
