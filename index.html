@@ -75,7 +75,7 @@
     <!-- Hlavička s logem -->
     <header class="w-full max-w-2xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-3">
         <div class="flex items-center gap-3 w-full sm:w-auto">
-            <img src="logo.png" alt="Logo" class="h-10 w-auto object-contain">
+            <img src="logo.svg" alt="Logo" class="h-10 w-auto object-contain">
             <div>
                 <h1 id="app-title" class="text-xl font-bold text-slate-100">Checkovník</h1>
                 <p id="app-subtitle" class="text-xs text-slate-400">Není vybrána žádná sada</p>
@@ -123,14 +123,14 @@
             </div>
         </div>
 
-        <!-- Karta s příkladem (Čistá černá barva textu, bez nápovědy) -->
+        <!-- Karta s příkladem (Čistá černá barva textu) -->
         <div id="math-card" class="bg-white text-black rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[160px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-2">
             <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-4 px-2 text-lg md:text-xl font-bold text-black">
                 Zadejte název sady
             </div>
         </div>
 
-        <!-- Tlačítka Předchozí a Následující (přesunuto pod kartu) -->
+        <!-- Tlačítka Předchozí a Následující (pod kartou) -->
         <div class="flex justify-between gap-4 my-2">
             <button id="prev-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-semibold py-3 px-4 rounded-xl shadow border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
                 ← Předchozí
@@ -192,7 +192,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.10</span>
+        <span>Checkovník v2.11</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -323,12 +323,12 @@
                 if (subOpt === 'only-statements') {
                     htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                 } else if (subOpt === 'instant-results') {
-                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[lightyellow, 3px]{${answer}}`;
+                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
                 } else {
                     if (randomStepPointer === 0) {
                         htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[lightyellow, 3px]{${answer}}`;
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
                     }
                 }
 
@@ -349,7 +349,7 @@
                             if (nonWorksheetStepPointer === 0) {
                                 htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                             } else {
-                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[lightyellow, 3px]{${answer}}`;
+                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
                             }
                         }
                     } else {
@@ -359,7 +359,7 @@
                     if (currentMode === 'steps' && hasDetailedSteps(problem)) {
                         htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[lightyellow, 3px]{${answer}}`;
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
                     }
                 }
 
