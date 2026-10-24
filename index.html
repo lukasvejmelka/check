@@ -71,9 +71,8 @@
 
     <!-- ZDE SE NAČÍTAJÍ JEDNOTLIVÉ JS SADY -->
     <script src="sada-odmocniny.js"></script>
-    <script src="sada-odmocniny-2.js"></script>
 
-    <!-- Hlavička s větším logem -->
+    <!-- Hlavička s logem -->
     <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-2">
         <div class="flex items-center gap-3 w-full sm:w-auto">
             <img src="logo.svg" alt="Logo" class="h-12 w-auto object-contain">
@@ -192,7 +191,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.12</span>
+        <span>Checkovník v2.13</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -236,8 +235,8 @@
         
         const datasetInput = document.getElementById('dataset-input');
         const datasetsList = document.getElementById('datasets-list');
-        appTitle = document.getElementById('app-title');
-        appSubtitle = document.getElementById('app-subtitle');
+        const appTitle = document.getElementById('app-title');
+        const appSubtitle = document.getElementById('app-subtitle');
 
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
         const advancedSettingsContainer = document.getElementById('advanced-settings-container');
@@ -463,30 +462,33 @@
             }
         }
 
-        function loadDataset(datasetId) {
+        function loadDataset(datasetId, updateUrl = true) {
             const registry = window.datasetRegistry || {};
             const keys = Object.keys(registry);
             
             if (!datasetId || datasetId.trim() === "" || keys.length === 0) {
                 problems = [];
                 datasetInput.value = "";
+                if (updateUrl) {
+                    const cleanUrl = window.location.pathname;
+                    window.history.pushState({}, '', cleanUrl);
+                }
                 render();
                 return;
             }
 
+            // Hledání přesné shody klíče (ID) nebo názvu
             let foundKey = keys.find(key => key.toLowerCase() === datasetId.toLowerCase());
             
             if (!foundKey) {
                 foundKey = keys.find(key => {
                     const name = registry[key]?.meta?.name;
-                    return name && name.toLowerCase().includes(datasetId.toLowerCase());
+                    return name && name.toLowerCase() === datasetId.toLowerCase();
                 });
             }
 
             if (!foundKey) {
-                problems = [];
-                datasetInput.value = datasetId;
-                render();
+                // Pokud jde o částečný text při psaní, nenačítáme hned, abychom nerušili uživatele
                 return;
             }
 
@@ -494,7 +496,12 @@
 
             appTitle.innerText = data.meta?.name || "Checkovník";
             appSubtitle.innerText = data.meta?.description || "";
-            datasetInput.value = data.meta?.name || datasetId;
+            datasetInput.value = data.meta?.name || "";
+
+            if (updateUrl) {
+                const newUrl = window.location.pathname + '?set=' + encodeURIComponent(foundKey);
+                window.history.pushState({set: foundKey}, '', newUrl);
+            }
 
             problems = [];
             if (data.chapters && Array.isArray(data.chapters)) {
@@ -560,25 +567,14 @@
             datasetInput.value = "";
         });
 
+        // Při psaní kontrolujeme pouze přesnou shodu, aby šlo psát mezery a doplňovat názvy
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
                 loadDataset("");
                 return;
             }
-
-            const registry = window.datasetRegistry || {};
-            const matchingEntries = Object.values(registry).filter(d => {
-                const name = d.meta?.name || "";
-                const id = d.meta?.id || "";
-                return name.toLowerCase().includes(query.toLowerCase()) || id.toLowerCase().includes(query.toLowerCase());
-            });
-
-            if (matchingEntries.length === 1) {
-                loadDataset(matchingEntries[0].meta.name);
-            } else {
-                loadDataset(query);
-            }
+            loadDataset(query);
         });
 
         datasetInput.addEventListener('change', (e) => {
@@ -689,6 +685,13 @@
             render();
         });
 
+        // Podpora pro tlačítka Zpět / Vpřed v prohlížeči
+        window.addEventListener('popstate', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const setParam = urlParams.get('set') || urlParams.get('id') || urlParams.get('sada');
+            loadDataset(setParam || "", false);
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             initDatasetSelector();
 
@@ -696,9 +699,9 @@
             const setParam = urlParams.get('set') || urlParams.get('id') || urlParams.get('sada');
 
             if (setParam) {
-                loadDataset(setParam);
+                loadDataset(setParam, false);
             } else {
-                loadDataset("");
+                loadDataset("", false);
             }
         });
     </script>
