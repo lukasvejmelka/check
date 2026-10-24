@@ -1,42 +1,21 @@
 // Registrace sady do globálního registru trenažéru
 window.registerDataset({
     "meta": {
-        "id": "odmocniny-mocniny-ii",
+        "id": "papousek",
         "name": "Odmocniny a mocniny II.",
-        "description": "Interaktivní pracovní list (96 příkladů)",
+        "description": "Interaktivní pracovní list (76 příkladů)",
         "version": "2.2"
     },
     "chapters": [
         {
             "chapterId": "I",
-            "title": "I. Základní odmocniny",
+            "title": "I. Základní odmocninyX",
             "color": "text-blue-400",
             "problems": [
                 { "id": 1, "type": "expression", "statement": "\\sqrt{81}", "answer": "\\underline{\\underline{9}}", "steps": "\\sqrt{81} = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}" },
                 { "id": 2, "type": "expression", "statement": "\\sqrt{100}", "answer": "\\underline{\\underline{10}}", "steps": "\\sqrt{100} = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}" },
-                { "id": 3, "type": "expression", "statement": "\\sqrt{144}", "answer": "\\underline{\\underline{12}}", "steps": "\\sqrt{144} = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}" },
-                { "id": 4, "type": "expression", "statement": "\\sqrt{196}", "answer": "\\underline{\\underline{14}}", "steps": "\\sqrt{196} = \\bbox[#fef08a, 3px]{\\underline{\\underline{14}}}" },
-                { "id": 5, "type": "expression", "statement": "\\sqrt[3]{8}", "answer": "\\underline{\\underline{2}}", "steps": "\\sqrt[3]{8} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}" },
-                { "id": 6, "type": "expression", "statement": "\\sqrt[3]{27}", "answer": "\\underline{\\underline{3}}", "steps": "\\sqrt[3]{27} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}" },
-                { "id": 7, "type": "expression", "statement": "\\sqrt[3]{125}", "answer": "\\underline{\\underline{5}}", "steps": "\\sqrt[3]{125} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}" },
-                { "id": 8, "type": "expression", "statement": "\\sqrt[3]{216}", "answer": "\\underline{\\underline{6}}", "steps": "\\sqrt[3]{216} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}" },
-                { "id": 9, "type": "expression", "statement": "\\sqrt{0{,}25}", "answer": "\\underline{\\underline{0{,}5}}", "steps": "\\sqrt{0{,}25} = \\sqrt{\\frac{25}{100}} = \\frac{5}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}5}}}" },
-                { "id": 10, "type": "expression", "statement": "\\sqrt{0{,}09}", "answer": "\\underline{\\underline{0{,}3}}", "steps": "\\sqrt{0{,}09} = \\sqrt{\\frac{9}{100}} = \\frac{3}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}" },
-                { "id": 11, "type": "expression", "statement": "\\sqrt{1{,}69}", "answer": "\\underline{\\underline{1{,}3}}", "steps": "\\sqrt{1{,}69} = \\sqrt{\\frac{169}{100}} = \\frac{13}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}3}}}" },
-                { "id": 12, "type": "expression", "statement": "\\sqrt{2{,}25}", "answer": "\\underline{\\underline{1{,}5}}", "steps": "\\sqrt{2{,}25} = \\sqrt{\\frac{225}{100}} = \\frac{15}{10} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1{,}5}}}" },
-                { "id": 13, "type": "expression", "statement": "\\sqrt{\\dfrac{9}{16}}", "answer": "\\underline{\\underline{\\dfrac{3}{4}}}", "steps": "\\sqrt{\\frac{9}{16}} = \\frac{\\sqrt{9}}{\\sqrt{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{3}{4}}}\\mathstrut}" },
-                { "id": 14, "type": "expression", "statement": "\\sqrt{\\dfrac{4}{25}}", "answer": "\\underline{\\underline{\\dfrac{2}{5}}}", "steps": "\\sqrt{\\frac{4}{25}} = \\frac{\\sqrt{4}}{\\sqrt{25}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}" },
-                { "id": 15, "type": "expression", "statement": "\\sqrt{\\dfrac{16}{49}}", "answer": "\\underline{\\underline{\\dfrac{4}{7}}}", "steps": "\\sqrt{\\frac{16}{49}} = \\frac{\\sqrt{16}}{\\sqrt{49}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{4}{7}}}\\mathstrut}" },
-                { "id": 16, "type": "expression", "statement": "\\sqrt{\\dfrac{81}{100}}", "answer": "\\underline{\\underline{\\dfrac{9}{10}}}", "steps": "\\sqrt{\\frac{81}{100}} = \\frac{\\sqrt{81}}{\\sqrt{100}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{9}{10}}}\\mathstrut}" },
-                { "id": 17, "type": "expression", "statement": "\\sqrt{10^4}", "answer": "\\underline{\\underline{100}}", "steps": "\\sqrt{10^4} = 10^{\\frac{4}{2}} = 10^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{100}}}" },
-                { "id": 18, "type": "expression", "statement": "\\sqrt{10^6}", "answer": "\\underline{\\underline{1000}}", "steps": "\\sqrt{10^6} = 10^{\\frac{6}{2}} = 10^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1000}}}" },
-                { "id": 19, "type": "expression", "statement": "\\sqrt[4]{16}", "answer": "\\underline{\\underline{2}}", "steps": "\\sqrt[4]{16} = \\sqrt[4]{2^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}" },
-                { "id": 20, "type": "expression", "statement": "\\sqrt[4]{81}", "answer": "\\underline{\\underline{3}}", "steps": "\\sqrt[4]{81} = \\sqrt[4]{3^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}" },
-                { "id": 21, "type": "expression", "statement": "\\sqrt[5]{32}", "answer": "\\underline{\\underline{2}}", "steps": "\\sqrt[5]{32} = \\sqrt[5]{2^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}" },
-                { "id": 22, "type": "expression", "statement": "\\sqrt[5]{243}", "answer": "\\underline{\\underline{3}}", "steps": "\\sqrt[5]{243} = \\sqrt[5]{3^5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}" },
-                { "id": 23, "type": "expression", "statement": "\\sqrt[3]{0{,}001}", "answer": "\\underline{\\underline{0{,}1}}", "steps": "\\sqrt[3]{0{,}001} = \\sqrt[3]{\\frac{1}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}1}}}" },
-                { "id": 24, "type": "expression", "statement": "\\sqrt[3]{0{,}027}", "answer": "\\underline{\\underline{0{,}3}}", "steps": "\\sqrt[3]{0{,}027} = \\sqrt[3]{\\frac{27}{1000}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{0{,}3}}}" }
-            ]
+                { "id": 3, "type": "expression", "statement": "\\sqrt{144}", "answer": "\\underline{\\underline{12}}", "steps": "\\sqrt{144} = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}" }
+                          ]
         },
         {
             "chapterId": "II",
@@ -50,40 +29,8 @@ window.registerDataset({
                 { "id": 29, "type": "expression", "statement": "\\sqrt{\\dfrac{1}{16}}", "answer": "\\underline{\\underline{\\dfrac{1}{4}}}", "steps": "\\sqrt{\\frac{1}{16}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{1}{4}}}\\mathstrut}" },
                 { "id": 30, "type": "expression", "statement": "\\sqrt[3]{\\dfrac{8}{125}}", "answer": "\\underline{\\underline{\\dfrac{2}{5}}}", "steps": "\\sqrt[3]{\\frac{8}{125}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\frac{2}{5}}}\\mathstrut}" },
                 { "id": 31, "type": "expression", "statement": "\\sqrt{3^4}", "answer": "\\underline{\\underline{9}}", "steps": "\\sqrt{3^4} = 3^{\\frac{4}{2}} = 3^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{9}}}" },
-                { "id": 32, "type": "expression", "statement": "\\sqrt[3]{2^6}", "answer": "\\underline{\\underline{4}}", "steps": "\\sqrt[3]{2^6} = 2^{\\frac{6}{3}} = 2^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}" },
-                { "id": 33, "type": "expression", "statement": "\\sqrt{8}", "answer": "\\underline{\\underline{2\\sqrt{2}}}", "steps": "\\sqrt{8} = \\sqrt{4 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}" },
-                { "id": 34, "type": "expression", "statement": "\\sqrt{12}", "answer": "\\underline{\\underline{2\\sqrt{3}}}", "steps": "\\sqrt{12} = \\sqrt{4 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{3}}}]}" },
-                { "id": 35, "type": "expression", "statement": "\\sqrt{18}", "answer": "\\underline{\\underline{3\\sqrt{2}}}", "steps": "\\sqrt{18} = \\sqrt{9 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}" },
-                { "id": 36, "type": "expression", "statement": "\\sqrt{20}", "answer": "\\underline{\\underline{2\\sqrt{5}}}", "steps": "\\sqrt{20} = \\sqrt{4 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{5}}}]}" },
-                { "id": 37, "type": "expression", "statement": "\\sqrt{27}", "answer": "\\underline{\\underline{3\\sqrt{3}}}", "steps": "\\sqrt{27} = \\sqrt{9 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{3}}}]}" },
-                { "id": 38, "type": "expression", "statement": "\\sqrt{32}", "answer": "\\underline{\\underline{4\\sqrt{2}}}", "steps": "\\sqrt{32} = \\sqrt{16 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{2}}}]}" },
-                { "id": 39, "type": "expression", "statement": "\\sqrt{45}", "answer": "\\underline{\\underline{3\\sqrt{5}}}", "steps": "\\sqrt{45} = \\sqrt{9 \\cdot 5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{5}}}]}" },
-                { "id": 40, "type": "expression", "statement": "\\sqrt{50}", "answer": "\\underline{\\underline{5\\sqrt{2}}}", "steps": "\\sqrt{50} = \\sqrt{25 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{2}}}]}" },
-                { "id": 41, "type": "expression", "statement": "\\sqrt{75}", "answer": "\\underline{\\underline{5\\sqrt{3}}}", "steps": "\\sqrt{75} = \\sqrt{25 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}" },
-                { "id": 42, "type": "expression", "statement": "\\sqrt{72}", "answer": "\\underline{\\underline{6\\sqrt{2}}}", "steps": "\\sqrt{72} = \\sqrt{36 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{2}}}]}" },
-                { "id": 43, "type": "expression", "statement": "\\sqrt{98}", "answer": "\\underline{\\underline{7\\sqrt{2}}}", "steps": "\\sqrt{98} = \\sqrt{49 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{7\\sqrt{2}}}]}" },
-                { "id": 44, "type": "expression", "statement": "\\sqrt{108}", "answer": "\\underline{\\underline{6\\sqrt{3}}}", "steps": "\\sqrt{108} = \\sqrt{36 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6\\sqrt{3}}}]}" },
-                { "id": 45, "type": "expression", "statement": "\\sqrt{x^3}", "answer": "\\underline{\\underline{x\\sqrt{x}}}", "steps": "\\sqrt{x^3} = \\sqrt{x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt{x}}}]}" },
-                { "id": 46, "type": "expression", "statement": "\\sqrt{x^5}", "answer": "\\underline{\\underline{x^2\\sqrt{x}}}", "steps": "\\sqrt{x^5} = \\sqrt{x^4 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2\\sqrt{x}}}]}" },
-                { "id": 47, "type": "expression", "statement": "\\sqrt{a^4}", "answer": "\\underline{\\underline{a^2}}", "steps": "\\sqrt{a^4} = a^{\\frac{4}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^2}}}" },
-                { "id": 48, "type": "expression", "statement": "\\sqrt{a^7}", "answer": "\\underline{\\underline{a^3\\sqrt{a}}}", "steps": "\\sqrt{a^7} = \\sqrt{a^6 \\cdot a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^3\\sqrt{a}}}]}" },
-                { "id": 49, "type": "expression", "statement": "\\sqrt{18x^2}", "answer": "\\underline{\\underline{3x\\sqrt{2}}}", "steps": "\\sqrt{18x^2} = \\sqrt{9 \\cdot 2 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3x\\sqrt{2}}}]}" },
-                { "id": 50, "type": "expression", "statement": "\\sqrt{20x^3}", "answer": "\\underline{\\underline{2x\\sqrt{5x}}}", "steps": "\\sqrt{20x^3} = \\sqrt{4 \\cdot 5 \\cdot x^2 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x\\sqrt{5x}}}]}" },
-                { "id": 51, "type": "expression", "statement": "\\sqrt{32y^3}", "answer": "\\underline{\\underline{4y\\sqrt{2y}}}", "steps": "\\sqrt{32y^3} = \\sqrt{16 \\cdot 2 \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4y\\sqrt{2y}}}]}" },
-                { "id": 52, "type": "expression", "statement": "\\sqrt{45a^4}", "answer": "\\underline{\\underline{3a^2\\sqrt{5}}}", "steps": "\\sqrt{45a^4} = \\sqrt{9 \\cdot 5 \\cdot a^4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a^2\\sqrt{5}}}]}" },
-                { "id": 53, "type": "expression", "statement": "\\sqrt{50b^5}", "answer": "\\underline{\\underline{5b^2\\sqrt{2b}}}", "steps": "\\sqrt{50b^5} = \\sqrt{25 \\cdot 2 \\cdot b^4 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5b^2\\sqrt{2b}}}]}" },
-                { "id": 54, "type": "expression", "statement": "\\sqrt{75x^6}", "answer": "\\underline{\\underline{5x^3\\sqrt{3}}}", "steps": "\\sqrt{75x^6} = \\sqrt{25 \\cdot 3 \\cdot x^6} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5x^3\\sqrt{3}}}]}" },
-                { "id": 55, "type": "expression", "statement": "\\sqrt[3]{16}", "answer": "\\underline{\\underline{2\\sqrt[3]{2}}}", "steps": "\\sqrt[3]{16} = \\sqrt[3]{8 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{2}}}]}" },
-                { "id": 56, "type": "expression", "statement": "\\sqrt[3]{24}", "answer": "\\underline{\\underline{2\\sqrt[3]{3}}}", "steps": "\\sqrt[3]{24} = \\sqrt[3]{8 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt[3]{3}}}]}" },
-                { "id": 57, "type": "expression", "statement": "\\sqrt[3]{54}", "answer": "\\underline{\\underline{3\\sqrt[3]{2}}}", "steps": "\\sqrt[3]{54} = \\sqrt[3]{27 \\cdot 2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{2}}}]}" },
-                { "id": 58, "type": "expression", "statement": "\\sqrt[3]{81}", "answer": "\\underline{\\underline{3\\sqrt[3]{3}}}", "steps": "\\sqrt[3]{81} = \\sqrt[3]{27 \\cdot 3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt[3]{3}}}]}" },
-                { "id": 59, "type": "expression", "statement": "\\sqrt[3]{x^4}", "answer": "\\underline{\\underline{x\\sqrt[3]{x}}}", "steps": "\\sqrt[3]{x^4} = \\sqrt[3]{x^3 \\cdot x} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x}}}]}" },
-                { "id": 60, "type": "expression", "statement": "\\sqrt[3]{x^5}", "answer": "\\underline{\\underline{x\\sqrt[3]{x^2}}}", "steps": "\\sqrt[3]{x^5} = \\sqrt[3]{x^3 \\cdot x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x\\sqrt[3]{x^2}}}]}" },
-                { "id": 61, "type": "expression", "statement": "\\sqrt[3]{8a^5}", "answer": "\\underline{\\underline{2a\\sqrt[3]{a^2}}}", "steps": "\\sqrt[3]{8a^5} = \\sqrt[3]{8 \\cdot a^3 \\cdot a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2a\\sqrt[3]{a^2}}}]}" },
-                { "id": 62, "type": "expression", "statement": "\\sqrt[3]{27b^4}", "answer": "\\underline{\\underline{3b\\sqrt[3]{b}}}", "steps": "\\sqrt[3]{27b^4} = \\sqrt[3]{27 \\cdot b^3 \\cdot b} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3b\\sqrt[3]{b}}}]}" },
-                { "id": 63, "type": "expression", "statement": "\\sqrt{8x^5 y^3}", "answer": "\\underline{\\underline{2x^2 y \\sqrt{2xy}}}", "steps": "\\sqrt{8x^5 y^3} = \\sqrt{4 \\cdot 2 \\cdot x^4 \\cdot x \\cdot y^2 \\cdot y} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2 y \\sqrt{2xy}}}]}" },
-                { "id": 64, "type": "expression", "statement": "\\sqrt[3]{16a^4 b^5}", "answer": "\\underline{\\underline{2ab\\sqrt[3]{2a \\cdot b^2}}}", "steps": "\\sqrt[3]{16a^4 b^5} = \\sqrt[3]{8 \\cdot 2 \\cdot a^3 \\cdot a \\cdot b^3 \\cdot b^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2ab\\sqrt[3]{2ab^2}}}]}" }
-            ]
+                { "id": 32, "type": "expression", "statement": "\\sqrt[3]{2^6}", "answer": "\\underline{\\underline{4}}", "steps": "\\sqrt[3]{2^6} = 2^{\\frac{6}{3}} = 2^2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}" }
+                          ]
         },
         {
             "chapterId": "III",
@@ -91,22 +38,8 @@ window.registerDataset({
             "color": "text-amber-400",
             "problems": [
                 { "id": 65, "type": "expression", "statement": "\\sqrt{3} \\cdot \\sqrt{12}", "answer": "\\underline{\\underline{6}}", "steps": "\\sqrt{3} \\cdot \\sqrt{12} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}" },
-                { "id": 66, "type": "expression", "statement": "\\sqrt{2} \\cdot \\sqrt{8}", "answer": "\\underline{\\underline{4}}", "steps": "\\sqrt{2} \\cdot \\sqrt{8} = \\sqrt{16} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}" },
-                { "id": 67, "type": "expression", "statement": "\\dfrac{\\sqrt{54}}{\\sqrt{6}}", "answer": "\\underline{\\underline{3}}", "steps": "\\frac{\\sqrt{54}}{\\sqrt{6}} = \\sqrt{\\frac{54}{6}} = \\sqrt{9} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3}}}" },
-                { "id": 68, "type": "expression", "statement": "\\dfrac{\\sqrt{75}}{\\sqrt{3}}", "answer": "\\underline{\\underline{5}}", "steps": "\\frac{\\sqrt{75}}{\\sqrt{3}} = \\sqrt{\\frac{75}{3}} = \\sqrt{25} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}" },
-                { "id": 69, "type": "expression", "statement": "3\\sqrt{2} + 5\\sqrt{2}", "answer": "\\underline{\\underline{8\\sqrt{2}}}", "steps": "3\\sqrt{2} + 5\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{8\\sqrt{2}}}]}" },
-                { "id": 70, "type": "expression", "statement": "7\\sqrt{5} - 3\\sqrt{5}", "answer": "\\underline{\\underline{4\\sqrt{5}}}", "steps": "7\\sqrt{5} - 3\\sqrt{5} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4\\sqrt{5}}}]}" },
-                { "id": 71, "type": "expression", "statement": "\\sqrt{50} - \\sqrt{18}", "answer": "\\underline{\\underline{2\\sqrt{2}}}", "steps": "\\sqrt{50} - \\sqrt{18} = 5\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2\\sqrt{2}}}]}" },
-                { "id": 72, "type": "expression", "statement": "\\sqrt{27} + \\sqrt{12}", "answer": "\\underline{\\underline{5\\sqrt{3}}}", "steps": "\\sqrt{27} + \\sqrt{12} = 3\\sqrt{3} + 2\\sqrt{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5\\sqrt{3}}}]}" },
-                { "id": 73, "type": "expression", "statement": "(2\\sqrt{3})^2", "answer": "\\underline{\\underline{12}}", "steps": "(2\\sqrt{3})^2 = 2^2 \\cdot (\\sqrt{3})^2 = 4 \\cdot 3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{12}}}" },
-                { "id": 74, "type": "expression", "statement": "(-3\\sqrt{2})^2", "answer": "\\underline{\\underline{18}}", "steps": "(-3\\sqrt{2})^2 = (-3)^2 \\cdot (\\sqrt{2})^2 = 9 \\cdot 2 = \\bbox[#fef08a, 3px]{\\underline{\\underline{18}}}" },
-                { "id": 75, "type": "expression", "statement": "(\\sqrt{5} + 2)(\\sqrt{5} - 2)", "answer": "\\underline{\\underline{1}}", "steps": "(\\sqrt{5}+2)(\\sqrt{5}-2) = (\\sqrt{5})^2 - 2^2 = 5 - 4 = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}" },
-                { "id": 76, "type": "expression", "statement": "(\\sqrt{3} + 1)^2", "answer": "\\underline{\\underline{4 + 2\\sqrt{3}}}", "steps": "(\\sqrt{3}+1)^2 = 3 + 2\\sqrt{3} + 1 = \\bbox[#fef08a, 3px]{\\underline{\\underline{4 + 2\\sqrt{3}}}]}" },
-                { "id": 77, "type": "expression", "statement": "\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{18})", "answer": "\\underline{\\underline{10}}", "steps": "\\sqrt{2}(\\sqrt{8} + \\sqrt{18}) = \\sqrt{16} + \\sqrt{36} = 4 + 6 = \\bbox[#fef08a, 3px]{\\underline{\\underline{10}}}" },
-                { "id": 78, "type": "expression", "statement": "\\dfrac{\\sqrt{12} + \\sqrt{27}}{\\sqrt{3}}", "answer": "\\underline{\\underline{5}}", "steps": "\\frac{\\sqrt{12}+\\sqrt{27}}{\\sqrt{3}} = \\frac{2\\sqrt{3}+3\\sqrt{3}}{\\sqrt{3}} = \\frac{5\\sqrt{3}}{\\sqrt{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{5}}}" },
-                { "id": 79, "type": "expression", "statement": "\\sqrt{2} \\cdot \\sqrt{3} \\cdot \\sqrt{6}", "answer": "\\underline{\\underline{6}}", "steps": "\\sqrt{2 \\cdot 3 \\cdot 6} = \\sqrt{36} = \\bbox[#fef08a, 3px]{\\underline{\\underline{6}}}" },
-                { "id": 80, "type": "expression", "statement": "\\dfrac{\\sqrt{32} \\cdot \\sqrt{2}}{\\sqrt{16}}", "answer": "\\underline{\\underline{2}}", "steps": "\\frac{\\sqrt{64}}{4} = \\frac{8}{4} = \\bbox[#fef08a, 3px]{\\underline{\\underline{2}}}" }
-            ]
+                { "id": 66, "type": "expression", "statement": "\\sqrt{2} \\cdot \\sqrt{8}", "answer": "\\underline{\\underline{4}}", "steps": "\\sqrt{2} \\cdot \\sqrt{8} = \\sqrt{16} = \\bbox[#fef08a, 3px]{\\underline{\\underline{4}}}" }
+                          ]
         },
         {
             "chapterId": "IV",
@@ -115,21 +48,8 @@ window.registerDataset({
             "problems": [
                 { "id": 81, "type": "expression", "statement": "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}}", "answer": "\\underline{\\underline{x^{\\frac{5}{6}}}}", "steps": "x^{\\frac{1}{2}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{1}{2}+\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{5}{6}}}}}" },
                 { "id": 82, "type": "expression", "statement": "\\sqrt{x} \\cdot \\sqrt[3]{x^2}", "answer": "\\underline{\\underline{x^{\\frac{7}{6}}}}", "steps": "x^{\\frac{1}{2}} \\cdot x^{\\frac{2}{3}} = x^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{7}{6}}}}}" },
-                { "id": 83, "type": "expression", "statement": "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", "answer": "\\underline{\\underline{a^{-\\frac{1}{6}}}}", "steps": "\\frac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{6}}}}}" },
-                { "id": 84, "type": "expression", "statement": "(\\sqrt{a^3})^{\\frac{1}{3}}", "answer": "\\underline{\\underline{a^{\\frac{1}{2}}}}", "steps": "(a^{\\frac{3}{2}})^{\\frac{1}{3}} = a^{\\frac{3}{2} \\cdot \\frac{1}{3}} = a^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{\\sqrt{a}}}}" },
-                { "id": 85, "type": "expression", "statement": "\\sqrt{x \\sqrt{x}}", "answer": "\\underline{\\underline{x^{\\frac{3}{4}}}}", "steps": "\\sqrt{x \\cdot x^{\\frac{1}{2}}} = \\sqrt{x^{\\frac{3}{2}}} = (x^{\\frac{3}{2}})^{\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{4}}}}}" },
-                { "id": 86, "type": "expression", "statement": "\\sqrt[3]{a \\cdot \\sqrt{a}}", "answer": "\\underline{\\underline{a^{\\frac{1}{2}}}}", "steps": "\\sqrt[3]{a \\cdot a^{\\frac{1}{2}}} = \\sqrt[3]{a^{\\frac{3}{2}}} = (a^{\\frac{3}{2}})^{\\frac{1}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{2}}}}}" },
-                { "id": 87, "type": "expression", "statement": "\\dfrac{x^2 \\cdot \\sqrt{x}}{\\sqrt[3]{x^2}}", "answer": "\\underline{\\underline{x^{\\frac{13}{6}}}}", "steps": "\\frac{x^2 \\cdot x^{\\frac{1}{2}}}{x^{\\frac{2}{3}}} = x^{2 + \\frac{1}{2} - \\frac{2}{3}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{13}{6}}}}}" },
-                { "id": 88, "type": "expression", "statement": "(\\sqrt[4]{x^3})^2", "answer": "\\underline{\\underline{x^{\\frac{3}{2}}}}", "steps": "(x^{\\frac{3}{4}})^2 = x^{\\frac{6}{4}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^{\\frac{3}{2}}}}}" },
-                { "id": 89, "type": "expression", "statement": "\\sqrt{8} + \\sqrt{32} - \\sqrt{18}", "answer": "\\underline{\\underline{3\\sqrt{2}}}", "steps": "2\\sqrt{2} + 4\\sqrt{2} - 3\\sqrt{2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3\\sqrt{2}}}]}" },
-                { "id": 90, "type": "expression", "statement": "\\sqrt{3} \\cdot \\sqrt[3]{9}", "answer": "\\underline{\\underline{3^{\\frac{5}{6}}}}", "steps": "3^{\\frac{1}{2}} \\cdot 3^{\\frac{2}{3}} = 3^{\\frac{3+4}{6}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3^{\\frac{5}{6}}}}}" },
-                { "id": 91, "type": "expression", "statement": "\\dfrac{\\sqrt[4]{81}}{\\sqrt{9}}", "answer": "\\underline{\\underline{1}}", "steps": "\\frac{3}{3} = \\bbox[#fef08a, 3px]{\\underline{\\underline{1}}}" },
-                { "id": 92, "type": "expression", "statement": "\\sqrt{a^2 b} \\cdot \\sqrt{ab^3}", "answer": "\\underline{\\underline{ab^2\\sqrt{a}}}", "steps": "\\sqrt{a^3 b^4} = a b^2 \\sqrt{a} = \\bbox[#fef08a, 3px]{\\underline{\\underline{ab^2\\sqrt{a}}}]}" },
-                { "id": 93, "type": "expression", "statement": "\\dfrac{\\sqrt{27a^3}}{\\sqrt{3a}}", "answer": "\\underline{\\underline{3a}}", "steps": "\\sqrt{\\frac{27a^3}{3a}} = \\sqrt{9a^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{3a}}}" },
-                { "id": 94, "type": "expression", "statement": "(\\sqrt[3]{2x^2})^3", "answer": "\\underline{\\underline{2x^2}}", "steps": "(\\sqrt[3]{2x^2})^3 = \\bbox[#fef08a, 3px]{\\underline{\\underline{2x^2}}}" },
-                { "id": 95, "type": "expression", "statement": "\\sqrt{x^4 y^2}", "answer": "\\underline{\\underline{x^2 y}}", "steps": "\\sqrt{x^4 y^2} = x^{\\frac{4}{2}} y^{\\frac{2}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x^2 y}}}" },
-                { "id": 96, "type": "expression", "statement": "\\dfrac{\\sqrt{x^5}}{\\sqrt{x^3}}", "answer": "\\underline{\\underline{x}}", "steps": "\\sqrt{\\frac{x^5}{x^3}} = \\sqrt{x^2} = \\bbox[#fef08a, 3px]{\\underline{\\underline{x}}}" }
-            ]
+                { "id": 83, "type": "expression", "statement": "\\dfrac{\\sqrt[3]{a^2}}{\\sqrt{a}}", "answer": "\\underline{\\underline{a^{-\\frac{1}{6}}}}", "steps": "\\frac{a^{\\frac{2}{3}}}{a^{\\frac{1}{2}}} = a^{\\frac{2}{3}-\\frac{1}{2}} = \\bbox[#fef08a, 3px]{\\underline{\\underline{a^{\\frac{1}{6}}}}}" }
+                           ]
         }
     ]
 });
