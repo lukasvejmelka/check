@@ -67,7 +67,6 @@
 
     <!-- ZDE SE NAČÍTAJÍ JEDNOTLIVÉ JS SADY -->
     <script src="sada-odmocniny.js"></script>
-     <script src="sada-odmocniny-2.js"></script>
 
     <!-- Hlavička -->
     <header class="w-full max-w-2xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-3">
@@ -124,7 +123,7 @@
             </button>
         </div>
 
-        <!-- Karta s příkladem (Opravena sytost a plná černá barva textu) -->
+        <!-- Karta s příkladem (Čistá černá barva textu) -->
         <div id="math-card" class="bg-white text-black rounded-2xl p-6 shadow-2xl border-4 border-slate-700 min-h-[160px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-2">
             <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-4 px-2 text-lg md:text-xl font-bold text-black">
                 Zadejte název sady
@@ -186,7 +185,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto p-4 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.6</span>
+        <span>Checkovník v2.7</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -309,12 +308,12 @@
                 if (subOpt === 'only-statements') {
                     htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                 } else if (subOpt === 'instant-results') {
-                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[rgb(254,240,138), 3px]{${answer}}`;
                 } else {
                     if (randomStepPointer === 0) {
                         htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[rgb(254,240,138), 3px]{${answer}}`;
                     }
                 }
 
@@ -335,7 +334,7 @@
                             if (nonWorksheetStepPointer === 0) {
                                 htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
                             } else {
-                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[rgb(254,240,138), 3px]{${answer}}`;
                             }
                         }
                     } else {
@@ -345,7 +344,7 @@
                     if (currentMode === 'steps' && hasDetailedSteps(problem)) {
                         htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fef08a, 3px]{${answer}}`;
+                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[rgb(254,240,138), 3px]{${answer}}`;
                     }
                 }
 
@@ -541,14 +540,11 @@
             });
         }
 
-        // --- ÚPRAVA: Chování pole pro výběr sady ---
-        
-        // 1. Při klepnutí na pole se obsah automaticky vymaže
+        // Chování pole pro výběr sady
         datasetInput.addEventListener('click', () => {
             datasetInput.value = "";
         });
 
-        // 2. Při psaní filtrujeme a pokud zbývá jediná shoda, rovnou ji vybereme
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
@@ -563,7 +559,6 @@
                 return name.toLowerCase().includes(query.toLowerCase()) || id.toLowerCase().includes(query.toLowerCase());
             });
 
-            // Pokud zbývá přesně jedna odpovídající sada, automaticky ji načteme
             if (matchingEntries.length === 1) {
                 loadDataset(matchingEntries[0].meta.name);
             } else {
@@ -571,12 +566,9 @@
             }
         });
 
-        // 3. Při potvrzení výběru (z našeptávače nebo enterem)
         datasetInput.addEventListener('change', (e) => {
             loadDataset(e.target.value);
         });
-
-        // --- Konec úpravy pole ---
 
         nextBtn.addEventListener('click', goNext);
         prevBtn.addEventListener('click', goPrev);
