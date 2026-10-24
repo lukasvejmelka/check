@@ -71,8 +71,6 @@
 
     <!-- ZDE SE NAČÍTAJÍ JEDNOTLIVÉ JS SADY -->
     <script src="sada-odmocniny.js"></script>
-    <script src="sada-odmocniny-2.js"></script>
-
 
     <!-- Hlavička s logem -->
     <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-2">
@@ -142,13 +140,13 @@
             </button>
         </div>
 
-        <!-- Přepínač režimu: Výsledek / Postup (bez textového popisku) -->
-        <div class="mt-1 bg-slate-800/80 p-2 rounded-xl border border-slate-700 flex justify-center">
-            <div class="inline-flex rounded-lg bg-slate-900 p-1 border border-slate-700 w-full">
-                <button id="mode-result" class="flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow">
+        <!-- Přepínač režimu: Výsledek / Postup (nově graficky poladěno) -->
+        <div class="mt-1 bg-slate-800/40 p-1.5 rounded-xl border border-slate-800 flex justify-center">
+            <div class="inline-flex rounded-lg bg-slate-900/80 p-1 border border-slate-700/80 w-full shadow-inner">
+                <button id="mode-result" class="flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow">
                     Jen výsledek
                 </button>
-                <button id="mode-steps" class="flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+                <button id="mode-steps" class="flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
                     Postup řešení
                 </button>
             </div>
@@ -193,7 +191,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.13</span>
+        <span>Checkovník v2.14</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -275,8 +273,8 @@
             } else {
                 modeStepsBtn.setAttribute('disabled', 'true');
                 currentMode = 'result';
-                modeResultBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
-                modeStepsBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
+                modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
             }
         }
 
@@ -432,8 +430,8 @@
                     currentMode = 'result';
                 }
 
-                modeResultBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
-                modeStepsBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
+                modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
 
                 if (currentIndex < problems.length - 1) {
                     currentIndex++;
@@ -490,7 +488,6 @@
             }
 
             if (!foundKey) {
-                // Pokud jde o částečný text při psaní, nenačítáme hned, abychom nerušili uživatele
                 return;
             }
 
@@ -569,14 +566,28 @@
             datasetInput.value = "";
         });
 
-        // Při psaní kontrolujeme pouze přesnou shodu, aby šlo psát mezery a doplňovat názvy
+        // Inteligentní našeptávač: vyhodnotí shody, pokud je výsledkem právě jedna sada, automaticky ji načte
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
                 loadDataset("");
                 return;
             }
-            loadDataset(query);
+
+            const registry = window.datasetRegistry || {};
+            const matchingEntries = Object.values(registry).filter(d => {
+                const name = (d.meta?.name || "").toLowerCase();
+                const id = (d.meta?.id || "").toLowerCase();
+                const q = query.toLowerCase();
+                return name.includes(q) || id.includes(q);
+            });
+
+            if (matchingEntries.length === 1) {
+                // Unikátní shoda - automaticky vybereme a načteme
+                loadDataset(matchingEntries[0].meta.name);
+            } else {
+                // Více možností nebo žádná - vyčkáme na další znaky / přesný výběr
+            }
         });
 
         datasetInput.addEventListener('change', (e) => {
@@ -603,8 +614,8 @@
         modeResultBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             currentMode = 'result';
-            modeResultBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
-            modeStepsBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+            modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
+            modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200";
             render();
         });
 
@@ -612,8 +623,8 @@
             e.stopPropagation();
             if (modeStepsBtn.hasAttribute('disabled')) return;
             currentMode = 'steps';
-            modeStepsBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition bg-slate-700 text-white shadow";
-            modeResultBtn.className = "flex-1 px-4 py-1.5 text-xs font-medium rounded-md transition text-slate-400 hover:text-white";
+            modeStepsBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-slate-700 text-white shadow";
+            modeResultBtn.className = "flex-1 px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-400 hover:text-slate-200";
             render();
         });
 
