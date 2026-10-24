@@ -59,7 +59,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-[100dvh] flex flex-col justify-between select-none">
+<body class="bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 text-slate-100 min-h-[100dvh] flex flex-col justify-between select-none">
 
     <!-- Registr sad v paměti -->
     <script>
@@ -74,9 +74,8 @@
     <script src="sada-odmocniny-2.js"></script>
     <script src="sada-odmocniny-3.js"></script>
 
-
     <!-- Hlavička s logem (kliknutí resetuje aplikaci) -->
-    <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 gap-2">
+    <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center border-b border-slate-800/80 gap-2 backdrop-blur-sm bg-slate-950/30">
         <a href="index.html" class="flex items-center gap-3 w-full sm:w-auto cursor-pointer group focus:outline-none">
             <img src="logo.svg" alt="Logo" class="h-12 w-auto object-contain transition group-hover:scale-105">
             <div>
@@ -87,11 +86,11 @@
         <!-- Výběr sady / Našeptávač + tlačítko nastavení -->
         <div class="w-full sm:w-auto flex items-center gap-2">
             <label for="dataset-input" class="text-xs text-slate-400 whitespace-nowrap">Sada:</label>
-            <input list="datasets-list" id="dataset-input" class="bg-slate-800 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-slate-500 w-full sm:w-48" placeholder="Vyberte nebo napište...">
+            <input list="datasets-list" id="dataset-input" class="bg-slate-900/80 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-indigo-500 w-full sm:w-48 shadow-inner" placeholder="Vyberte nebo napište...">
             <datalist id="datasets-list">
                 <!-- Dynamicky plněno ze seznamu sad -->
             </datalist>
-            <button id="settings-toggle-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-1.5 rounded border border-slate-700 text-xs flex items-center justify-center transition" title="Nastavení">
+            <button id="settings-toggle-btn" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 p-1.5 rounded border border-slate-700 text-xs flex items-center justify-center transition shadow" title="Nastavení">
                 ⚙️
             </button>
         </div>
@@ -103,13 +102,13 @@
         <!-- Posuvník / Indikátor pozice (Sekvenční režim) -->
         <div id="sequential-nav-container" class="mb-3">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-1.5">
-                <span id="current-chapter-badge" class="px-2 py-0.5 bg-slate-800 rounded font-medium">-</span>
+                <span id="current-chapter-badge" class="px-2.5 py-0.5 bg-slate-800/80 border border-slate-700/50 rounded-md font-medium shadow-sm">-</span>
                 <div>
-                    Příklad <input type="number" id="problem-input" min="1" max="1" value="1" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500"> / <span id="total-count">0</span>
+                    Příklad <input type="number" id="problem-input" min="1" max="1" value="1" class="w-12 text-center bg-slate-900/80 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-indigo-500 shadow-inner"> / <span id="total-count">0</span>
                 </div>
             </div>
             <!-- Barevně rozlišená osa s výrazným sliderem -->
-            <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible" id="progress-bar-track">
+            <div class="relative w-full h-4 bg-slate-900/80 border border-slate-800 rounded-full overflow-visible shadow-inner" id="progress-bar-track">
                 <input type="range" id="slider-range" min="1" max="1" value="1" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
             </div>
         </div>
@@ -120,68 +119,68 @@
                 <span class="text-amber-400 font-medium">Režim náhodného předkládání</span>
                 <span id="random-progress-text">Příklad 0 z 0</span>
             </div>
-            <div class="relative w-full h-4 bg-slate-800 rounded-full overflow-visible cursor-pointer" id="random-track">
-                <div id="random-progress-bar" class="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-all duration-300 pointer-events-none" style="width: 1%;"></div>
+            <div class="relative w-full h-4 bg-slate-900/80 border border-slate-800 rounded-full overflow-visible cursor-pointer shadow-inner" id="random-track">
+                <div id="random-progress-bar" class="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-all duration-300 pointer-events-none shadow" style="width: 1%;"></div>
                 <input type="range" id="random-slider" min="0" max="0" value="0" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
             </div>
         </div>
 
         <!-- Karta s příkladem (Čistá černá barva textu) -->
-        <div id="math-card" class="bg-white text-black rounded-2xl p-4 sm:p-6 shadow-xl border-4 border-slate-700 min-h-[130px] sm:min-h-[150px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-1">
+        <div id="math-card" class="bg-white text-black rounded-2xl p-4 sm:p-6 shadow-2xl border-4 border-slate-700/80 min-h-[130px] sm:min-h-[150px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-1">
             <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-2 px-2 text-lg md:text-xl font-bold text-black">
                 Zadejte název sady
             </div>
         </div>
 
-        <!-- Tlačítka Předchozí a Následující (pod kartou) -->
+        <!-- Tlačítka Předchozí a Následující (atraktivnější design s přechodem) -->
         <div class="flex justify-between gap-3 my-2">
-            <button id="prev-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+            <button id="prev-btn" class="flex-1 bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-slate-800 hover:to-indigo-900 active:scale-[0.99] text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-lg border border-indigo-900/40 transition flex items-center justify-center gap-2 text-sm">
                 ← Předchozí
             </button>
-            <button id="next-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+            <button id="next-btn" class="flex-1 bg-gradient-to-r from-indigo-950 to-slate-900 hover:from-indigo-900 hover:to-slate-800 active:scale-[0.99] text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-lg border border-indigo-900/40 transition flex items-center justify-center gap-2 text-sm">
                 Následující →
             </button>
         </div>
 
         <!-- Přepínač režimu: Výsledek / Postup (elegantní design) -->
-        <div class="mt-1 flex rounded-xl bg-slate-800/80 p-1 border border-slate-700/60 shadow-lg">
-            <button id="mode-result" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm">
+        <div class="mt-1 flex rounded-xl bg-slate-900/80 p-1 border border-slate-800 shadow-lg">
+            <button id="mode-result" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm border border-slate-700/50">
                 Jen výsledek
             </button>
-            <button id="mode-steps" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+            <button id="mode-steps" class="flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed border border-transparent">
                 Postup řešení
             </button>
         </div>
 
         <!-- Pokročilá nastavení (skrytá pod ozubeným kolečkem) -->
-        <div id="advanced-settings-container" class="mt-2 space-y-2 bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-xs hidden">
+        <div id="advanced-settings-container" class="mt-2 space-y-2 bg-slate-900/70 backdrop-blur-md p-3 rounded-xl border border-slate-800 text-xs hidden shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="no-worksheets-chk" class="w-4 h-4 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+                    <input type="checkbox" id="no-worksheets-chk" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-950 border-slate-700">
                     <span class="font-medium text-slate-300">Režim bez pracovního listu (jen zadání)</span>
                 </label>
                 <label id="continuous-result-wrapper" class="flex items-center gap-2 cursor-pointer pl-6 sm:pl-0 opacity-50 pointer-events-none transition">
-                    <input type="checkbox" id="continuous-result-chk" class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+                    <input type="checkbox" id="continuous-result-chk" class="w-3.5 h-3.5 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-950 border-slate-700">
                     <span class="text-slate-400">Zobrazovat průběžně výsledky</span>
                 </label>
             </div>
 
-            <div class="border-t border-slate-700/60 pt-2">
+            <div class="border-t border-slate-800 pt-2">
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="random-mode-chk" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                    <input type="checkbox" id="random-mode-chk" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700">
                     <span class="font-medium text-amber-400">Režim náhodného předkládání (promíchat sadu)</span>
                 </label>
                 <div id="random-suboptions" class="mt-2 pl-6 space-y-1 hidden">
                     <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="random-sub" value="interleave" checked class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <input type="radio" name="random-sub" value="interleave" checked class="text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700">
                         <span class="text-slate-300">Prokládat výsledky (zadání -> výsledek -> další)</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="random-sub" value="only-statements" class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <input type="radio" name="random-sub" value="only-statements" class="text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700">
                         <span class="text-slate-300">Procházet jen zadání</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="random-sub" value="instant-results" class="text-amber-500 focus:ring-amber-400 bg-slate-900 border-slate-700">
+                        <input type="radio" name="random-sub" value="instant-results" class="text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700">
                         <span class="text-slate-300">Zobrazovat ihned s výsledky</span>
                     </label>
                 </div>
@@ -191,10 +190,10 @@
     </main>
 
     <!-- Zápatí -->
-    <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-800 text-center text-xs text-slate-500 flex justify-between items-center">
-        <span>Checkovník v2.15</span>
+    <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-800/80 text-center text-xs text-slate-500 flex justify-between items-center backdrop-blur-sm bg-slate-950/30">
+        <span>Checkovník v2.16</span>
         <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
+            <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-950 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
         </label>
     </footer>
@@ -256,7 +255,7 @@
             if (highlight) {
                 datasetInput.className = "bg-red-950/50 text-red-100 border-2 border-red-500 rounded px-2 py-1 text-xs focus:outline-none focus:border-red-400 w-full sm:w-48 placeholder-red-300 animate-pulse";
             } else {
-                datasetInput.className = "bg-slate-800 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-slate-500 w-full sm:w-48";
+                datasetInput.className = "bg-slate-900/80 text-slate-100 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-indigo-500 w-full sm:w-48 shadow-inner";
             }
         }
 
@@ -279,8 +278,8 @@
             } else {
                 modeStepsBtn.setAttribute('disabled', 'true');
                 currentMode = 'result';
-                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
-                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm border border-slate-700/50";
+                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed border border-transparent";
             }
         }
 
@@ -297,7 +296,7 @@
                 sliderRange.value = 1;
                 totalCountSpan.innerText = "0";
                 currentChapterBadge.innerText = "-";
-                currentChapterBadge.className = "px-2 py-0.5 bg-slate-800 rounded font-medium text-slate-400";
+                currentChapterBadge.className = "px-2.5 py-0.5 bg-slate-800/80 border border-slate-700/50 rounded-md font-medium text-slate-400 shadow-sm";
                 return;
             }
 
@@ -372,7 +371,7 @@
                 sliderRange.value = probNum;
                 
                 currentChapterBadge.innerText = problem.chapterTitle || "Kapitola";
-                currentChapterBadge.className = `px-2 py-0.5 bg-slate-800 rounded font-medium ${problem.chapterColor || "text-slate-300"}`;
+                currentChapterBadge.className = `px-2.5 py-0.5 bg-slate-800/80 border border-slate-700/50 rounded-md font-medium ${problem.chapterColor || "text-slate-300"} shadow-sm`;
             }
 
             mathContent.innerHTML = `$${htmlString}$`;
@@ -436,8 +435,8 @@
                     currentMode = 'result';
                 }
 
-                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
-                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed";
+                modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm border border-slate-700/50";
+                modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed border border-transparent";
 
                 if (currentIndex < problems.length - 1) {
                     currentIndex++;
@@ -485,7 +484,6 @@
 
             const normDatasetId = normalizeString(datasetId);
 
-            // Hledání přesné shody (ignorující diakritiku a velikost písmen)
             let foundKey = keys.find(key => normalizeString(key) === normDatasetId);
             
             if (!foundKey) {
@@ -574,7 +572,7 @@
             datasetInput.value = "";
         });
 
-        // Inteligentní našeptávač (shovívavý k diakritice a velikosti písmen)
+        // Inteligentní našeptávač
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
@@ -620,8 +618,8 @@
         modeResultBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             currentMode = 'result';
-            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
-            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200";
+            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm border border-slate-700/50";
+            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent";
             render();
         });
 
@@ -629,8 +627,8 @@
             e.stopPropagation();
             if (modeStepsBtn.hasAttribute('disabled')) return;
             currentMode = 'steps';
-            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm";
-            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200";
+            modeStepsBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm border border-slate-700/50";
+            modeResultBtn.className = "flex-1 py-2 text-xs font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent";
             render();
         });
 
