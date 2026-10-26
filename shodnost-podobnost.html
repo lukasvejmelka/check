@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shodnost a Podobnost - Interaktivní Geometrie s Důkazem</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+            user-select: none;
+            overflow: hidden;
+            background-color: #0b0f19;
+        }
+        /* Glassmorphism panel styling */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 3px;
+        }
+        /* Custom Range Input */
+        input[type=range] {
+            accent-color: #3b82f6;
+        }
+        /* Glow animations */
+        @keyframes goldenPulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+        .pulse-gold {
+            animation: goldenPulse 1.6s infinite;
+        }
+        /* Proof log entry highlights */
+        .log-entry {
+            animation: fadeInLog 0.35s ease-out forwards;
+        }
+        @keyframes fadeInLog {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-100 h-screen w-screen flex flex-col justify-between relative overflow-hidden" id="appContainer">
+
+    <!-- Top Info Overlay Bar -->
+    <header class="absolute top-3 left-3 right-3 z-20 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
+        
+        <!-- App Title Tag -->
+        <div class="glass-panel px-4 py-2.5 rounded-2xl flex items-center space-x-3 pointer-events-auto shadow-xl">
+            <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 text-white p-2 rounded-xl shadow-md flex items-center justify-center">
+                <i class="fa-solid fa-shapes text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-white leading-tight flex items-center gap-2">
+                    Shodnost a Podobnost
+                    <span id="badgeMode" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">SHODNOST</span>
+                </h1>
+                <p class="text-[11px] text-slate-400">Interaktivní geometrický průzkum s vyhodnocením</p>
+            </div>
+        </div>
+
+        <!-- Realtime Live Measurements Panel -->
+        <div class="glass-panel px-4 py-2 rounded-2xl flex items-center space-x-3 md:space-x-5 text-xs pointer-events-auto shadow-xl">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block shadow-sm"></span>
+                <span class="text-slate-400 font-medium">Vzor |XY|:</span>
+                <span id="mXY" class="font-mono font-bold text-white text-sm">0.0</span>
+            </div>
+            <div class="w-px h-6 bg-slate-700"></div>
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-sm"></span>
+                <span class="text-slate-400 font-medium">Obraz |X'Y'|:</span>
+                <span id="mX1Y1" class="font-mono font-bold text-amber-300 text-sm">0.0</span>
+            </div>
+            <div class="w-px h-6 bg-slate-700"></div>
+            <div class="flex items-center space-x-2 bg-slate-800/80 px-3 py-1 rounded-xl border border-slate-700">
+                <span class="text-slate-400 font-medium">Poměr k = |X'Y'| / |XY|:</span>
+                <span id="mRatio" class="font-mono font-extrabold text-blue-400 text-base">1.00</span>
+            </div>
+        </div>
+
+        <!-- Utility Action Buttons -->
+        <div class="flex items-center space-x-2 pointer-events-auto">
+            <button id="btnAddVertex" title="Přidat Vrchol" class="glass-panel hover:bg-slate-700/60 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 shadow-md">
+                <i class="fa-solid fa-plus text-emerald-400"></i>
+                <span class="hidden sm:inline">Vrchol</span>
+            </button>
+            <button id="btnRemoveVertex" title="Odebrat Vrchol" class="glass-panel hover:bg-slate-700/60 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 shadow-md">
+                <i class="fa-solid fa-minus text-rose-400"></i>
+                <span class="hidden sm:inline">Vrchol</span>
+            </button>
+            <button id="btnFullscreen" title="Celá obrazovka" class="glass-panel hover:bg-slate-700/60 text-slate-200 p-2.5 rounded-xl text-xs transition shadow-md">
+                <i class="fa-solid fa-expand text-blue-400 text-sm"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Interactive Canvas -->
+    <main class="w-full h-full relative cursor-crosshair">
+        <canvas id="geoCanvas" class="w-full h-full block"></canvas>
+
+        <!-- Dynamic Animation Stage Overlay Banner -->
+        <div id="animStageBanner" class="absolute top-20 left-1/2 -translate-x-1/2 glass-panel border border-amber-500/40 px-5 py-2 rounded-full text-amber-300 text-xs font-bold tracking-wide flex items-center space-x-2.5 opacity-0 transition-opacity duration-300 pointer-events-none shadow-2xl z-20">
+            <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
+            <span id="animStageText">Provádění...</span>
+        </div>
+
+        <!-- Touch / Drag Hint -->
+        <div class="absolute bottom-36 left-4 glass-panel px-3 py-1.5 rounded-xl text-[11px] text-slate-300 pointer-events-none flex items-center space-x-2 border border-slate-700/50 shadow-lg">
+            <i class="fa-solid fa-hand-pointer text-blue-400"></i>
+            <span>Přetahujte vrcholy A,B,C..., úsečku XY i obraz uchopením</span>
+        </div>
+
+        <!-- FLOATING DRAGGABLE PROOF WINDOW (Průhledné přemístitelné okno demonstrace) -->
+        <div id="proofWindow" class="absolute top-24 right-6 w-80 sm:w-96 glass-panel rounded-2xl shadow-2xl border border-slate-600/60 z-20 flex flex-col hidden transition-all">
+            
+            <!-- Window Header (Draggable Handle) -->
+            <div id="proofHeader" class="p-3 bg-slate-800/80 rounded-t-2xl border-b border-slate-700/60 flex items-center justify-between cursor-move select-none">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-amber-400"></i>
+                    <span class="text-xs font-bold text-white tracking-wide">Výsledky průzkumu objektů</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <button id="btnClearProof" title="Vyčistit zápis" class="text-slate-400 hover:text-white px-2 py-0.5 rounded text-xs">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button id="btnCloseProof" title="Zavřít" class="text-slate-400 hover:text-rose-400 px-2 py-0.5 rounded text-xs">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Proof Log Content List -->
+            <div id="proofLog" class="p-3.5 space-y-2 max-h-80 overflow-y-auto text-xs font-mono text-slate-300 bg-slate-950/40">
+                <div class="text-slate-400 italic text-[11px] text-center py-2">
+                    Kliknutím na tlačítko "Prozkoumej objekty" spustíte matematické porovnání.
+                </div>
+            </div>
+
+            <!-- Proof Window Footer Summary -->
+            <div id="proofFooter" class="p-2.5 bg-slate-900/90 rounded-b-2xl border-t border-slate-700/60 text-[11px] text-slate-400 flex items-center justify-between">
+                <span>Stav: <strong id="proofStatusText" class="text-amber-400 font-semibold">Připraveno</strong></span>
+                <span id="proofModeTag" class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">SHODNOST</span>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom Presentation Dock Panel -->
+    <footer class="absolute bottom-3 left-3 right-3 z-30 pointer-events-auto">
+        <div class="glass-panel p-3 md:p-4 rounded-3xl shadow-2xl border border-slate-700/80 max-w-7xl mx-auto flex flex-col gap-3">
+            
+            <!-- Row 1: Mode Switches, Main Action Buttons & Toggles -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/50 pb-3">
+                
+                <!-- Mode Switcher -->
+                <div class="flex items-center bg-slate-900/80 p-1 rounded-2xl border border-slate-700/80">
+                    <button id="modeCongruence" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-blue-600 text-white shadow-md">
+                        <i class="fa-solid fa-clone"></i>
+                        <span>Shodnost (k = 1)</span>
+                    </button>
+                    <button id="modeSimilarity" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                        <span>Podobnost (k ∈ ℝ⁺)</span>
+                    </button>
+                </div>
+
+                <!-- Animated Action Engines -->
+                <div class="flex items-center space-x-2 flex-wrap gap-2">
+                    
+                    <!-- RENAMED: PROZKOUMEJ OBJEKTY BUTTON -->
+                    <button id="btnDemo" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs md:text-sm rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center space-x-2">
+                        <i class="fa-solid fa-magnifying-glass-chart text-slate-950"></i>
+                        <span>Prozkoumej objekty</span>
+                    </button>
+
+                    <!-- TRANSFORM ANIMATION BUTTON -->
+                    <button id="btnPlay" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs md:text-sm rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center space-x-2 pulse-gold">
+                        <i class="fa-solid fa-play text-slate-950"></i>
+                        <span>ANIMACE TRANSFR.</span>
+                    </button>
+
+                    <button id="btnReset" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span class="hidden sm:inline">Reset</span>
+                    </button>
+                </div>
+
+                <!-- Visual Options -->
+                <div class="flex items-center space-x-3 text-xs">
+                    <label class="inline-flex items-center space-x-1.5 cursor-pointer text-slate-300 hover:text-white transition">
+                        <input type="checkbox" id="chkAngles" checked class="rounded border-slate-700 text-blue-500 focus:ring-0 bg-slate-900 h-3.5 w-3.5">
+                        <span class="text-[11px]">Úhly</span>
+                    </label>
+                    <label class="inline-flex items-center space-x-1.5 cursor-pointer text-slate-300 hover:text-white transition">
+                        <input type="checkbox" id="chkLengths" checked class="rounded border-slate-700 text-blue-500 focus:ring-0 bg-slate-900 h-3.5 w-3.5">
+                        <span class="text-[11px]">Délky</span>
+                    </label>
+                    <label class="inline-flex items-center space-x-1.5 cursor-pointer text-slate-300 hover:text-white transition">
+                        <input type="checkbox" id="chkGuides" checked class="rounded border-slate-700 text-blue-500 focus:ring-0 bg-slate-900 h-3.5 w-3.5">
+                        <span class="text-[11px]">Spojnice (projektor)</span>
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- Row 2: Dynamic Sliders -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 items-center text-xs">
+                
+                <!-- Posun X -->
+                <div class="glass-card p-2 rounded-xl flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-[11px] text-slate-300 font-medium">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-arrows-left-right text-blue-400"></i> Posun X</span>
+                        <span id="txtTransX" class="font-mono text-slate-400">180</span>
+                    </div>
+                    <input type="range" id="sliderTransX" min="-350" max="350" value="180" class="w-full cursor-pointer h-1.5 bg-slate-700 rounded-lg">
+                </div>
+
+                <!-- Posun Y -->
+                <div class="glass-card p-2 rounded-xl flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-[11px] text-slate-300 font-medium">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-arrows-up-down text-blue-400"></i> Posun Y</span>
+                        <span id="txtTransY" class="font-mono text-slate-400">30</span>
+                    </div>
+                    <input type="range" id="sliderTransY" min="-300" max="300" value="30" class="w-full cursor-pointer h-1.5 bg-slate-700 rounded-lg">
+                </div>
+
+                <!-- Otočení -->
+                <div class="glass-card p-2 rounded-xl flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-[11px] text-slate-300 font-medium">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-rotate text-emerald-400"></i> Otočení</span>
+                        <span id="txtRotate" class="font-mono text-slate-400">45°</span>
+                    </div>
+                    <input type="range" id="sliderRotate" min="0" max="360" value="45" class="w-full cursor-pointer h-1.5 bg-slate-700 rounded-lg">
+                </div>
+
+                <!-- Překlopení -->
+                <div class="glass-card p-2 rounded-xl flex items-center justify-between h-full px-3">
+                    <span class="text-[11px] font-medium text-slate-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-left text-amber-400"></i> Překlopení
+                    </span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="chkFlipX" class="sr-only peer">
+                        <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-500"></div>
+                    </label>
+                </div>
+
+                <!-- RENAMED: Koeficient podobnosti (škálovací faktor) (k) -->
+                <div id="similarityBox" class="glass-card p-2 rounded-xl flex flex-col gap-1 col-span-2 sm:col-span-1 border border-amber-500/30 opacity-50 pointer-events-none transition-all">
+                    <div class="flex justify-between items-center text-[10px] sm:text-[11px] text-amber-300 font-bold truncate">
+                        <span class="flex items-center gap-1 truncate"><i class="fa-solid fa-expand text-amber-400"></i> Koef. podobnosti (k)</span>
+                        <span id="txtScaleK" class="font-mono bg-amber-500/20 text-amber-300 px-1 py-0.2 rounded">1.30×</span>
+                    </div>
+                    <input type="range" id="sliderK" min="0.2" max="2.5" step="0.05" value="1.3" class="w-full cursor-pointer h-1.5 bg-slate-700 rounded-lg accent-amber-400">
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Interactive Script Core -->
+    <script>
+        // --- State Management ---
+        const state = {
+            mode: 'congruence', // 'congruence' | 'similarity'
+            
+            // Configured parameters
+            targetTransX: 180,
+            targetTransY: 30,
+            targetRotation: 45,
+            targetFlipX: false,
+            targetK: 1.3,
+
+            // Animated parameters
+            currentTransX: 180,
+            currentTransY: 30,
+            currentRotation: 45,
+            currentFlipScaleX: 1.0,
+            currentK: 1.0,
+
+            // Animation state
+            isAnimating: false,
+            animProgress: 0,
+            animStep: 0,
+            goldenFlashAlpha: 0,
+
+            // DEMONSTRATION MODE ENGINE
+            isDemonstrating: false,
+            demoPhase: 'none', // 'sides' | 'angles' | 'segment' | 'done'
+            highlightSideIdx: -1,
+            highlightAngleIdx: -1,
+            highlightSegment: false,
+            demoTimer: 0,
+
+            // Toggles
+            showAngles: true,
+            showLengths: true,
+            showGuides: true,
+
+            // Vertices & Probed points XY
+            vertices: [],
+            pointX: { x: 0, y: 0 },
+            pointY: { x: 0, y: 0 },
+
+            // Interaction Drag Targets
+            dragTarget: null,
+            dragStartPos: { x: 0, y: 0 },
+            initialTrans: { x: 0, y: 0 },
+            initialSegmentX: { x: 0, y: 0 },
+            initialSegmentY: { x: 0, y: 0 }
+        };
+
+        const VERTEX_NAMES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+        // DOM References
+        const container = document.getElementById('appContainer');
+        const canvas = document.getElementById('geoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const modeCongruence = document.getElementById('modeCongruence');
+        const modeSimilarity = document.getElementById('modeSimilarity');
+        const badgeMode = document.getElementById('badgeMode');
+        const similarityBox = document.getElementById('similarityBox');
+
+        const btnPlay = document.getElementById('btnPlay');
+        const btnDemo = document.getElementById('btnDemo');
+        const btnReset = document.getElementById('btnReset');
+        const btnFullscreen = document.getElementById('btnFullscreen');
+        const btnAddVertex = document.getElementById('btnAddVertex');
+        const btnRemoveVertex = document.getElementById('btnRemoveVertex');
+
+        const animStageBanner = document.getElementById('animStageBanner');
+        const animStageText = document.getElementById('animStageText');
+
+        const sliderTransX = document.getElementById('sliderTransX');
+        const sliderTransY = document.getElementById('sliderTransY');
+        const sliderRotate = document.getElementById('sliderRotate');
+        const sliderK = document.getElementById('sliderK');
+        const chkFlipX = document.getElementById('chkFlipX');
+
+        const txtTransX = document.getElementById('txtTransX');
+        const txtTransY = document.getElementById('txtTransY');
+        const txtRotate = document.getElementById('txtRotate');
+        const txtScaleK = document.getElementById('txtScaleK');
+
+        const chkAngles = document.getElementById('chkAngles');
+        const chkLengths = document.getElementById('chkLengths');
+        const chkGuides = document.getElementById('chkGuides');
+
+        const mXY = document.getElementById('mXY');
+        const mX1Y1 = document.getElementById('mX1Y1');
+        const mRatio = document.getElementById('mRatio');
+
+        // Floating Proof Window Elements
+        const proofWindow = document.getElementById('proofWindow');
+        const proofHeader = document.getElementById('proofHeader');
+        const proofLog = document.getElementById('proofLog');
+        const proofStatusText = document.getElementById('proofStatusText');
+        const proofModeTag = document.getElementById('proofModeTag');
+        const btnCloseProof = document.getElementById('btnCloseProof');
+        const btnClearProof = document.getElementById('btnClearProof');
+
+        // --- Init Function ---
+        function init() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            setupEventListeners();
+            setupDraggableWindow();
+            resetDefaultPolygon();
+            syncStateToDisplay();
+            requestAnimationFrame(animationLoop);
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        function resetDefaultPolygon() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            const cx = Math.min(w * 0.28, 250);
+            const cy = h * 0.42;
+
+            state.vertices = [
+                { x: cx - 20, y: cy - 110 },
+                { x: cx + 90, y: cy - 40 },
+                { x: cx + 70, y: cy + 90 },
+                { x: cx - 80, y: cy + 80 },
+                { x: cx - 100, y: cy - 30 }
+            ];
+
+            state.pointX = { x: cx - 20, y: cy - 20 };
+            state.pointY = { x: cx + 30, y: cy + 30 };
+
+            sortVerticesCounterClockwise();
+        }
+
+        // Counter-Clockwise (CCW) Sorting around Centroid
+        function sortVerticesCounterClockwise() {
+            if (state.vertices.length < 3) return;
+            const center = getCenter(state.vertices);
+            state.vertices.sort((a, b) => {
+                const angleA = Math.atan2(a.y - center.y, a.x - center.x);
+                const angleB = Math.atan2(b.y - center.y, b.x - center.x);
+                return angleA - angleB; // Standard CCW angle order
+            });
+        }
+
+        function syncStateToDisplay() {
+            if (!state.isAnimating) {
+                state.currentTransX = state.targetTransX;
+                state.currentTransY = state.targetTransY;
+                state.currentRotation = state.targetRotation;
+                state.currentFlipScaleX = state.targetFlipX ? -1.0 : 1.0;
+                state.currentK = state.mode === 'similarity' ? state.targetK : 1.0;
+            }
+        }
+
+        // --- Geometry Math & Transformations ---
+        function getCenter(verts) {
+            let sx = 0, sy = 0;
+            verts.forEach(v => { sx += v.x; sy += v.y; });
+            return { x: sx / verts.length, y: sy / verts.length };
+        }
+
+        function transformPoint(pt, center) {
+            let dx = pt.x - center.x;
+            let dy = pt.y - center.y;
+
+            dx *= state.currentFlipScaleX;
+            dx *= state.currentK;
+            dy *= state.currentK;
+
+            const rad = (state.currentRotation * Math.PI) / 180;
+            const rx = dx * Math.cos(rad) - dy * Math.sin(rad);
+            const ry = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+            return {
+                x: center.x + state.currentTransX + rx,
+                y: center.y + state.currentTransY + ry
+            };
+        }
+
+        function dist(p1, p2) {
+            return Math.hypot(p2.x - p1.x, p2.y - p1.y);
+        }
+
+        function distToSegment(p, v, w) {
+            const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
+            if (l2 === 0) return dist(p, v);
+            let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+            t = Math.max(0, Math.min(1, t));
+            return dist(p, { x: v.x + t * (w.x - v.x), y: v.y + t * (w.y - v.y) });
+        }
+
+        function calculateAngle(p1, vertex, p2) {
+            const a = dist(vertex, p1);
+            const b = dist(vertex, p2);
+            const c = dist(p1, p2);
+            if (a === 0 || b === 0) return 0;
+            const cosVal = Math.max(-1, Math.min(1, (a * a + b * b - c * c) / (2 * a * b)));
+            return (Math.acos(cosVal) * 180) / Math.PI;
+        }
+
+        // --- Proof Window Draggable Implementation ---
+        function setupDraggableWindow() {
+            let isDragging = false;
+            let offset = { x: 0, y: 0 };
+
+            proofHeader.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                const rect = proofWindow.getBoundingClientRect();
+                offset.x = e.clientX - rect.left;
+                offset.y = e.clientY - rect.top;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                let newX = e.clientX - offset.x;
+                let newY = e.clientY - offset.y;
+                proofWindow.style.left = `${newX}px`;
+                proofWindow.style.top = `${newY}px`;
+                proofWindow.style.right = 'auto';
+            });
+
+            window.addEventListener('mouseup', () => isDragging = false);
+
+            proofHeader.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                const touch = e.touches[0];
+                const rect = proofWindow.getBoundingClientRect();
+                offset.x = touch.clientX - rect.left;
+                offset.y = touch.clientY - rect.top;
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const touch = e.touches[0];
+                proofWindow.style.left = `${touch.clientX - offset.x}px`;
+                proofWindow.style.top = `${touch.clientY - offset.y}px`;
+                proofWindow.style.right = 'auto';
+            });
+
+            window.addEventListener('touchend', () => isDragging = false);
+
+            btnCloseProof.addEventListener('click', () => proofWindow.classList.add('hidden'));
+            btnClearProof.addEventListener('click', () => {
+                proofLog.innerHTML = `<div class="text-slate-500 italic text-[11px] text-center py-2">Zápis vyčištěn.</div>`;
+            });
+        }
+
+        function appendProofLog(htmlContent, isHeader = false) {
+            proofWindow.classList.remove('hidden');
+            if (isHeader) {
+                const item = document.createElement('div');
+                item.className = 'font-bold text-amber-400 border-b border-slate-700/80 pb-1 mt-2 mb-1 text-[11px] uppercase tracking-wider log-entry';
+                item.innerHTML = htmlContent;
+                proofLog.appendChild(item);
+            } else {
+                const item = document.createElement('div');
+                item.className = 'p-1.5 rounded bg-slate-900/60 border border-slate-800 text-[11px] log-entry flex items-center justify-between';
+                item.innerHTML = htmlContent;
+                proofLog.appendChild(item);
+            }
+            proofLog.scrollTop = proofLog.scrollHeight;
+        }
+
+        // --- Demonstration Engine (Prozkoumej objekty) ---
+        function startDemonstration() {
+            if (state.isAnimating || state.isDemonstrating) return;
+            
+            state.isDemonstrating = true;
+            state.demoPhase = 'sides';
+            state.highlightSideIdx = 0;
+            state.highlightAngleIdx = -1;
+            state.highlightSegment = false;
+            state.demoTimer = 0;
+
+            proofWindow.classList.remove('hidden');
+            proofLog.innerHTML = '';
+            proofStatusText.textContent = "Probíhá průzkum...";
+            proofModeTag.textContent = state.mode === 'congruence' ? 'SHODNOST' : 'PODOBNOST';
+            proofModeTag.className = state.mode === 'congruence' ? 
+                'text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300' : 
+                'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300';
+
+            appendProofLog(`<i class="fa-solid fa-play text-emerald-400 mr-1.5"></i> Začátek průzkumu: ${state.mode === 'congruence' ? 'Shodnost' : 'Podobnost'}`, true);
+            appendProofLog(`<i class="fa-solid fa-ruler-combined mr-1 text-blue-400"></i> Fáze 1: Kontrola odpovídajících stran`, true);
+
+            btnDemo.disabled = true;
+            btnDemo.classList.add('opacity-50');
+            animStageBanner.classList.remove('opacity-0');
+            animStageText.textContent = "Průzkum: Porovnávání délek stran...";
+        }
+
+        function updateDemonstrationEngine(dt) {
+            state.demoTimer += dt;
+
+            const center = getCenter(state.vertices);
+            const transformedVerts = state.vertices.map(v => transformPoint(v, center));
+            const n = state.vertices.length;
+
+            if (state.demoPhase === 'sides') {
+                if (state.demoTimer >= 1.2) {
+                    state.demoTimer = 0;
+                    const i = state.highlightSideIdx;
+                    const p1 = state.vertices[i];
+                    const p2 = state.vertices[(i + 1) % n];
+                    const d1 = dist(p1, p2);
+
+                    const tp1 = transformedVerts[i];
+                    const tp2 = transformedVerts[(i + 1) % n];
+                    const d2 = dist(tp1, tp2);
+
+                    const name1 = VERTEX_NAMES[i % VERTEX_NAMES.length];
+                    const name2 = VERTEX_NAMES[(i + 1) % VERTEX_NAMES.length];
+
+                    if (state.mode === 'congruence') {
+                        appendProofLog(`
+                            <span>|<span class="text-blue-400">${name1}${name2}</span>| = |<span class="text-emerald-400">${name1}'${name2}'</span>| = ${d1.toFixed(1)}</span>
+                            <span class="text-emerald-400 font-bold ml-1">✓ rovnost</span>
+                        `);
+                    } else {
+                        const ratio = d2 / d1;
+                        appendProofLog(`
+                            <span>|<span class="text-amber-400">${name1}'${name2}'</span>| / |<span class="text-blue-400">${name1}${name2}</span>| = ${d2.toFixed(1)} / ${d1.toFixed(1)}</span>
+                            <span class="text-amber-300 font-bold ml-1">k = ${ratio.toFixed(2)}</span>
+                        `);
+                    }
+
+                    state.highlightSideIdx++;
+                    if (state.highlightSideIdx >= n) {
+                        state.demoPhase = 'angles';
+                        state.highlightSideIdx = -1;
+                        state.highlightAngleIdx = 0;
+                        animStageText.textContent = "Průzkum: Porovnávání vnitřních úhlů...";
+                        appendProofLog(`<i class="fa-solid fa-compass mr-1 text-emerald-400"></i> Fáze 2: Kontrola vnitřních úhlů`, true);
+                    }
+                }
+            } else if (state.demoPhase === 'angles') {
+                if (state.demoTimer >= 1.2) {
+                    state.demoTimer = 0;
+                    const i = state.highlightAngleIdx;
+                    const prev = state.vertices[(i - 1 + n) % n];
+                    const curr = state.vertices[i];
+                    const next = state.vertices[(i + 1) % n];
+                    const a1 = calculateAngle(prev, curr, next);
+
+                    const tPrev = transformedVerts[(i - 1 + n) % n];
+                    const tCurr = transformedVerts[i];
+                    const tNext = transformedVerts[(i + 1) % n];
+                    const a2 = calculateAngle(tPrev, tCurr, tNext);
+
+                    const vName = VERTEX_NAMES[i % VERTEX_NAMES.length];
+
+                    appendProofLog(`
+                        <span>∠${vName} = ∠${vName}' = ${a1.toFixed(1)}°</span>
+                        <span class="text-emerald-400 font-bold ml-1">✓ úhly shodné</span>
+                    `);
+
+                    state.highlightAngleIdx++;
+                    if (state.highlightAngleIdx >= n) {
+                        state.demoPhase = 'segment';
+                        state.highlightAngleIdx = -1;
+                        state.highlightSegment = true;
+                        animStageText.textContent = "Průzkum: Porovnávání kontrolní úsečky XY...";
+                        appendProofLog(`<i class="fa-solid fa-draw-polygon mr-1 text-rose-400"></i> Fáze 3: Kontrola úsečky XY`, true);
+                    }
+                }
+            } else if (state.demoPhase === 'segment') {
+                if (state.demoTimer >= 1.4) {
+                    state.demoTimer = 0;
+                    const lenXY = dist(state.pointX, state.pointY);
+                    const transX = transformPoint(state.pointX, center);
+                    const transY = transformPoint(state.pointY, center);
+                    const lenX1Y1 = dist(transX, transY);
+
+                    if (state.mode === 'congruence') {
+                        appendProofLog(`
+                            <span>|XY| = |X'Y'| = ${lenXY.toFixed(1)}</span>
+                            <span class="text-emerald-400 font-bold ml-1">✓ zachováno</span>
+                        `);
+                        appendProofLog(`<div class="text-center font-bold text-emerald-400 py-1">ZÁVĚR: Útvary jsou SHODNÉ</div>`, true);
+                    } else {
+                        const r = lenX1Y1 / lenXY;
+                        appendProofLog(`
+                            <span>|X'Y'| / |XY| = ${lenX1Y1.toFixed(1)} / ${lenXY.toFixed(1)}</span>
+                            <span class="text-amber-300 font-bold ml-1">k = ${r.toFixed(2)}</span>
+                        `);
+                        appendProofLog(`<div class="text-center font-bold text-amber-400 py-1">ZÁVĚR: Útvary jsou PODOBNÉ (k = ${r.toFixed(2)})</div>`, true);
+                    }
+
+                    state.isDemonstrating = false;
+                    state.demoPhase = 'done';
+                    state.highlightSegment = false;
+                    proofStatusText.textContent = "Průzkum dokončen";
+                    animStageBanner.classList.add('opacity-0');
+                    btnDemo.disabled = false;
+                    btnDemo.classList.remove('opacity-50');
+                }
+            }
+        }
+
+        // --- Transformation Animation Sequence Engine ---
+        function startAnimation() {
+            if (state.isDemonstrating) return;
+            state.isAnimating = true;
+            state.animStep = 0;
+            state.animProgress = 0;
+
+            state.currentTransX = 0;
+            state.currentTransY = 0;
+            state.currentRotation = 0;
+            state.currentFlipScaleX = 1.0;
+            state.currentK = 1.0;
+            state.goldenFlashAlpha = 1.0;
+
+            animStageBanner.classList.remove('opacity-0');
+            btnPlay.disabled = true;
+            btnPlay.classList.add('opacity-50');
+        }
+
+        function updateAnimationStep(dt) {
+            const speed = 1.2;
+            state.animProgress += dt * speed;
+
+            const easeInOut = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            const progress = Math.min(1, state.animProgress);
+            const eased = easeInOut(progress);
+
+            switch (state.animStep) {
+                case 0:
+                    animStageText.textContent = "1. Vytvoření identické kopie (Klonování)";
+                    state.goldenFlashAlpha = Math.max(0, 1.0 - progress);
+                    if (progress >= 1) { state.animStep = 1; state.animProgress = 0; }
+                    break;
+                case 1:
+                    animStageText.textContent = "2. Translace (Posunutí)";
+                    state.currentTransX = state.targetTransX * eased;
+                    state.currentTransY = state.targetTransY * eased;
+                    if (progress >= 1) { state.animStep = 2; state.animProgress = 0; }
+                    break;
+                case 2:
+                    animStageText.textContent = "3. Rotace (Otočení)";
+                    state.currentRotation = state.targetRotation * eased;
+                    if (progress >= 1) {
+                        state.animStep = state.targetFlipX ? 3 : (state.mode === 'similarity' ? 4 : 5);
+                        state.animProgress = 0;
+                    }
+                    break;
+                case 3:
+                    animStageText.textContent = "4. Osové Překlopení";
+                    state.currentFlipScaleX = 1.0 - 2.0 * eased;
+                    if (progress >= 1) {
+                        state.animStep = state.mode === 'similarity' ? 4 : 5;
+                        state.animProgress = 0;
+                    }
+                    break;
+                case 4:
+                    animStageText.textContent = `5. Homotetie (Škálovací faktor k = ${state.targetK.toFixed(2)})`;
+                    state.currentK = 1.0 + (state.targetK - 1.0) * eased;
+                    if (progress >= 1) { state.animStep = 5; state.animProgress = 0; }
+                    break;
+                case 5:
+                    state.isAnimating = false;
+                    animStageBanner.classList.add('opacity-0');
+                    btnPlay.disabled = false;
+                    btnPlay.classList.remove('opacity-50');
+                    syncStateToDisplay();
+                    break;
+            }
+        }
+
+        // --- Main Animation & Render Loop ---
+        let lastTime = 0;
+        function animationLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const dt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            if (state.isAnimating) {
+                updateAnimationStep(dt);
+            } else if (state.isDemonstrating) {
+                updateDemonstrationEngine(dt);
+            }
+
+            render();
+            requestAnimationFrame(animationLoop);
+        }
+
+        // --- Rendering Core ---
+        function render() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+
+            ctx.clearRect(0, 0, w, h);
+            drawGrid(w, h);
+
+            const center = getCenter(state.vertices);
+            const transformedVerts = state.vertices.map(v => transformPoint(v, center));
+            const transformedX = transformPoint(state.pointX, center);
+            const transformedY = transformPoint(state.pointY, center);
+
+            // 1. High-Contrast Correspondence Guides for Projector Projection
+            if (state.showGuides) {
+                ctx.save();
+                ctx.setLineDash([8, 6]);
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)'; // Vibrant sky blue
+                ctx.lineWidth = 2.5; // Thicker for projector
+                for (let i = 0; i < state.vertices.length; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(state.vertices[i].x, state.vertices[i].y);
+                    ctx.lineTo(transformedVerts[i].x, transformedVerts[i].y);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // 2. Base Shapes
+            drawPolygon(state.vertices, '#3b82f6', 'rgba(59, 130, 246, 0.15)', false);
+            const imgColor = state.mode === 'similarity' ? '#f59e0b' : '#10b981';
+            const imgFill = state.mode === 'similarity' ? 'rgba(245, 158, 11, 0.18)' : 'rgba(16, 185, 129, 0.18)';
+            drawPolygon(transformedVerts, imgColor, imgFill, true);
+
+            // 3. Golden Flash
+            if (state.goldenFlashAlpha > 0) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(state.vertices[0].x, state.vertices[0].y);
+                for (let i = 1; i < state.vertices.length; i++) {
+                    ctx.lineTo(state.vertices[i].x, state.vertices[i].y);
+                }
+                ctx.closePath();
+                ctx.fillStyle = `rgba(251, 191, 36, ${state.goldenFlashAlpha * 0.6})`;
+                ctx.fill();
+                ctx.strokeStyle = `rgba(251, 191, 36, ${state.goldenFlashAlpha})`;
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 4. Probed Segments XY and X'Y'
+            drawSegment(state.pointX, state.pointY, 'X', 'Y', '#f43f5e', state.highlightSegment);
+            drawSegment(transformedX, transformedY, "X'", "Y'", '#fbbf24', state.highlightSegment);
+
+            // 5. Side Lengths (UNITLESS) & Angle Arcs
+            if (state.showLengths) {
+                drawSideLengths(state.vertices, '#60a5fa');
+                drawSideLengths(transformedVerts, state.mode === 'similarity' ? '#fcd34d' : '#34d399');
+            }
+
+            if (state.showAngles) {
+                drawAngleArcs(state.vertices, '#93c5fd', false);
+                drawAngleArcs(transformedVerts, '#a7f3d0', true);
+            }
+
+            // 6. Highlight active demonstration elements
+            if (state.highlightSideIdx >= 0) {
+                highlightSidePair(state.vertices, transformedVerts, state.highlightSideIdx);
+            }
+            if (state.highlightAngleIdx >= 0) {
+                highlightAngleArcPair(state.vertices, transformedVerts, state.highlightAngleIdx);
+            }
+
+            updateDashboard(transformedX, transformedY);
+        }
+
+        function drawGrid(w, h) {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+            ctx.lineWidth = 1;
+            const grid = 40;
+            for (let x = 0; x < w; x += grid) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y < h; y += grid) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawPolygon(verts, strokeColor, fillColor, isTransformed) {
+            if (verts.length === 0) return;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(verts[0].x, verts[0].y);
+            for (let i = 1; i < verts.length; i++) {
+                ctx.lineTo(verts[i].x, verts[i].y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            verts.forEach((v, idx) => {
+                ctx.beginPath();
+                ctx.arc(v.x, v.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#0f172a';
+                ctx.fill();
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                const name = VERTEX_NAMES[idx % VERTEX_NAMES.length];
+                const label = isTransformed ? `${name}'` : `${name}`;
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillStyle = strokeColor;
+                ctx.fillText(label, v.x + 10, v.y - 8);
+            });
+            ctx.restore();
+        }
+
+        function drawSegment(p1, p2, l1, l2, color, isHighlighted = false) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = isHighlighted ? 6 : 3.5;
+            if (isHighlighted) {
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 14;
+            }
+            ctx.stroke();
+
+            [{ p: p1, lbl: l1 }, { p: p2, lbl: l2 }].forEach(item => {
+                ctx.beginPath();
+                ctx.arc(item.p.x, item.p.y, isHighlighted ? 7 : 5.5, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.font = 'bold 12px Inter, sans-serif';
+                ctx.fillStyle = color;
+                ctx.fillText(item.lbl, item.p.x - 12, item.p.y - 8);
+            });
+            ctx.restore();
+        }
+
+        // Side lengths drawn WITHOUT 'px' units
+        function drawSideLengths(verts, color) {
+            ctx.save();
+            ctx.font = 'bold 11px Inter, sans-serif';
+            for (let i = 0; i < verts.length; i++) {
+                const p1 = verts[i];
+                const p2 = verts[(i + 1) % verts.length];
+                const d = dist(p1, p2).toFixed(1);
+
+                const mx = (p1.x + p2.x) / 2;
+                const my = (p1.y + p2.y) / 2;
+
+                const tw = ctx.measureText(d).width;
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.fillRect(mx - tw / 2 - 3, my - 7, tw + 6, 14);
+
+                ctx.fillStyle = color;
+                ctx.fillText(d, mx - tw / 2, my + 3);
+            }
+            ctx.restore();
+        }
+
+        // Interior Angle Arcs Rendering
+        function drawAngleArcs(verts, color, isTransformed) {
+            ctx.save();
+            const n = verts.length;
+            const r = 22; // arc radius
+
+            for (let i = 0; i < n; i++) {
+                const prev = verts[(i - 1 + n) % n];
+                const curr = verts[i];
+                const next = verts[(i + 1) % n];
+
+                const a1 = Math.atan2(prev.y - curr.y, prev.x - curr.x);
+                const a2 = Math.atan2(next.y - curr.y, next.x - curr.x);
+
+                let diff = a2 - a1;
+                while (diff < 0) diff += Math.PI * 2;
+                while (diff >= Math.PI * 2) diff -= Math.PI * 2;
+
+                // Determine interior arc direction
+                const counterClockwise = diff > Math.PI;
+
+                ctx.beginPath();
+                ctx.arc(curr.x, curr.y, r, a1, a2, counterClockwise);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                const deg = calculateAngle(prev, curr, next).toFixed(0);
+                const midAngle = counterClockwise ? a1 - (Math.PI * 2 - diff) / 2 : a1 + diff / 2;
+                const tx = curr.x + Math.cos(midAngle) * (r + 14);
+                const ty = curr.y + Math.sin(midAngle) * (r + 14);
+
+                ctx.font = '10px Inter, sans-serif';
+                ctx.fillStyle = color;
+                ctx.fillText(`${deg}°`, tx - 8, ty + 4);
+            }
+            ctx.restore();
+        }
+
+        function highlightSidePair(verts1, verts2, idx) {
+            const n = verts1.length;
+            const p1 = verts1[idx];
+            const p2 = verts1[(idx + 1) % n];
+            const tp1 = verts2[idx];
+            const tp2 = verts2[(idx + 1) % n];
+
+            ctx.save();
+            ctx.lineWidth = 6;
+            ctx.shadowBlur = 15;
+
+            // Base shape side
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.shadowColor = '#38bdf8';
+            ctx.stroke();
+
+            // Transformed shape side
+            ctx.beginPath();
+            ctx.moveTo(tp1.x, tp1.y);
+            ctx.lineTo(tp2.x, tp2.y);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.shadowColor = '#f59e0b';
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Highlight interior ANGLE ARCS during examination phase
+        function highlightAngleArcPair(verts1, verts2, idx) {
+            ctx.save();
+            [verts1, verts2].forEach((verts, vIndex) => {
+                const n = verts.length;
+                const prev = verts[(idx - 1 + n) % n];
+                const curr = verts[idx];
+                const next = verts[(idx + 1) % n];
+
+                const a1 = Math.atan2(prev.y - curr.y, prev.x - curr.x);
+                const a2 = Math.atan2(next.y - curr.y, next.x - curr.x);
+
+                let diff = a2 - a1;
+                while (diff < 0) diff += Math.PI * 2;
+                while (diff >= Math.PI * 2) diff -= Math.PI * 2;
+
+                const counterClockwise = diff > Math.PI;
+                const activeColor = vIndex === 0 ? '#38bdf8' : '#34d399';
+
+                ctx.beginPath();
+                ctx.arc(curr.x, curr.y, 28, a1, a2, counterClockwise);
+                ctx.strokeStyle = activeColor;
+                ctx.shadowColor = activeColor;
+                ctx.shadowBlur = 18;
+                ctx.lineWidth = 5;
+                ctx.stroke();
+            });
+            ctx.restore();
+        }
+
+        function updateDashboard(transX, transY) {
+            const lenXY = dist(state.pointX, state.pointY);
+            const lenX1Y1 = dist(transX, transY);
+            const ratio = lenXY > 0 ? (lenX1Y1 / lenXY) : 1.0;
+
+            mXY.textContent = `${lenXY.toFixed(1)}`;
+            mX1Y1.textContent = `${lenX1Y1.toFixed(1)}`;
+            mRatio.textContent = ratio.toFixed(2);
+        }
+
+        // --- Event Listener Setup ---
+        function setupEventListeners() {
+            modeCongruence.addEventListener('click', () => {
+                state.mode = 'congruence';
+                modeCongruence.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-blue-600 text-white shadow-md";
+                modeSimilarity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-white";
+                badgeMode.textContent = "SHODNOST";
+                badgeMode.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30";
+                similarityBox.classList.add('opacity-50', 'pointer-events-none');
+                syncStateToDisplay();
+            });
+
+            modeSimilarity.addEventListener('click', () => {
+                state.mode = 'similarity';
+                modeSimilarity.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-amber-500 text-slate-950 shadow-md";
+                modeCongruence.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-white";
+                badgeMode.textContent = "PODOBNOST";
+                badgeMode.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                similarityBox.classList.remove('opacity-50', 'pointer-events-none');
+                syncStateToDisplay();
+            });
+
+            sliderTransX.addEventListener('input', (e) => {
+                state.targetTransX = parseInt(e.target.value, 10);
+                txtTransX.textContent = state.targetTransX;
+                syncStateToDisplay();
+            });
+
+            sliderTransY.addEventListener('input', (e) => {
+                state.targetTransY = parseInt(e.target.value, 10);
+                txtTransY.textContent = state.targetTransY;
+                syncStateToDisplay();
+            });
+
+            sliderRotate.addEventListener('input', (e) => {
+                state.targetRotation = parseInt(e.target.value, 10);
+                txtRotate.textContent = `${state.targetRotation}°`;
+                syncStateToDisplay();
+            });
+
+            sliderK.addEventListener('input', (e) => {
+                state.targetK = parseFloat(e.target.value);
+                txtScaleK.textContent = `${state.targetK.toFixed(2)}×`;
+                syncStateToDisplay();
+            });
+
+            chkFlipX.addEventListener('change', (e) => {
+                state.targetFlipX = e.target.checked;
+                syncStateToDisplay();
+            });
+
+            chkAngles.addEventListener('change', (e) => state.showAngles = e.target.checked);
+            chkLengths.addEventListener('change', (e) => state.showLengths = e.target.checked);
+            chkGuides.addEventListener('change', (e) => state.showGuides = e.target.checked);
+
+            btnPlay.addEventListener('click', startAnimation);
+            btnDemo.addEventListener('click', startDemonstration);
+
+            btnReset.addEventListener('click', () => {
+                state.isAnimating = false;
+                state.isDemonstrating = false;
+                state.targetTransX = 180;
+                state.targetTransY = 30;
+                state.targetRotation = 45;
+                state.targetFlipX = false;
+                state.targetK = 1.3;
+
+                sliderTransX.value = 180;
+                sliderTransY.value = 30;
+                sliderRotate.value = 45;
+                sliderK.value = 1.3;
+                chkFlipX.checked = false;
+
+                txtTransX.textContent = "180";
+                txtTransY.textContent = "30";
+                txtRotate.textContent = "45°";
+                txtScaleK.textContent = "1.30×";
+
+                resetDefaultPolygon();
+                syncStateToDisplay();
+                proofLog.innerHTML = `<div class="text-slate-500 italic text-[11px] text-center py-2">Resetováno.</div>`;
+            });
+
+            btnFullscreen.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    container.requestFullscreen().catch(err => console.error(err));
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            btnAddVertex.addEventListener('click', () => {
+                if (state.vertices.length >= 8) return;
+                const n = state.vertices.length;
+                const last = state.vertices[n - 1];
+                const first = state.vertices[0];
+                state.vertices.push({
+                    x: (last.x + first.x) / 2 + 30,
+                    y: (last.y + first.y) / 2 + 30
+                });
+                sortVerticesCounterClockwise();
+            });
+
+            btnRemoveVertex.addEventListener('click', () => {
+                if (state.vertices.length <= 3) return;
+                state.vertices.pop();
+                sortVerticesCounterClockwise();
+            });
+
+            // Canvas Mouse/Touch Events
+            canvas.addEventListener('mousedown', handlePointerDown);
+            canvas.addEventListener('mousemove', handlePointerMove);
+            window.addEventListener('mouseup', handlePointerUp);
+
+            canvas.addEventListener('touchstart', (e) => { handlePointerDown(e); e.preventDefault(); }, { passive: false });
+            canvas.addEventListener('touchmove', (e) => { handlePointerMove(e); e.preventDefault(); }, { passive: false });
+            window.addEventListener('touchend', handlePointerUp);
+        }
+
+        function getMousePos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handlePointerDown(evt) {
+            if (state.isAnimating || state.isDemonstrating) return;
+            const pos = getMousePos(evt);
+            const hitR = 16;
+
+            // 1. Polygon Vertices Dragging
+            for (let i = 0; i < state.vertices.length; i++) {
+                if (dist(pos, state.vertices[i]) < hitR) {
+                    state.dragTarget = { type: 'vertex', index: i };
+                    return;
+                }
+            }
+
+            // 2. Endpoints X or Y Dragging
+            if (dist(pos, state.pointX) < hitR) {
+                state.dragTarget = { type: 'pointX' };
+                return;
+            }
+            if (dist(pos, state.pointY) < hitR) {
+                state.dragTarget = { type: 'pointY' };
+                return;
+            }
+
+            // 3. Whole Segment XY Dragging (By dragging inside/on the segment line)
+            if (distToSegment(pos, state.pointX, state.pointY) < 12) {
+                state.dragTarget = { type: 'segmentXY' };
+                state.dragStartPos = pos;
+                state.initialSegmentX = { ...state.pointX };
+                state.initialSegmentY = { ...state.pointY };
+                return;
+            }
+
+            // 4. Transformed Image Shape Dragging
+            const center = getCenter(state.vertices);
+            const transformedVerts = state.vertices.map(v => transformPoint(v, center));
+            const transformedCenter = getCenter(transformedVerts);
+
+            if (dist(pos, transformedCenter) < 120) {
+                state.dragTarget = { type: 'transformedShape' };
+                state.dragStartPos = pos;
+                state.initialTrans = { x: state.targetTransX, y: state.targetTransY };
+            }
+        }
+
+        function handlePointerMove(evt) {
+            if (!state.dragTarget) return;
+            const pos = getMousePos(evt);
+
+            if (state.dragTarget.type === 'vertex') {
+                state.vertices[state.dragTarget.index] = pos;
+                sortVerticesCounterClockwise(); // Keep CCW order
+            } else if (state.dragTarget.type === 'pointX') {
+                state.pointX = pos;
+            } else if (state.dragTarget.type === 'pointY') {
+                state.pointY = pos;
+            } else if (state.dragTarget.type === 'segmentXY') {
+                const dx = pos.x - state.dragStartPos.x;
+                const dy = pos.y - state.dragStartPos.y;
+                state.pointX = { x: state.initialSegmentX.x + dx, y: state.initialSegmentX.y + dy };
+                state.pointY = { x: state.initialSegmentY.x + dx, y: state.initialSegmentY.y + dy };
+            } else if (state.dragTarget.type === 'transformedShape') {
+                const dx = pos.x - state.dragStartPos.x;
+                const dy = pos.y - state.dragStartPos.y;
+                state.targetTransX = Math.round(state.initialTrans.x + dx);
+                state.targetTransY = Math.round(state.initialTrans.y + dy);
+                sliderTransX.value = state.targetTransX;
+                sliderTransY.value = state.targetTransY;
+                txtTransX.textContent = state.targetTransX;
+                txtTransY.textContent = state.targetTransY;
+                syncStateToDisplay();
+            }
+        }
+
+        function handlePointerUp() {
+            state.dragTarget = null;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
