@@ -6,15 +6,15 @@
     <title>Checkovník</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- MathJax s povolenými moduly bbox a array -->
+    <!-- MathJax s povoleným modulem bbox -->
     <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                packages: {'[+]': ['bbox', 'array']}
+                packages: {'[+]': ['bbox']}
             },
             loader: {
-                load: ['[tex]/bbox', '[tex]/array']
+                load: ['[tex]/bbox']
             },
             svg: {
                 fontCache: 'global'
@@ -195,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.25</span>
+        <span>Checkovník v2.26</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -294,22 +294,6 @@
             }
         }
 
-        function splitEquation(str) {
-            if (!str) return { left: "", op: "", right: "" };
-            const ops = ['\\ge', '\\le', '=', '<', '>', '\\in'];
-            for (const op of ops) {
-                const idx = str.indexOf(op);
-                if (idx !== -1) {
-                    return {
-                        left: str.substring(0, idx).trim(),
-                        op: op,
-                        right: str.substring(idx + op.length).trim()
-                    };
-                }
-            }
-            return { left: str, op: "", right: "" };
-        }
-
         function getProblemDisplayHtml(probNum, problem, showResult, showSteps) {
             const pType = problem.type || 'expression';
             const statement = problem.statement || "";
@@ -317,31 +301,13 @@
             const steps = problem.steps || "";
 
             if (pType === 'equation') {
-                const stParts = splitEquation(statement);
-                const stepParts = steps && steps.trim() !== "" ? splitEquation(steps) : null;
-
                 if (showSteps && hasDetailedSteps(problem)) {
-                    let rows = [
-                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`
-                    ];
-                    if (stepParts) {
-                        rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
-                    }
-                    return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
+                    return `\\mathbf{${probNum})} \\quad ${steps}`;
                 }
-
                 if (!showResult) {
-                    return `\\begin{array}{r r@{}c@{}l} \\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right} \\end{array}`;
+                    return `\\mathbf{${probNum})} \\quad ${statement}`;
                 } else {
-                    let rows = [
-                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`
-                    ];
-                    if (stepParts) {
-                        rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
-                    }
-                    // Celý výsledek je spojen do jednoho bloku přes 3 sloupce pro plynulé podbarvení a podtržení
-                    rows.push(`& \\multicolumn{3}{c}{\\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}}`);
-                    return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
+                    return `\\mathbf{${probNum})} \\quad ${statement} \\Rightarrow \\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}`;
                 }
             } else {
                 if (showSteps && hasDetailedSteps(problem)) {
