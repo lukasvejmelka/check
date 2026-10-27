@@ -101,13 +101,18 @@
         <!-- Posuvník / Indikátor pozice (Sekvenční režim) -->
         <div id="sequential-nav-container" class="mb-3">
             <div class="flex justify-between items-center text-xs text-slate-300 mb-1.5 font-medium">
-                <span id="current-chapter-badge" class="px-2.5 py-0.5 bg-slate-800 border border-slate-700 rounded-md font-semibold text-slate-200 shadow-sm">-</span>
+                <div class="flex items-center gap-1.5">
+                    <button id="prev-chapter-btn" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 border border-slate-700 rounded text-slate-300 transition font-bold" title="Předchozí kapitola">&lt;&lt;</button>
+                    <span id="current-chapter-badge" class="px-2.5 py-0.5 bg-slate-800 border border-slate-700 rounded-md font-semibold text-slate-200 shadow-sm">-</span>
+                    <button id="next-chapter-btn" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 border border-slate-700 rounded text-slate-300 transition font-bold" title="Následující kapitola">&gt;&gt;</button>
+                </div>
                 <div>
                     Příklad <input type="number" id="problem-input" min="1" max="1" value="1" class="w-12 text-center bg-slate-800 text-slate-100 border border-slate-700 rounded px-1 py-0.5 text-xs font-bold focus:outline-none focus:border-slate-500 shadow-inner"> / <span id="total-count">0</span>
                 </div>
             </div>
-            <!-- Osa s výrazným sliderem -->
+            <!-- Osa s vybarvenou levou částí a výrazným sliderem -->
             <div class="relative w-full h-4 bg-slate-800 border border-slate-700 rounded-full overflow-visible shadow-inner" id="progress-bar-track">
+                <div id="sequential-progress-bar" class="absolute top-0 left-0 h-full bg-indigo-600 rounded-full transition-all duration-150 pointer-events-none shadow" style="width: 0%;"></div>
                 <input type="range" id="slider-range" min="1" max="1" value="1" class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent cursor-pointer z-10">
             </div>
         </div>
@@ -190,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.20</span>
+        <span>Checkovník v2.21</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -206,6 +211,7 @@
         let randomIndices = [];
         let randomStepPointer = 0;
         let nonWorksheetStepPointer = 0;
+        let datasetChapters = [];
 
         const mathCard = document.getElementById('math-card');
         const mathContent = document.getElementById('math-content');
@@ -213,6 +219,7 @@
         const nextBtn = document.getElementById('next-btn');
         const problemInput = document.getElementById('problem-input');
         const sliderRange = document.getElementById('slider-range');
+        const sequentialProgressBar = document.getElementById('sequential-progress-bar');
         const currentChapterBadge = document.getElementById('current-chapter-badge');
         const totalCountSpan = document.getElementById('total-count');
         
@@ -239,6 +246,9 @@
 
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
         const advancedSettingsContainer = document.getElementById('advanced-settings-container');
+
+        const nextChapterBtn = document.getElementById('next-chapter-btn');
+        const prevChapterBtn = document.getElementById('prev-chapter-btn');
 
         function normalizeString(str) {
             return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -284,31 +294,61 @@
             }
         }
 
-        // Univerzální generátor obsahu příkladu podle typu a módu zobrazení
+        // Pomocná funkce pro rozdělení rovnice/nerovnice na levou stranu, operátor a pravou stranu
+        function splitEquation(str) {
+            if (!str) return { left: "", op: "", right: "" };
+            const ops = ['\\ge', '\\le', '=', '<', '>', '\\in'];
+            for (const op of ops) {
+                const idx = str.indexOf(op);
+                if (idx !== -1) {
+                    return {
+                        left: str.substring(0, idx).trim(),
+                        op: op,
+                        right: str.substring(idx + op.length).trim()
+                    };
+                }
+            }
+            return { left: str, op: "", right: "" };
+        }
+
         function getProblemDisplayHtml(probNum, problem, showResult, showSteps) {
             const pType = problem.type || 'expression';
             const statement = problem.statement || "";
             const answer = problem.answer || "";
             const steps = problem.steps || "";
 
-            if (showSteps && hasDetailedSteps(problem)) {
-                return `\\mathbf{${probNum})} \\quad ${steps}`;
-            }
+            if (pType === 'equation') {
+                if (showSteps && hasDetailedSteps(problem)) {
+                    const stParts = splitEquation(statement);
+                    const stepParts = splitEquation(steps);
+                    let rows = [
+                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`,
+                        `& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`
+                    ];
+                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} ${rows.join(' \\\\ ')} \\end{array}`;
+                }
 
-            if (!showResult) {
-                if (pType === 'equation') {
-                    return `\\mathbf{${probNum})} \\quad ${statement}`;
+                if (!showResult) {
+                    const stParts = splitEquation(statement);
+                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} \\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right} \\end{array}`;
                 } else {
-                    return `\\mathbf{${probNum})} \\quad ${statement} = `;
+                    const stParts = splitEquation(statement);
+                    let rows = [
+                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`
+                    ];
+                    if (steps && steps.trim() !== "") {
+                        const stepParts = splitEquation(steps);
+                        rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
+                    }
+                    rows.push(`& \\multicolumn{3}{l}{\\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}}`);
+                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} ${rows.join(' \\\\ ')} \\end{array}`;
                 }
             } else {
-                if (pType === 'equation') {
-                    let inner = `\\mathbf{${probNum})} \\quad ${statement}`;
-                    if (steps && steps.trim() !== "") {
-                        inner += ` \\\\ \\quad ${steps}`;
-                    }
-                    inner += ` \\\\ \\quad \\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}`;
-                    return `\\begin{array}{l} ${inner} \\end{array}`;
+                if (showSteps && hasDetailedSteps(problem)) {
+                    return `\\mathbf{${probNum})} \\quad ${steps}`;
+                }
+                if (!showResult) {
+                    return `\\mathbf{${probNum})} \\quad ${statement} = `;
                 } else {
                     return `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
                 }
@@ -326,6 +366,7 @@
                 problemInput.max = 1;
                 sliderRange.max = 1;
                 sliderRange.value = 1;
+                if (sequentialProgressBar) sequentialProgressBar.style.width = '0%';
                 totalCountSpan.innerText = "0";
                 currentChapterBadge.innerText = "-";
                 currentChapterBadge.className = "px-2.5 py-0.5 bg-slate-800 border border-slate-700 rounded-md font-semibold text-slate-400 shadow-sm";
@@ -397,6 +438,14 @@
 
                 problemInput.value = probNum;
                 sliderRange.value = probNum;
+                
+                // Aktualizace šířky modrého progress baru v sekvenčním režimu
+                const maxVal = parseInt(sliderRange.max) || 1;
+                const val = parseInt(sliderRange.value) || 1;
+                const seqPct = ((val - 1) / (maxVal > 1 ? maxVal - 1 : 1)) * 100;
+                if (sequentialProgressBar) {
+                    sequentialProgressBar.style.width = `${Math.max(0, Math.min(100, seqPct))}%`;
+                }
                 
                 currentChapterBadge.innerText = problem.chapterTitle || "Kapitola";
                 currentChapterBadge.className = `px-2.5 py-0.5 bg-slate-800 border border-slate-700 rounded-md font-semibold ${problem.chapterColor || "text-slate-200"} shadow-sm`;
@@ -495,12 +544,55 @@
             }
         }
 
+        // Skoky mezi kapitolami pomocí tlačítek << a >>
+        function jumpToNextChapter() {
+            if (!datasetChapters || datasetChapters.length === 0 || problems.length === 0) return;
+            vibrate();
+            let nextChap = datasetChapters.find(c => c.startIndex > currentIndex);
+            if (nextChap) {
+                currentIndex = nextChap.startIndex;
+            } else {
+                currentIndex = datasetChapters[0].startIndex;
+            }
+            currentMode = 'result';
+            nonWorksheetStepPointer = 0;
+            if (isRandomMode) randomStepPointer = 0;
+            render();
+        }
+
+        function jumpToPrevChapter() {
+            if (!datasetChapters || datasetChapters.length === 0 || problems.length === 0) return;
+            vibrate();
+            let currentChapIdx = datasetChapters.findIndex((c, idx) => {
+                const nextStart = datasetChapters[idx + 1] ? datasetChapters[idx + 1].startIndex : problems.length;
+                return currentIndex >= c.startIndex && currentIndex < nextStart;
+            });
+            if (currentChapIdx === -1) currentChapIdx = 0;
+
+            const currentChap = datasetChapters[currentChapIdx];
+            if (currentIndex > currentChap.startIndex) {
+                currentIndex = currentChap.startIndex;
+            } else {
+                let prevChapIdx = currentChapIdx - 1;
+                if (prevChapIdx < 0) prevChapIdx = datasetChapters.length - 1;
+                currentIndex = datasetChapters[prevChapIdx].startIndex;
+            }
+            currentMode = 'result';
+            nonWorksheetStepPointer = 0;
+            if (isRandomMode) randomStepPointer = 0;
+            render();
+        }
+
+        nextChapterBtn.addEventListener('click', jumpToNextChapter);
+        prevChapterBtn.addEventListener('click', jumpToPrevChapter);
+
         function loadDataset(datasetId, updateUrl = true) {
             const registry = window.datasetRegistry || {};
             const keys = Object.keys(registry);
             
             if (!datasetId || datasetId.trim() === "" || keys.length === 0) {
                 problems = [];
+                datasetChapters = [];
                 datasetInput.value = "";
                 if (updateUrl) {
                     const cleanUrl = window.location.pathname;
@@ -537,8 +629,15 @@
             }
 
             problems = [];
+            datasetChapters = [];
+            let currentGlobalIndex = 0;
+
             if (data.chapters && Array.isArray(data.chapters)) {
                 data.chapters.forEach(chap => {
+                    datasetChapters.push({
+                        title: chap.title || "Kapitola",
+                        startIndex: currentGlobalIndex
+                    });
                     if (chap.problems && Array.isArray(chap.problems)) {
                         chap.problems.forEach(prob => {
                             problems.push({
@@ -546,10 +645,15 @@
                                 chapterTitle: chap.title || "Kapitola",
                                 chapterColor: chap.color || "text-slate-300"
                             });
+                            currentGlobalIndex++;
                         });
                     }
                 });
             } else if (data.problems && Array.isArray(data.problems)) {
+                datasetChapters.push({
+                    title: "Příklady",
+                    startIndex: 0
+                });
                 data.problems.forEach(prob => {
                     problems.push({
                         ...prob,
