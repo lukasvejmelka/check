@@ -6,15 +6,15 @@
     <title>Checkovník</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- MathJax s povolenými moduly bbox a array -->
+    <!-- MathJax s povoleným modulem bbox -->
     <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                packages: {'[+]': ['bbox', 'array']}
+                packages: {'[+]': ['bbox']}
             },
             loader: {
-                load: ['[tex]/bbox', '[tex]/array']
+                load: ['[tex]/bbox']
             },
             svg: {
                 fontCache: 'global'
@@ -195,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.23</span>
+        <span>Checkovník v2.24</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -319,6 +319,7 @@
             if (pType === 'equation') {
                 const stParts = splitEquation(statement);
                 const stepParts = steps && steps.trim() !== "" ? splitEquation(steps) : null;
+                const ansParts = splitEquation(answer);
 
                 if (showSteps && hasDetailedSteps(problem)) {
                     let rows = [
@@ -339,7 +340,7 @@
                     if (stepParts) {
                         rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
                     }
-                    rows.push(`& \\multicolumn{3}{c}{\\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}}`);
+                    rows.push(`& \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.left}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.op}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.right}}}}`);
                     return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
                 }
             } else {
@@ -542,7 +543,6 @@
             }
         }
 
-        // Nekroužící skoky mezi kapitolami pomocí tlačítek << a >>
         function jumpToNextChapter() {
             if (!datasetChapters || datasetChapters.length === 0 || problems.length === 0) return;
             vibrate();
