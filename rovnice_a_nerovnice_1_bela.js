@@ -4,7 +4,7 @@ window.registerDataset({
         "id": "BELA",
         "name": "Rovnice a nerovnice 1",
         "description": "BELA Startovací supersada",
-        "version": "2.4"
+        "version": "2.5"
     },
     "chapters": [
         {
@@ -92,17 +92,17 @@ window.registerDataset({
                 { "id": 71, "type": "equation", "statement": "22 < -11x", "answer": "x \\in (-\\infty, -2)", "steps": "" },
                 { "id": 72, "type": "equation", "statement": "-26 \\ge 2x", "answer": "x \\in (-\\infty, -13\\rangle", "steps": "" },
                 { "id": 73, "type": "equation", "statement": "x + 3 < 5", "answer": "x \\in (-\\infty, 2)", "steps": "" },
-                { "id": 74, "type": "equation", "statement": "4x \\ge 14", "answer": "x \\in \\left\\langle \\frac{7}{2}, +\\infty \\right)", "steps": "" },
-                { "id": 75, "type": "equation", "statement": "-30x < 15", "answer": "x \\in \\left(-\\frac{1}{2}, +\\infty\\right)", "steps": "" },
-                { "id": 76, "type": "equation", "statement": "-31 \\le -124x", "answer": "x \\in \\left(-\\infty, \\frac{1}{4}\\rangle", "steps": "" },
-                { "id": 77, "type": "equation", "statement": "-95x > 114", "answer": "x \\in \\left(-\\infty, -\\frac{6}{5}\\right)", "steps": "" },
-                { "id": 78, "type": "equation", "statement": "6x \\le 3", "answer": "x \\in \\left(-\\infty, \\frac{1}{2}\\rangle", "steps": "" },
-                { "id": 79, "type": "equation", "statement": "-18x > 6", "answer": "x \\in \\left(-\\infty, -\\frac{1}{3}\\right)", "steps": "" },
-                { "id": 80, "type": "equation", "statement": "-5 < 75x", "answer": "x \\in \\left(-\\frac{1}{15}, +\\infty\\right)", "steps": "" },
+                { "id": 74, "type": "equation", "statement": "4x \\ge 14", "answer": "x \\in \\langle \\frac{7}{2}, +\\infty)", "steps": "" },
+                { "id": 75, "type": "equation", "statement": "-30x < 15", "answer": "x \\in (-\\frac{1}{2}, +\\infty)", "steps": "" },
+                { "id": 76, "type": "equation", "statement": "-31 \\le -124x", "answer": "x \\in (-\\infty, \\frac{1}{4}\\rangle", "steps": "" },
+                { "id": 77, "type": "equation", "statement": "-95x > 114", "answer": "x \\in (-\\infty, -\\frac{6}{5})", "steps": "" },
+                { "id": 78, "type": "equation", "statement": "6x \\le 3", "answer": "x \\in (-\\infty, \\frac{1}{2}\\rangle", "steps": "" },
+                { "id": 79, "type": "equation", "statement": "-18x > 6", "answer": "x \\in (-\\infty, -\\frac{1}{3})", "steps": "" },
+                { "id": 80, "type": "equation", "statement": "-5 < 75x", "answer": "x \\in (-\\frac{1}{15}, +\\infty)", "steps": "" },
                 { "id": 81, "type": "equation", "statement": "\\frac{x}{2} > 5", "answer": "x \\in (10, +\\infty)", "steps": "" },
-                { "id": 82, "type": "equation", "statement": "-\\frac{x}{3} \\le \\frac{1}{7}", "answer": "x \\in \\left\\langle -\\frac{3}{7}, +\\infty \\right)", "steps": "" },
+                { "id": 82, "type": "equation", "statement": "-\\frac{x}{3} \\le \\frac{1}{7}", "answer": "x \\in \\langle -\\frac{3}{7}, +\\infty)", "steps": "" },
                 { "id": 83, "type": "equation", "statement": "-\\frac{3x}{7} < -\\frac{3}{7}", "answer": "x \\in (1, +\\infty)", "steps": "" },
-                { "id": 84, "type": "equation", "statement": "-\\frac{5}{6}x \\ge 7", "answer": "x \\in \\left(-\\infty, -\\frac{42}{5}\\rangle", "steps": "" },
+                { "id": 84, "type": "equation", "statement": "-\\frac{5}{6}x \\ge 7", "answer": "x \\in (-\\infty, -\\frac{42}{5}\\rangle", "steps": "" },
                 { "id": 85, "type": "equation", "statement": "5x < 5x + 1", "answer": "x \\in \\mathbb{R}", "steps": "" },
                 { "id": 86, "type": "equation", "statement": "0x \\ge 3", "answer": "x \\in \\emptyset", "steps": "" },
                 { "id": 87, "type": "equation", "statement": "0x \\le 0", "answer": "x \\in \\mathbb{R}", "steps": "" }
