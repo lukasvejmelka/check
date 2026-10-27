@@ -195,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.21</span>
+        <span>Checkovník v2.22</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -294,7 +294,6 @@
             }
         }
 
-        // Pomocná funkce pro rozdělení rovnice/nerovnice na levou stranu, operátor a pravou stranu
         function splitEquation(str) {
             if (!str) return { left: "", op: "", right: "" };
             const ops = ['\\ge', '\\le', '=', '<', '>', '\\in'];
@@ -318,30 +317,31 @@
             const steps = problem.steps || "";
 
             if (pType === 'equation') {
-                if (showSteps && hasDetailedSteps(problem)) {
-                    const stParts = splitEquation(statement);
-                    const stepParts = splitEquation(steps);
-                    let rows = [
-                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`,
-                        `& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`
-                    ];
-                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} ${rows.join(' \\\\ ')} \\end{array}`;
-                }
+                const stParts = splitEquation(statement);
+                const ansParts = splitEquation(answer);
+                const stepParts = steps && steps.trim() !== "" ? splitEquation(steps) : null;
 
-                if (!showResult) {
-                    const stParts = splitEquation(statement);
-                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} \\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right} \\end{array}`;
-                } else {
-                    const stParts = splitEquation(statement);
+                if (showSteps && hasDetailedSteps(problem)) {
                     let rows = [
                         `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`
                     ];
-                    if (steps && steps.trim() !== "") {
-                        const stepParts = splitEquation(steps);
+                    if (stepParts) {
                         rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
                     }
-                    rows.push(`& \\multicolumn{3}{l}{\\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}}`);
-                    return `\\begin{array}{r r@{\\quad}c@{\\quad}l} ${rows.join(' \\\\ ')} \\end{array}`;
+                    return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
+                }
+
+                if (!showResult) {
+                    return `\\begin{array}{r r@{}c@{}l} \\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right} \\end{array}`;
+                } else {
+                    let rows = [
+                        `\\mathbf{${probNum})} & ${stParts.left} & ${stParts.op} & ${stParts.right}`
+                    ];
+                    if (stepParts) {
+                        rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
+                    }
+                    rows.push(`& \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.left}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.op}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.right}}}}`);
+                    return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
                 }
             } else {
                 if (showSteps && hasDetailedSteps(problem)) {
@@ -439,7 +439,6 @@
                 problemInput.value = probNum;
                 sliderRange.value = probNum;
                 
-                // Aktualizace šířky modrého progress baru v sekvenčním režimu
                 const maxVal = parseInt(sliderRange.max) || 1;
                 const val = parseInt(sliderRange.value) || 1;
                 const seqPct = ((val - 1) / (maxVal > 1 ? maxVal - 1 : 1)) * 100;
@@ -544,20 +543,18 @@
             }
         }
 
-        // Skoky mezi kapitolami pomocí tlačítek << a >>
+        // Nekroužící skoky mezi kapitolami pomocí tlačítek << a >>
         function jumpToNextChapter() {
             if (!datasetChapters || datasetChapters.length === 0 || problems.length === 0) return;
             vibrate();
             let nextChap = datasetChapters.find(c => c.startIndex > currentIndex);
             if (nextChap) {
                 currentIndex = nextChap.startIndex;
-            } else {
-                currentIndex = datasetChapters[0].startIndex;
+                currentMode = 'result';
+                nonWorksheetStepPointer = 0;
+                if (isRandomMode) randomStepPointer = 0;
+                render();
             }
-            currentMode = 'result';
-            nonWorksheetStepPointer = 0;
-            if (isRandomMode) randomStepPointer = 0;
-            render();
         }
 
         function jumpToPrevChapter() {
@@ -572,10 +569,10 @@
             const currentChap = datasetChapters[currentChapIdx];
             if (currentIndex > currentChap.startIndex) {
                 currentIndex = currentChap.startIndex;
+            } else if (currentChapIdx > 0) {
+                currentIndex = datasetChapters[currentChapIdx - 1].startIndex;
             } else {
-                let prevChapIdx = currentChapIdx - 1;
-                if (prevChapIdx < 0) prevChapIdx = datasetChapters.length - 1;
-                currentIndex = datasetChapters[prevChapIdx].startIndex;
+                currentIndex = 0;
             }
             currentMode = 'result';
             nonWorksheetStepPointer = 0;
