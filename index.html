@@ -195,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.26</span>
+        <span>Checkovník v2.27</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -307,7 +307,7 @@
                 if (!showResult) {
                     return `\\mathbf{${probNum})} \\quad ${statement}`;
                 } else {
-                    return `\\mathbf{${probNum})} \\quad ${statement} \\Rightarrow \\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}`;
+                    return `\\mathbf{${probNum})} \\quad ${statement} \\quad \\Rightarrow \\quad \\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}`;
                 }
             } else {
                 if (showSteps && hasDetailedSteps(problem)) {
