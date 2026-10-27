@@ -73,9 +73,7 @@
     <script src="mocniny_a_odmocniny_2_bako.js"></script>
     <script src="rovnice_a_nerovnice_1_bela.js"></script>
 
-
-
-    <!-- Hlavička s logem (jasně odlišená od pozadí) -->
+    <!-- Hlavička s logem -->
     <header class="w-full max-w-2xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center bg-slate-800 border-b border-slate-700 shadow-md">
         <a href="index.html" class="flex items-center gap-3 w-full sm:w-auto cursor-pointer group focus:outline-none">
             <img src="logo.svg" alt="Logo" class="h-12 w-auto object-contain transition group-hover:scale-105">
@@ -126,14 +124,14 @@
             </div>
         </div>
 
-        <!-- Karta s příkladem (Čistá bílá karta, černý text pro maximální přehlednost) -->
+        <!-- Karta s příkladem -->
         <div id="math-card" class="bg-white text-black rounded-2xl p-4 sm:p-6 shadow-xl border-2 border-slate-700 min-h-[130px] sm:min-h-[150px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-1">
             <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-2 px-2 text-lg md:text-xl font-bold text-black">
                 Zadejte název sady
             </div>
         </div>
 
-        <!-- Tlačítka Předchozí a Následující (HLAVNÍ VÝRAZNÉ PRVKY) -->
+        <!-- Tlačítka Předchozí a Následující -->
         <div class="flex justify-between gap-3 my-3">
             <button id="prev-btn" class="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm border border-indigo-400/40">
                 ← Předchozí
@@ -143,7 +141,7 @@
             </button>
         </div>
 
-        <!-- Přepínač režimu: Výsledek / Postup (neutrální, nerušivý) -->
+        <!-- Přepínač režimu: Výsledek / Postup -->
         <div class="mt-1 flex rounded-xl bg-slate-800 p-1 border border-slate-700 shadow-md">
             <button id="mode-result" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm border border-slate-600">
                 Jen výsledek
@@ -153,7 +151,7 @@
             </button>
         </div>
 
-        <!-- Pokročilá nastavení (skrytá pod ozubeným kolečkem) -->
+        <!-- Pokročilá nastavení -->
         <div id="advanced-settings-container" class="mt-2 space-y-2 bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs hidden shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <label class="flex items-center gap-2 cursor-pointer">
@@ -190,9 +188,9 @@
 
     </main>
 
-    <!-- Zápatí (jasně oddělené) -->
+    <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.19</span>
+        <span>Checkovník v2.20</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -242,12 +240,10 @@
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
         const advancedSettingsContainer = document.getElementById('advanced-settings-container');
 
-        // Pomocná funkce pro odstranění diakritiky a převedení na malá písmena
         function normalizeString(str) {
             return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
 
-        // Toggle pro pokročilá nastavení (ozubené kolečko)
         settingsToggleBtn.addEventListener('click', () => {
             advancedSettingsContainer.classList.toggle('hidden');
         });
@@ -268,7 +264,11 @@
 
         function hasDetailedSteps(problem) {
             if (!problem || !problem.steps) return false;
-            const steps = problem.steps;
+            const steps = problem.steps.trim();
+            if (steps === "") return false;
+            if (problem.type === 'equation') {
+                return true;
+            }
             const equalsCount = (steps.match(/=/g) || []).length;
             return equalsCount > 1;
         }
@@ -281,6 +281,37 @@
                 currentMode = 'result';
                 modeResultBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all duration-200 bg-slate-700 text-white shadow-sm border border-slate-600";
                 modeStepsBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed border border-transparent";
+            }
+        }
+
+        // Univerzální generátor obsahu příkladu podle typu a módu zobrazení
+        function getProblemDisplayHtml(probNum, problem, showResult, showSteps) {
+            const pType = problem.type || 'expression';
+            const statement = problem.statement || "";
+            const answer = problem.answer || "";
+            const steps = problem.steps || "";
+
+            if (showSteps && hasDetailedSteps(problem)) {
+                return `\\mathbf{${probNum})} \\quad ${steps}`;
+            }
+
+            if (!showResult) {
+                if (pType === 'equation') {
+                    return `\\mathbf{${probNum})} \\quad ${statement}`;
+                } else {
+                    return `\\mathbf{${probNum})} \\quad ${statement} = `;
+                }
+            } else {
+                if (pType === 'equation') {
+                    let inner = `\\mathbf{${probNum})} \\quad ${statement}`;
+                    if (steps && steps.trim() !== "") {
+                        inner += ` \\\\ \\quad ${steps}`;
+                    }
+                    inner += ` \\\\ \\quad \\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}`;
+                    return `\\begin{array}{l} ${inner} \\end{array}`;
+                } else {
+                    return `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
+                }
             }
         }
 
@@ -314,10 +345,6 @@
             if (!problem) return;
 
             const probNum = problem.id || (pIndex + 1);
-            const statement = problem.statement || "";
-            const answer = problem.answer || "";
-            const steps = problem.steps || "";
-
             updateStepsButtonState(problem);
 
             let htmlString = "";
@@ -326,14 +353,14 @@
                 const subOpt = document.querySelector('input[name="random-sub"]:checked').value;
                 
                 if (subOpt === 'only-statements') {
-                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                    htmlString = getProblemDisplayHtml(probNum, problem, false, false);
                 } else if (subOpt === 'instant-results') {
-                    htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
+                    htmlString = getProblemDisplayHtml(probNum, problem, true, false);
                 } else {
                     if (randomStepPointer === 0) {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                        htmlString = getProblemDisplayHtml(probNum, problem, false, false);
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
+                        htmlString = getProblemDisplayHtml(probNum, problem, true, false);
                     }
                 }
 
@@ -349,22 +376,22 @@
                 if (noWorksheets) {
                     if (isContinuous) {
                         if (currentMode === 'steps' && hasDetailedSteps(problem)) {
-                            htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
+                            htmlString = getProblemDisplayHtml(probNum, problem, false, true);
                         } else {
                             if (nonWorksheetStepPointer === 0) {
-                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                                htmlString = getProblemDisplayHtml(probNum, problem, false, false);
                             } else {
-                                htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
+                                htmlString = getProblemDisplayHtml(probNum, problem, true, false);
                             }
                         }
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = `;
+                        htmlString = getProblemDisplayHtml(probNum, problem, false, false);
                     }
                 } else {
                     if (currentMode === 'steps' && hasDetailedSteps(problem)) {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${steps}`;
+                        htmlString = getProblemDisplayHtml(probNum, problem, false, true);
                     } else {
-                        htmlString = `\\mathbf{${probNum})} \\quad ${statement} = \\bbox[#fde047, 3px]{${answer}}`;
+                        htmlString = getProblemDisplayHtml(probNum, problem, true, false);
                     }
                 }
 
@@ -568,12 +595,10 @@
             });
         }
 
-        // Chování pole pro výběr sady
         datasetInput.addEventListener('click', () => {
             datasetInput.value = "";
         });
 
-        // Inteligentní našeptávač
         datasetInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (!query) {
@@ -703,7 +728,6 @@
             render();
         });
 
-        // Podpora pro tlačítka Zpět / Vpřed v prohlížeči
         window.addEventListener('popstate', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const setParam = urlParams.get('set') || urlParams.get('id') || urlParams.get('sada');
