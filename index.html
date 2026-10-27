@@ -6,15 +6,15 @@
     <title>Checkovník</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- MathJax s povoleným modulem bbox -->
+    <!-- MathJax s povolenými moduly bbox a array -->
     <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
-                packages: {'[+]': ['bbox']}
+                packages: {'[+]': ['bbox', 'array']}
             },
             loader: {
-                load: ['[tex]/bbox']
+                load: ['[tex]/bbox', '[tex]/array']
             },
             svg: {
                 fontCache: 'global'
@@ -195,7 +195,7 @@
 
     <!-- Zápatí -->
     <footer class="w-full max-w-2xl mx-auto px-4 py-2 border-t border-slate-700 text-center text-xs text-slate-400 flex justify-between items-center bg-slate-800 shadow-md">
-        <span>Checkovník v2.22</span>
+        <span>Checkovník v2.23</span>
         <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="vibration-chk" checked class="w-3.5 h-3.5 rounded text-slate-600 focus:ring-slate-500 bg-slate-900 border-slate-700">
             <span>Hmatová odezva (vibrace)</span>
@@ -318,7 +318,6 @@
 
             if (pType === 'equation') {
                 const stParts = splitEquation(statement);
-                const ansParts = splitEquation(answer);
                 const stepParts = steps && steps.trim() !== "" ? splitEquation(steps) : null;
 
                 if (showSteps && hasDetailedSteps(problem)) {
@@ -340,7 +339,7 @@
                     if (stepParts) {
                         rows.push(`& ${stepParts.left} & ${stepParts.op} & ${stepParts.right}`);
                     }
-                    rows.push(`& \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.left}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.op}}}} & \\bbox[#fde047, 3px]{\\underline{\\underline{${ansParts.right}}}}`);
+                    rows.push(`& \\multicolumn{3}{c}{\\bbox[#fde047, 3px]{\\underline{\\underline{${answer}}}}}`);
                     return `\\begin{array}{r r@{}c@{}l} ${rows.join(' \\\\ ')} \\end{array}`;
                 }
             } else {
