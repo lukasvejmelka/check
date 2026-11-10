@@ -61,8 +61,9 @@ window.registerDataset({
                 { id: 44, type: "equation", statement: "\\begin{array}{rcl} 2x-y+z &=& 3 \\\\ 4x-2y+2z &=& 8 \\\\ x+y-z &=& 1 \\end{array}", answer: "K = \\emptyset", steps: "" },
                 { id: 45, type: "equation", statement: "\\begin{array}{rcl} x+y+z &=& 3 \\\\ 2x+2y+2z &=& 6 \\\\ x-y+z &=& 1 \\end{array}", answer: "K = \\{[t, 1, 2-t]\\}; t \\in \\mathbb{R}", steps: "" },
                 { id: 46, type: "equation", statement: "\\begin{array}{rcl} x+y+z &=& 0 \\\\ 2x+2y+2z &=& 0 \\\\ 3x+3y+3z &=& 0 \\end{array}", answer: "K = \\{[-s-t, s, t]\\}; s, t \\in \\mathbb{R}", steps: "" },
-                { id: 47, type: "equation", statement: "\\begin{array}{rcl} 2a+b &=& 5 \\\\ b-3c &=& -11 \\\\ a+2c &=& 7 \\end{array}", answer: "K = \\{[1, 3, 2]\\}", steps: "" },
-                { id: 48, type: "equation", statement: "\\begin{array}{rcl} 4a-c &=& 5 \\\\ 3a+2b &=& 8 \\\\ 5b+2c &=& -1 \\end{array}", answer: "K = \\{[2, 1, -3]\\}", steps: "" }
+                { id: 47, type: "equation", statement: "\\begin{array}{rcl} 2a+b &=& 5 \\\\ b-3c &=& -11 \\\\ a+2c &=& 7 \\end{array}", answer: "K = \\{[11, -17, -2]\\}", steps: "" },
+                { id: 48, type: "equation", statement: "\\begin{array}{rcl} 4a-c &=& 5 \\\\ 3a+2b &=& 8 \\\\ 5b+2c &=& -1 \\end{array}", answer: "K = \\{[-22, 37, -93]\\}", steps: "" }
+
             ]
         }
     ]
