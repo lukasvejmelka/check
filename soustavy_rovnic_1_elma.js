@@ -2,7 +2,7 @@ window.registerDataset({
     meta: {
         id: "ELMA",
         name: "Soustavy rovnic 1",
-        description: "ELMA advanced parádosada"
+        description: "ELMA entry-level parádosada"
     },
     chapters: [
         {
