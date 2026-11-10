@@ -62,4 +62,34 @@ window.registerDataset({
                 { id: 45, type: "expression", statement: "\\frac{2}{\\sqrt[3]{x^2 y}}", answer: "\\frac{2\\sqrt[3]{x y^2}}{xy}", steps: "\\frac{2}{\\sqrt[3]{x^2 y}} = \\frac{2\\cdot\\sqrt[3]{x y^2}}{\\sqrt[3]{x^2 y}\\cdot\\sqrt[3]{x y^2}} = \\frac{2\\sqrt[3]{x y^2}}{xy}" },
                 { id: 46, type: "expression", statement: "\\frac{ab}{\\sqrt[4]{a^3 b^2}}", answer: "\\sqrt[4]{a b^2}", steps: "\\frac{ab}{\\sqrt[4]{a^3 b^2}} = \\frac{ab\\sqrt[4]{a b^2}}{ab} = \\sqrt[4]{a b^2}" },
                 { id: 47, type: "expression", statement: "\\frac{1}{\\sqrt[3]{(x-1)^2}}", answer: "\\frac{\\sqrt[3]{x-1}}{x-1}", steps: "\\frac{1}{\\sqrt[3]{(x-1)^2}} = \\frac{1\\cdot\\sqrt[3]{x-1}}{\\sqrt[3]{(x-1)^2}\\cdot\\sqrt[3]{x-1}} = \\frac{\\sqrt[3]{x-1}}{x-1}" },
-                { id: 48, type: "expression", statement: "\\frac{2}{\\sqrt[4]{(a+b)^3}}", answer: "\\frac{2\\sqrt[4]{a+b}}{a+b}", steps:
+                { id: 48, type: "expression", statement: "\\frac{2}{\\sqrt[4]{(a+b)^3}}", answer: "\\frac{2\\sqrt[4]{a+b}}{a+b}", steps: "\\frac{2}{\\sqrt[4]{(a+b)^3}} = \\frac{2\\cdot\\sqrt[4]{a+b}}{\\sqrt[4]{(a+b)^3}\\cdot\\sqrt[4]{a+b}} = \\frac{2\\sqrt[4]{a+b}}{a+b}" }
+            ]
+        },
+        {
+            title: "III. Ve jmenovateli dvojčlen obsahující druhé odmocniny",
+            color: "text-emerald-400",
+            problems: [
+                { id: 49, type: "expression", statement: "\\frac{1}{\\sqrt{3}-\\sqrt{2}}", answer: "\\sqrt{3}+\\sqrt{2}", steps: "\\frac{1}{\\sqrt{3}-\\sqrt{2}} = \\frac{1\\cdot(\\sqrt{3}+\\sqrt{2})}{(\\sqrt{3}-\\sqrt{2})(\\sqrt{3}+\\sqrt{2})} = \\frac{\\sqrt{3}+\\sqrt{2}}{3-2} = \\sqrt{3}+\\sqrt{2}" },
+                { id: 50, type: "expression", statement: "\\frac{2}{\\sqrt{5}+\\sqrt{3}}", answer: "\\sqrt{5}-\\sqrt{3}", steps: "\\frac{2}{\\sqrt{5}+\\sqrt{3}} = \\frac{2(\\sqrt{5}-\\sqrt{3})}{(\\sqrt{5}+\\sqrt{3})(\\sqrt{5}-\\sqrt{3})} = \\frac{2(\\sqrt{5}-\\sqrt{3})}{5-3} = \\sqrt{5}-\\sqrt{3}" },
+                { id: 51, type: "expression", statement: "\\frac{1}{\\sqrt{x}+1}", answer: "\\frac{\\sqrt{x}-1}{x-1}", steps: "\\frac{1}{\\sqrt{x}+1} = \\frac{1\\cdot(\\sqrt{x}-1)}{(\\sqrt{x}+1)(\\sqrt{x}-1)} = \\frac{\\sqrt{x}-1}{x-1}" },
+                { id: 52, type: "expression", statement: "\\frac{3}{\\sqrt{y}-2}", answer: "\\frac{3(\\sqrt{y}+2)}{y-4}", steps: "\\frac{3}{\\sqrt{y}-2} = \\frac{3(\\sqrt{y}+2)}{(\\sqrt{y}-2)(\\sqrt{y}+2)} = \\frac{3(\\sqrt{y}+2)}{y-4}" },
+                { id: 53, type: "expression", statement: "\\frac{4}{\\sqrt{x}-\\sqrt{3}}", answer: "\\frac{4(\\sqrt{x}+\\sqrt{3})}{x-3}", steps: "\\frac{4}{\\sqrt{x}-\\sqrt{3}} = \\frac{4(\\sqrt{x}+\\sqrt{3})}{(\\sqrt{x}-\\sqrt{3})(\\sqrt{x}+\\sqrt{3})} = \\frac{4(\\sqrt{x}+\\sqrt{3})}{x-3}" },
+                { id: 54, type: "expression", statement: "\\frac{1}{2+\\sqrt{a}}", answer: "\\frac{2-\\sqrt{a}}{4-a}", steps: "\\frac{1}{2+\\sqrt{a}} = \\frac{1\\cdot(2-\\sqrt{a})}{(2+\\sqrt{a})(2-\\sqrt{a})} = \\frac{2-\\sqrt{a}}{4-a}" },
+                { id: 55, type: "expression", statement: "\\frac{6}{3-\\sqrt{b}}", answer: "\\frac{6(3+\\sqrt{b})}{9-b}", steps: "\\frac{6}{3-\\sqrt{b}} = \\frac{6(3+\\sqrt{b})}{(3-\\sqrt{b})(3+\\sqrt{b})} = \\frac{6(3+\\sqrt{b})}{9-b}" },
+                { id: 56, type: "expression", statement: "\\frac{x-y}{\\sqrt{x}+\\sqrt{y}}", answer: "\\sqrt{x}-\\sqrt{y}", steps: "\\frac{x-y}{\\sqrt{x}+\\sqrt{y}} = \\frac{(x-y)(\\sqrt{x}-\\sqrt{y})}{x-y} = \\sqrt{x}-\\sqrt{y}" },
+                { id: 57, type: "expression", statement: "\\frac{a-4}{\\sqrt{a}-2}", answer: "\\sqrt{a}+2", steps: "\\frac{a-4}{\\sqrt{a}-2} = \\frac{(a-4)(\\sqrt{a}+2)}{a-4} = \\sqrt{a}+2" },
+                { id: 58, type: "expression", statement: "\\frac{y-9}{\\sqrt{y}+3}", answer: "\\sqrt{y}-3", steps: "\\frac{y-9}{\\sqrt{y}+3} = \\frac{(y-9)(\\sqrt{y}-3)}{y-9} = \\sqrt{y}-3" },
+                { id: 59, type: "expression", statement: "\\frac{\\sqrt{x}-1}{\\sqrt{x}+1}", answer: "\\frac{x-2\\sqrt{x}+1}{x-1}", steps: "\\frac{\\sqrt{x}-1}{\\sqrt{x}+1} = \\frac{(\\sqrt{x}-1)^2}{(\\sqrt{x}+1)(\\sqrt{x}-1)} = \\frac{x-2\\sqrt{x}+1}{x-1}" },
+                { id: 60, type: "expression", statement: "\\frac{\\sqrt{a}+\\sqrt{b}}{\\sqrt{a}-\\sqrt{b}}", answer: "\\frac{a+2\\sqrt{ab}+b}{a-b}", steps: "\\frac{\\sqrt{a}+\\sqrt{b}}{\\sqrt{a}-\\sqrt{b}} = \\frac{(\\sqrt{a}+\\sqrt{b})^2}{(\\sqrt{a}-\\sqrt{b})(\\sqrt{a}+\\sqrt{b})} = \\frac{a+2\\sqrt{ab}+b}{a-b}" },
+                { id: 61, type: "expression", statement: "\\frac{1}{2\\sqrt{x}-\\sqrt{y}}", answer: "\\frac{2\\sqrt{x}+\\sqrt{y}}{4x-y}", steps: "\\frac{1}{2\\sqrt{x}-\\sqrt{y}} = \\frac{2\\sqrt{x}+\\sqrt{y}}{(2\\sqrt{x}-\\sqrt{y})(2\\sqrt{x}+\\sqrt{y})} = \\frac{2\\sqrt{x}+\\sqrt{y}}{4x-y}" },
+                { id: 62, type: "expression", statement: "\\frac{3}{3\\sqrt{a}+2\\sqrt{b}}", answer: "\\frac{3(3\\sqrt{a}-2\\sqrt{b})}{9a-4b}", steps: "\\frac{3}{3\\sqrt{a}+2\\sqrt{b}} = \\frac{3(3\\sqrt{a}-2\\sqrt{b})}{(3\\sqrt{a}+2\\sqrt{b})(3\\sqrt{a}-2\\sqrt{b})} = \\frac{3(3\\sqrt{a}-2\\sqrt{b})}{9a-4b}" },
+                { id: 63, type: "expression", statement: "\\frac{x-4}{2\\sqrt{x}+4}", answer: "\\frac{\\sqrt{x}-2}{2}", steps: "\\frac{x-4}{2(\\sqrt{x}+2)} = \\frac{(x-4)(\\sqrt{x}-2)}{2(x-4)} = \\frac{\\sqrt{x}-2}{2}" },
+                { id: 64, type: "expression", statement: "\\frac{2x-8}{\\sqrt{x}-2}", answer: "2(\\sqrt{x}+2)", steps: "\\frac{2(x-4)}{\\sqrt{x}-2} = \\frac{2(x-4)(\\sqrt{x}+2)}{x-4} = 2(\\sqrt{x}+2)" },
+                { id: 65, type: "expression", statement: "\\frac{a^2-b^2}{\\sqrt{a}+\\sqrt{b}}", answer: "(a+b)(\\sqrt{a}-\\sqrt{b})", steps: "\\frac{(a-b)(a+b)}{\\sqrt{a}+\\sqrt{b}} = \\frac{(a-b)(a+b)(\\sqrt{a}-\\sqrt{b})}{a-b} = (a+b)(\\sqrt{a}-\\sqrt{b})" },
+                { id: 66, type: "expression", statement: "\\frac{x-1}{\\sqrt{x+3}-2}", answer: "\\sqrt{x+3}+2", steps: "\\frac{x-1}{\\sqrt{x+3}-2} = \\frac{(x-1)(\\sqrt{x+3}+2)}{(x+3)-4} = \\frac{(x-1)(\\sqrt{x+3}+2)}{x-1} = \\sqrt{x+3}+2" },
+                { id: 67, type: "expression", statement: "\\frac{4x-9y}{2\\sqrt{x}+3\\sqrt{y}}", answer: "2\\sqrt{x}-3\\sqrt{y}", steps: "\\frac{4x-9y}{2\\sqrt{x}+3\\sqrt{y}} = \\frac{(4x-9y)(2\\sqrt{x}-3\\sqrt{y})}{4x-9y} = 2\\sqrt{x}-3\\sqrt{y}" },
+                { id: 68, type: "expression", statement: "\\frac{\\sqrt{x+1}-\\sqrt{x-1}}{\\sqrt{x+1}+\\sqrt{x-1}}", answer: "x-\\sqrt{x^2-1}", steps: "\\frac{(\\sqrt{x+1}-\\sqrt{x-1})^2}{(x+1)-(x-1)} = \\frac{(x+1)-2\\sqrt{x^2-1}+(x-1)}{2} = \\frac{2x-2\\sqrt{x^2-1}}{2} = x-\\sqrt{x^2-1}" }
+            ]
+        }
+    ]
+});
