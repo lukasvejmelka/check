@@ -68,7 +68,7 @@ window.registerDataset({
                 { id: 33, type: "equation", statement: "\\sqrt{2}x - 3 = 5", answer: "x = 4\\sqrt{2}", steps: "" },
                 { id: 34, type: "equation", statement: "\\sqrt{3}x + 2 = x + 6", answer: "x = 2 + 2\\sqrt{3}", steps: "" },
                 { id: 35, type: "equation", statement: "x\\sqrt{5} - \\sqrt{5} = 2x", answer: "x = 5 + 2\\sqrt{5}", steps: "" },
-                { id: 36, type: "equation", statement: "\\sqrt{2}(x - 1) = 2x", answer: "x = 1 - \\sqrt{2}", steps: "" },
+                { id: 36, type: "equation", statement: "\\sqrt{2}(x - 1) = 2x", answer: "x = -1 - \\sqrt{2}", steps: "" },
                 { id: 37, type: "equation", statement: "x\\sqrt{3} - 3 = x - \\sqrt{3}", answer: "x = \\sqrt{3}", steps: "" },
                 { id: 38, type: "equation", statement: "\\sqrt{7}x - 14 = 0", answer: "x = 2\\sqrt{7}", steps: "" },
                 { id: 39, type: "equation", statement: "2x\\sqrt{3} - \\sqrt{12} = 0", answer: "x = 1", steps: "" },
