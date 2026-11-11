@@ -489,7 +489,11 @@
             if (isFullscreenActive) {
                 renderFullscreen(probNum, problem);
                 if (window.MathJax && window.MathJax.typesetPromise) {
-                    window.MathJax.typesetPromise([mathContent]).catch((err) => console.log(err));
+                    window.MathJax.typesetPromise([mathContent]).then(() => {
+                        mathContent.scrollLeft = mathContent.scrollWidth;
+                    }).catch((err) => console.log(err));
+                } else {
+                    mathContent.scrollLeft = mathContent.scrollWidth;
                 }
                 return;
             }
@@ -559,7 +563,20 @@
             mathContent.innerHTML = `$${htmlString}$`;
 
             if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([mathContent]).catch((err) => console.log(err));
+                window.MathJax.typesetPromise([mathContent]).then(() => {
+                    const isShowingResult = (
+                        currentMode === 'steps' || 
+                        (isRandomMode && document.querySelector('input[name="random-sub"]:checked').value === 'instant-results') ||
+                        (isRandomMode && randomStepPointer === 1) ||
+                        (!isRandomMode && noWorksheetsChk.checked && continuousResultChk.checked && nonWorksheetStepPointer === 1) ||
+                        (!isRandomMode && !noWorksheetsChk.checked)
+                    );
+                    if (isShowingResult) {
+                        mathContent.scrollLeft = mathContent.scrollWidth;
+                    } else {
+                        mathContent.scrollLeft = 0;
+                    }
+                }).catch((err) => console.log(err));
             }
         }
 
