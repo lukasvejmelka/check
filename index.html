@@ -65,6 +65,8 @@
             padding: 2rem !important;
             margin: 0 !important;
             overflow: hidden !important;
+            height: 100vh !important;
+            width: 100vw !important;
         }
 
         body.is-fullscreen header,
@@ -80,17 +82,18 @@
         body.is-fullscreen main {
             max-width: 100% !important;
             width: 100% !important;
-            height: 100vh !important;
+            height: calc(100vh - 4rem) !important;
             margin: 0 !important;
             padding: 0 !important;
-            display: block !important;
+            display: flex !important;
+            flex-direction: column !important;
         }
 
         body.is-fullscreen #math-card {
             border: none !important;
             box-shadow: none !important;
             background: transparent !important;
-            min-height: auto !important;
+            min-height: 100% !important;
             height: 100% !important;
             padding: 0 !important;
             margin: 0 !important;
@@ -99,24 +102,27 @@
             justify-content: space-between !important;
             align-items: stretch !important;
             text-align: left !important;
+            flex: 1 !important;
         }
 
         body.is-fullscreen #fullscreen-statement {
-            text-align: left;
+            text-align: left !important;
             font-size: 2.5rem;
             line-height: 1.3;
             color: #000000;
             font-weight: bold;
+            align-self: flex-start !important;
         }
 
         body.is-fullscreen #fullscreen-answer {
-            text-align: right;
+            text-align: right !important;
             font-size: 2.2rem;
             line-height: 1.3;
             color: #000000;
             font-weight: bold;
-            margin-top: auto;
-            align-self: flex-end;
+            margin-top: auto !important;
+            align-self: flex-end !important;
+            width: 100% !important;
         }
     </style>
 </head>
@@ -198,7 +204,7 @@
 
         <!-- Karta s příkladem -->
         <div id="math-card" class="bg-white text-black rounded-2xl p-4 sm:p-6 shadow-xl border-2 border-slate-700 min-h-[130px] sm:min-h-[150px] h-auto flex flex-col justify-center items-center text-center cursor-pointer relative overflow-visible transition-all my-1">
-            <div id="math-content" class="w-full overflow-x-auto overflow-y-visible py-2 px-2 text-lg md:text-xl font-bold text-black">
+            <div id="math-content" class="w-full h-full flex flex-col justify-between overflow-x-auto overflow-y-visible py-2 px-2 text-lg md:text-xl font-bold text-black">
                 Zadejte název sady
             </div>
         </div>
@@ -443,7 +449,7 @@
 
             mathContent.innerHTML = `
                 <div id="fullscreen-statement">$${stmtLatex}$</div>
-                <div id="fullscreen-answer">${showAns ? `$${ansLatex}$` : ''}</div>
+                <div id="fullscreen-answer">${showAns ? `$${ansLatex}$` : '&nbsp;'}</div>
             `;
         }
 
