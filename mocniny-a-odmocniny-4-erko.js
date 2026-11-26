@@ -53,10 +53,10 @@ window.registerDataset({
                 { id: 42, type: "expressions", statement: "(a^{-3})^{-2}", answer: "a^6", steps: "(a^{-3})^{-2} = \\bbox[#fde047, 3px]{\\underline{\\underline{a^6}}}" },
                 { id: 43, type: "expressions", statement: "(2^{-3})^{-1}", answer: "8", steps: "(2^{-3})^{-1} = 2^3 = \\bbox[#fde047, 3px]{\\underline{\\underline{8}}}" },
                 { id: 44, type: "expressions", statement: "(10^{-2})^{-3}", answer: "1000000", steps: "(10^{-2})^{-3} = 10^6 = \\bbox[#fde047, 3px]{\\underline{\\underline{1000000}}}" },
-                { id: 45, type: "expressions", statement: "((-2)^{-4})^{-1}", answer: "\\frac{1}{16}", steps: "((-2)^{-4})^{-1} = (-2)^{-4} = \\frac{1}{(-2)^4} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{16}}}}" },
+                { id: 45, type: "expressions", statement: "((-2)^{-4})^{-1}", answer: "16", steps: "((-2)^{-4})^{-1} = (-2)^{(-4)\\cdot(-1)} = (-2)^4 = \\bbox[#fde047, 3px]{\\underline{\\underline{16}}}" },
                 { id: 46, type: "expressions", statement: "(x^3y^{-2})^{-1}", answer: "\\frac{y^2}{x^3}", steps: "(x^3y^{-2})^{-1} = \\frac{1}{x^3y^{-2}} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{y^2}{x^3}}}}" },
                 { id: 47, type: "expressions", statement: "(a^{-2}b^3)^{-1}", answer: "\\frac{a^2}{b^3}", steps: "(a^{-2}b^3)^{-1} = \\frac{1}{a^{-2}b^3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{a^2}{b^3}}}}" },
-                { id: 48, type: "expressions", statement: "(2x^{-3})^{-2}", answer: "\\frac{x^6}{4}", steps: "(2x^{-3})^{-2} = \\frac{1}{2^{-2}x^6} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{x^6}{4}}}}" },
+                { id: 48, type: "expressions", statement: "(2x^{-3})^{-2}", answer: "\\frac{x^6}{4}", steps: "(2x^{-3})^{-2} = 2^{-2}x^6 = \\frac{x^6}{4} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{x^6}{4}}}}" },
                 { id: 49, type: "expressions", statement: "(10a^{-2})^{-1}", answer: "\\frac{a^2}{10}", steps: "(10a^{-2})^{-1} = \\frac{1}{10a^{-2}} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{a^2}{10}}}}" },
                 { id: 50, type: "expressions", statement: "((-3x)^{-2})^{-3}", answer: "729x^6", steps: "((-3x)^{-2})^{-3} = (-3x)^6 = \\bbox[#fde047, 3px]{\\underline{\\underline{729x^6}}}" }
             ]
@@ -122,7 +122,7 @@ window.registerDataset({
             ]
         },
         {
-            title: "III. Odstraňte záporné exponenty",
+            title: "IV. Odstraňte záporné exponenty",
             color: "text-amber-400",
             problems: [
                 { id: 99, type: "expressions", statement: "a^{-3}", answer: "\\frac{1}{a^3}", steps: "a^{-3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{a^3}}}}" },
@@ -167,7 +167,7 @@ window.registerDataset({
             ]
         },
         {
-            title: "IV. Zjednodušte (ve výsledku žádný záporný exponent)",
+            title: "V. Zjednodušte (ve výsledku žádný záporný exponent)",
             color: "text-rose-400",
             problems: [
                 { id: 138, type: "expressions", statement: "x^{-3}\\cdot x^5", answer: "x^2", steps: "x^{-3} \\cdot x^5 = x^{-3+5} = \\bbox[#fde047, 3px]{\\underline{\\underline{x^2}}}" },
@@ -202,10 +202,10 @@ window.registerDataset({
                 { id: 167, type: "expressions", statement: "\\frac{(a^{-3})^{-2}}{a^5}", answer: "a", steps: "\\frac{(a^{-3})^{-2}}{a^5} = \\frac{a^6}{a^5} = \\bbox[#fde047, 3px]{\\underline{\\underline{a}}}" },
                 { id: 168, type: "expressions", statement: "\\frac{x^{-3}y^4}{x^2y^{-2}}", answer: "\\frac{y^6}{x^5}", steps: "\\frac{x^{-3}y^4}{x^2y^{-2}} = x^{-5}y^6 = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{y^6}{x^5}}}}" },
                 { id: 169, type: "expressions", statement: "\\frac{a^{-2}b^5}{a^3b^{-4}}", answer: "\\frac{b^9}{a^5}", steps: "\\frac{a^{-2}b^5}{a^3b^{-4}} = a^{-5}b^9 = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{b^9}{a^5}}}}" },
-                { id: 170, type: "expressions", statement: "\\sqrt{x^{-6}}", answer: "\\frac{1}{x^3}", steps: "\\sqrt{x^{-6}} = (x^{-6})^{\\frac{1}{2}} = x^{-3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{x^3}}}}" },
+                { id: 170, type: "expressions", statement: "\\sqrt{x^{-6}}", answer: "\\frac{1}{|x|^3}", steps: "\\sqrt{x^{-6}} = \\sqrt{\\frac{1}{x^6}} = \\frac{1}{\\sqrt{x^6}} = \\frac{1}{|x|^3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{|x|^3}}}}" },
                 { id: 171, type: "expressions", statement: "\\sqrt{a^{-8}}", answer: "\\frac{1}{a^4}", steps: "\\sqrt{a^{-8}} = (a^{-8})^{\\frac{1}{2}} = a^{-4} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{a^4}}}}" },
                 { id: 172, type: "expressions", statement: "\\sqrt{10^{-4}}", answer: "\\frac{1}{100}", steps: "\\sqrt{10^{-4}} = 10^{-2} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{100}}}}" },
-                { id: 173, type: "expressions", statement: "\\sqrt{(x^3)^{-2}}", answer: "\\frac{1}{x^3}", steps: "\\sqrt{(x^3)^{-2}} = \\sqrt{x^{-6}} = x^{-3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{x^3}}}}" },
+                { id: 173, type: "expressions", statement: "\\sqrt{(x^3)^{-2}}", answer: "\\frac{1}{|x|^3}", steps: "\\sqrt{(x^3)^{-2}} = \\sqrt{x^{-6}} = \\frac{1}{|x|^3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{|x|^3}}}}" },
                 { id: 174, type: "expressions", statement: "\\sqrt[3]{a^{-9}}", answer: "\\frac{1}{a^3}", steps: "\\sqrt[3]{a^{-9}} = (a^{-9})^{\\frac{1}{3}} = a^{-3} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{a^3}}}}" },
                 { id: 175, type: "expressions", statement: "\\sqrt[3]{x^{-6}}", answer: "\\frac{1}{x^2}", steps: "\\sqrt[3]{x^{-6}} = (x^{-6})^{\\frac{1}{3}} = x^{-2} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{x^2}}}}" },
                 { id: 176, type: "expressions", statement: "\\sqrt[4]{10^{-8}}", answer: "\\frac{1}{100}", steps: "\\sqrt[4]{10^{-8}} = (10^{-8})^{\\frac{1}{4}} = 10^{-2} = \\bbox[#fde047, 3px]{\\underline{\\underline{\\frac{1}{100}}}}" },
